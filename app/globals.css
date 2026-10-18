@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
+@tailwind utilities;
+
+/* ============================
+   🎨 Katra Go - Brand Colors
+   ============================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary */
+  --color-primary: #0D154B;
+  --color-primary-50: #E7E9F2;
+  --color-primary-100: #C2C6DB;
+  --color-primary-200: #9AA0C2;
+  --color-primary-300: #727AA9;
+  --color-primary-400: #4A5490;
+  --color-primary-500: #0D154B;
+  --color-primary-600: #0A1139;
+  --color-primary-700: #070D27;
+  --color-primary-800: #040815;
+  --color-primary-900: #02040A;
+
+  /* Secondary */
+  --color-secondary: #C4EAEB;
+  --color-secondary-soft: #C4EAEB66;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ============================
+   Base Styles
+   ============================ */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: var(--color-primary);
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-noto-kufi), "Noto Kufi Arabic", sans-serif;
+  letter-spacing: 0;
+}
+
+/* ✅ LTR: Inter */
+[dir="ltr"] body {
+  font-family: var(--font-inter), "Inter", sans-serif;
+}
+
+/* تحسين وضوح النصوص العربية */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3 {
+  line-height: 1.5;
+}
+/* ============================
+   📅 Day Picker Custom Styles
+   ============================ */
+.katra-daypicker {
+  --rdp-accent-color: #0D154B;
+  --rdp-accent-background-color: #C4EAEB66;
+  --rdp-today-color: #0D154B;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.katra-daypicker .rdp-months {
+  gap: 1rem;
+}
+
+.katra-daypicker .rdp-caption_label {
+  font-weight: 700;
+  color: #0D154B;
+  font-size: 15px;
+}
+
+.katra-daypicker .rdp-head_cell {
+  color: #4A4A4A;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.katra-daypicker .rdp-day {
+  border-radius: 10px;
+  transition: all 0.15s ease;
+  color: #333;
+  width: 38px;
+  height: 38px;
+}
+
+.katra-daypicker .rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_disabled) {
+  background-color: #C4EAEB66;
+}
+
+.katra-daypicker .rdp-day_selected {
+  background-color: #0D154B !important;
+  color: white !important;
+  font-weight: 700;
+}
+
+.katra-daypicker .rdp-day_today:not(.rdp-day_selected) {
+  color: #0D154B;
+  font-weight: 700;
+  border: 1.5px solid #0D154B;
+}
+
+.katra-daypicker .rdp-button_previous,
+.katra-daypicker .rdp-button_next {
+  border-radius: 8px;
+  color: #0D154B;
+  transition: background 0.15s;
+}
+
+.katra-daypicker .rdp-button_previous:hover,
+.katra-daypicker .rdp-button_next:hover {
+  background-color: #C4EAEB66;
+}
+
+.katra-daypicker .rdp-nav {
+  gap: 4px;
+}
+/* ============================
+   Utilities
+   ============================ */
+.bg-primary { background-color: var(--color-primary); }
+.bg-primary-50 { background-color: var(--color-primary-50); }
+.bg-primary-100 { background-color: var(--color-primary-100); }
+.bg-primary-200 { background-color: var(--color-primary-200); }
+.bg-primary-300 { background-color: var(--color-primary-300); }
+.bg-primary-400 { background-color: var(--color-primary-400); }
+.bg-primary-600 { background-color: var(--color-primary-600); }
+.bg-primary-700 { background-color: var(--color-primary-700); }
+
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-secondary-soft { background-color: var(--color-secondary-soft); }
+
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+
+.border-primary { border-color: var(--color-primary); }
+.border-secondary { border-color: var(--color-secondary); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+button{
+  cursor: pointer;
 }

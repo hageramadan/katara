@@ -1,0 +1,42 @@
+{
+  "navbar": {
+    "home": "Home",
+    "hotels": "Hotels",
+    "flights": "Flights",
+    "offers": "Offers",
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "hero": {
+    "title": "Discover Your Next Trip with Katra Go",
+    "subtitle": "Book hotels & flights at the best prices",
+    "searchPlaceholder": "Where do you want to go?",
+    "searchBtn": "Search",
+    "checkIn": "Check-in",
+    "guests": "Guests"
+  },
+  "sections": {
+    "featured": "Featured Hotels",
+    "featuredSub": "Handpicked hotels for you",
+    "destinations": "Popular Destinations",
+    "destinationsSub": "Discover top travel destinations",
+    "whyUs": "Why Katra Go?",
+    "whyUsSub": "We offer an exceptional booking experience"
+  },
+  "features": {
+    "price": { "title": "Best Prices", "desc": "Competitive rates" },
+    "secure": { "title": "Secure Booking", "desc": "100% protected payment" },
+    "support": { "title": "24/7 Support", "desc": "Always here to help" },
+    "quality": { "title": "Guaranteed Quality", "desc": "Trusted hotels" }
+  },
+  "footer": {
+    "about": "About Us",
+    "contact": "Contact",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "rights": "All rights reserved",
+    "desc": "Your trusted platform for booking hotels & flights at the best prices.",
+    "follow": "Follow Us"
+  },
+  "currency": "Currency"
+}

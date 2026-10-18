@@ -1,0 +1,43 @@
+import { Booking } from "./types";
+
+export const bookings: Booking[] = [
+  {
+    id: 1,
+    category: "flights",
+    status: "upcoming",
+    tripTypeAr: "اتجاه واحد",
+    tripTypeEn: "One Way",
+    travelers: 1,
+    dateAr: "13 سبتمبر 2025",
+    dateEn: "13 Sep 2025",
+    fromCode: "CAI",
+    fromTime: "01:50",
+    toCode: "KWI",
+    toTime: "04:10",
+    duration: "3h 15m",
+    stopsAr: "مباشر",
+    stopsEn: "Direct",
+    baggage: "45",
+    image: "/images/promo/travel.png",
+   
+  },
+  {
+    id: 2,
+    category: "flights",
+    status: "past",
+    tripTypeAr: "ذهاب وعودة",
+    tripTypeEn: "Round Trip",
+    travelers: 2,
+    dateAr: "20 أكتوبر 2025",
+    dateEn: "20 Oct 2025",
+    fromCode: "CAI",
+    fromTime: "02:30",
+    toCode: "KWI",
+    toTime: "05:20",
+    duration: "2h 50m",
+    stopsAr: "مباشر",
+    stopsEn: "Direct",
+    baggage: "30",
+    image: "/images/promo/travel.png",
+  },
+];
