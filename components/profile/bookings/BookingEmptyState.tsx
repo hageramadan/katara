@@ -2,9 +2,11 @@
 import Image from "next/image";
 import { useApp } from "@/context/AppContext";
 import { FiSearch } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 export default function BookingEmptyState() {
   const { lang } = useApp();
+  const router = useRouter();
 
   return (
     <div className="bg-white rounded-2xl border border-[#DCE3EC] py-12 md:py-16 px-6 text-center">
@@ -35,6 +37,7 @@ export default function BookingEmptyState() {
       {/* CTA */}
       <button
         type="button"
+        onClick={() => router.push("/flight-booking")}
         className="
           inline-flex items-center justify-center gap-2
           bg-[#0D154B] text-white font-bold

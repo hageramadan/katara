@@ -6,10 +6,11 @@ import DateInputs from "./DateInputs";
 import TravelersDropdown from "./TravelersDropdown";
 import FlightFilters from "./FlightFilters";
 import { useApp } from "@/context/AppContext";
-import { FiSearch } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 export default function FlightBookingForm() {
   const { t } = useApp();
+  const router = useRouter();
   const [tripType, setTripType] = useState<TripType>("round");
   const [filters, setFilters] = useState<string[]>([
     "baggage",
@@ -36,7 +37,7 @@ export default function FlightBookingForm() {
         <FlightFilters value={filters} onChange={setFilters} />
 
         {/* Search Button */}
-        <button className="shrink-0 bg-primary text-white px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:opacity-90 transition flex items-center justify-center gap-2">
+        <button type="button" onClick={() => router.push("/flight-booking")} className="shrink-0 bg-primary text-white px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:opacity-90 transition flex items-center justify-center gap-2">
           {/* <FiSearch className="text-lg" /> */}
           {t.hero.searchBtn}
         </button>

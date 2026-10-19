@@ -6,11 +6,13 @@ export default function Counter({
   onChange,
   min = 0,
   max = 9,
+  formatValue = String,
 }: {
   value: number;
   onChange: (v: number) => void;
   min?: number;
   max?: number;
+  formatValue?: (value: number) => string;
 }) {
   return (
     <div className="flex items-center gap-2 sm:gap-3">
@@ -24,7 +26,7 @@ export default function Counter({
       </button>
 
       <span className="w-5 sm:w-6 text-center text-xs sm:text-base font-semibold text-primary">
-        {value}
+        {formatValue(value)}
       </span>
 
       <button

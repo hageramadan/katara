@@ -4,6 +4,7 @@ import { useApp } from "@/context/AppContext";
 import { FaPlane } from "react-icons/fa6";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiHeart } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 // ==================== Types ====================
 export type TicketCardProps = {
@@ -87,6 +88,7 @@ export default function TicketCard({
   compactMobile = false,
 }: TicketCardProps) {
   const { lang } = useApp();
+  const router = useRouter();
 
   const defaultCta = lang === "ar" ? "إستكمل الحجز" : "Continue Booking";
   const defaultUnit = lang === "ar" ? "كجم" : "kg";
@@ -290,7 +292,11 @@ export default function TicketCard({
             {ctaText && (
               <button
                 type="button"
-                onClick={onCtaClick}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (onCtaClick) onCtaClick();
+                  else router.push("/flight-booking");
+                }}
                 className="
                   w-full h-fit flex cursor-pointer items-center justify-center gap-2 md:gap-3
                   bg-[#0D154B] text-white font-bold text-sm md:text-base

@@ -1,11 +1,13 @@
 "use client";
 import Image from "next/image";
 import { useApp } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 import { FaPlane } from "react-icons/fa6";
 import { FaArrowLeft } from "react-icons/fa6";
 
 export default function PromoSection() {
   const { lang } = useApp();
+  const router = useRouter();
 
   return (
     <section className="py-10 px-4 bg-white">
@@ -170,6 +172,8 @@ export default function PromoSection() {
 
               {/* CTA Button */}
               <button
+                type="button"
+                onClick={() => router.push("/flight-booking")}
                 className="
                   w-full h-fit flex cursor-pointer items-center justify-center gap-2 md:gap-3
                   bg-primary text-white font-bold text-sm md:text-base

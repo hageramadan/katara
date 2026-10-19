@@ -3,17 +3,47 @@ import { useState, useRef, useEffect } from "react";
 import {FiChevronDown } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 import Counter from "./Counter";
+import { localizeDigits } from "@/lib/flights/format";
+import { CabinClass, TravelerSelection } from "@/lib/flights/types";
 
-type Cabin = "economy" | "business";
+type TravelersDropdownProps = {
+  className?: string;
+  initialSelection?: TravelerSelection;
+  onSelectionChange?: (selection: TravelerSelection) => void;
+  englishDigits?: boolean;
+};
 
-export default function TravelersDropdown({ className = "" }: { className?: string }) {
+export default function TravelersDropdown({
+  className = "",
+  initialSelection,
+  onSelectionChange,
+  englishDigits = false,
+}: TravelersDropdownProps) {
   const { lang } = useApp();
+  const ar = lang === "ar";
   const [open, setOpen] = useState(false);
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [infants, setInfants] = useState(0);
-  const [cabin, setCabin] = useState<Cabin>("economy");
+  const [adults, setAdults] = useState(initialSelection?.adults ?? 1);
+  const [children, setChildren] = useState(initialSelection?.children ?? 0);
+  const [infants, setInfants] = useState(initialSelection?.infants ?? 0);
+  const [cabin, setCabin] = useState<CabinClass>(initialSelection?.cabin ?? "economy");
   const ref = useRef<HTMLDivElement>(null);
+
+  const updateAdults = (value: number) => {
+    setAdults(value);
+    onSelectionChange?.({ adults: value, children, infants, cabin });
+  };
+  const updateChildren = (value: number) => {
+    setChildren(value);
+    onSelectionChange?.({ adults, children: value, infants, cabin });
+  };
+  const updateInfants = (value: number) => {
+    setInfants(value);
+    onSelectionChange?.({ adults, children, infants: value, cabin });
+  };
+  const updateCabin = (value: CabinClass) => {
+    setCabin(value);
+    onSelectionChange?.({ adults, children, infants, cabin: value });
+  };
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -24,6 +54,8 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
   }, []);
 
   const total = adults + children + infants;
+  const formatCount = (value: string | number) =>
+    localizeDigits(value, ar && !englishDigits);
 
   return (
     <div className={`relative ${className}`} ref={ref}>
@@ -38,8 +70,8 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
         <div className="flex items-center justify-between">
           <span className="text-primary font-semibold text-xs sm:text-sm flex items-center gap-2">
             {/* <FiUsers className="text-primary" /> */}
-            {total} {lang === "ar" ? "مسافر" : "Traveler"}
-            <span className="text-xs sm:text-sm text-[#333333] fot-bold">
+            {formatCount(total)} {lang === "ar" ? "مسافر" : "Traveler"}
+            <span className="text-xs sm:text-xs text-[#333333] fot-extrabold">
               / {lang === "ar"
                 ? cabin === "economy" ? "اقتصادية" : "درجة رجال أعمال"
                 : cabin === "economy" ? "Economy" : "Business"}
@@ -63,7 +95,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
                 {lang === "ar" ? "12 سنة وأكثر" : "12+ years"}
               </p> */}
             </div>
-            <Counter value={adults} onChange={setAdults} min={1} max={9} />
+            <Counter value={adults} onChange={updateAdults} min={1} max={9} formatValue={formatCount} />
           </div>
 
           {/* Children */}
@@ -76,7 +108,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
                 ({lang === "ar" ? "2 - 12 العمر" : "2 - 12 years"})
               </p>
             </div>
-            <Counter value={children} onChange={setChildren} min={0} max={8} />
+            <Counter value={children} onChange={updateChildren} min={0} max={8} formatValue={formatCount} />
           </div>
 
           {/* Infants */}
@@ -89,7 +121,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
                 ({lang === "ar" ? "0 - 2 العمر" : "0 - 2 years"})
               </p>
             </div>
-            <Counter value={infants} onChange={setInfants} min={0} max={4} />
+            <Counter value={infants} onChange={updateInfants} min={0} max={4} formatValue={formatCount} />
           </div>
 
           {/* Divider */}
@@ -99,7 +131,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => setCabin("economy")}
+              onClick={() => updateCabin("economy")}
               className={`
                 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold cursor-pointer transition
                 ${
@@ -113,7 +145,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
             </button>
             <button
               type="button"
-              onClick={() => setCabin("business")}
+              onClick={() => updateCabin("business")}
               className={`
                 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm cursor-pointer font-semibold transition
                 ${
