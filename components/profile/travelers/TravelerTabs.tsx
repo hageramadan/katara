@@ -16,17 +16,19 @@ export default function TravelerTabs({
   const { lang } = useApp();
 
   return (
-    <div className="flex flex-wrap items-center gap-2 md:gap-6 mb-6">
+    <div role="tablist" className="grid w-full grid-cols-3 items-center gap-1.5 sm:flex sm:flex-wrap sm:gap-3 md:gap-6 mb-4 sm:mb-6">
       {travelers.map((t) => {
         const active = t.id === activeId;
         return (
           <button
             key={t.id}
             onClick={() => onChange(t.id)}
+            role="tab"
+            aria-selected={active}
             className={`
-              relative flex items-center gap-2
-              px-4 md:px-12 py-2.5 md:py-3 rounded-xl
-              text-sm md:text-base font-bold 
+              relative flex min-w-0 w-full items-center justify-center gap-1 sm:w-auto sm:gap-2
+              px-1.5 sm:px-4 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-xl
+              text-[11px] sm:text-sm md:text-base font-bold text-center leading-tight
                cursor-pointer 
               ${
                 active
@@ -43,7 +45,7 @@ export default function TravelerTabs({
             {active && (
               <span
                 className="
-                  absolute top-1/2 -translate-y-1/2 -inset-e-4.5
+                  absolute top-1/2 hidden -translate-y-1/2 -inset-e-4.5 sm:block
                   w-0 h-0
                   border-y-22 border-y-transparent
                   border-e-22 border-e-[#E7F7F7]

@@ -17,7 +17,7 @@ export default function FlightStatusForm() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3 sm:space-y-5">
       {/* ============ Mode Selector ============ */}
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => {
@@ -28,7 +28,7 @@ export default function FlightStatusForm() {
               key={opt.key}
               onClick={() => setMode(opt.key)}
               className={`
-                flex items-center gap-2 cursor-pointer px-5 py-2.5 rounded-xl text-sm font-semibold
+                flex items-center gap-1.5 sm:gap-2 cursor-pointer px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold
                 transition-all duration-200
                 ${
                   active
@@ -47,13 +47,13 @@ export default function FlightStatusForm() {
       {mode === "route" && (
         <div className="flex flex-col md:flex-row md:items-stretch gap-3">
           {/* From */}
-          <div className="flex-1 bg-gray-50 rounded-xl px-4 py-3">
-            <label className="text-base text-[#4A4A4A] block mb-2">
+          <div className="flex-1 bg-gray-50 rounded-xl px-3 py-2 sm:px-4 sm:py-3">
+            <label className="text-xs sm:text-base text-[#4A4A4A] block mb-1 sm:mb-2">
               {lang === "ar" ? "من" : "From"}
             </label>
             <input
               defaultValue={lang === "ar" ? "القاهرة" : "Cairo"}
-              className="bg-transparent outline-none w-full text-[#0D0D0D] font-bold text-base"
+              className="bg-transparent outline-none w-full text-sm sm:text-base text-[#0D0D0D] font-bold"
             />
           </div>
 
@@ -79,9 +79,9 @@ export default function FlightStatusForm() {
           {/* Search Button */}
           <button
             aria-label="search"
-            className="shrink-0 bg-primary text-white px-8 rounded-xl font-bold text-base hover:opacity-90 transition flex items-center justify-center gap-2"
+            className="w-full md:w-auto shrink-0 bg-primary text-white px-8 py-3 md:py-0 rounded-xl font-bold text-sm sm:text-base hover:opacity-90 transition flex items-center justify-center gap-2"
           >
-            <FiSearch className="text-lg" />
+            <FiSearch className="text-xl sm:text-lg" />
             {lang === "ar" ? "بحث" : "Search"}
           </button>
         </div>
@@ -91,13 +91,13 @@ export default function FlightStatusForm() {
       {mode === "flightNumber" && (
         <div className="flex flex-col md:flex-row md:items-stretch gap-3">
           {/* Flight Number */}
-          <div className="flex-1 bg-gray-50 rounded-xl px-4 py-3">
-            <label className="text-base text-[#4A4A4A] block mb-2">
+          <div className="flex-1 bg-gray-50 rounded-xl px-3 py-2 sm:px-4 sm:py-3">
+            <label className="text-xs sm:text-base text-[#4A4A4A] block mb-1 sm:mb-2">
               {lang === "ar" ? "رقم الرحلة" : "Flight Number"}
             </label>
             <input
               placeholder="MS 123"
-              className="bg-transparent outline-none w-full text-[#0D0D0D] font-bold text-base"
+              className="bg-transparent outline-none w-full text-sm sm:text-base text-[#0D0D0D] font-bold"
             />
           </div>
 
@@ -112,9 +112,9 @@ export default function FlightStatusForm() {
           {/* Search Button */}
           <button
             aria-label="search"
-            className="shrink-0 bg-primary text-white px-8 rounded-xl font-bold text-base hover:opacity-90 transition flex items-center justify-center gap-2"
+            className="w-full md:w-auto shrink-0 bg-primary text-white px-8 py-3 md:py-0 rounded-xl font-bold text-sm sm:text-base hover:opacity-90 transition flex items-center justify-center gap-2"
           >
-            <FiSearch className="text-lg" />
+            <FiSearch className="text-xl sm:text-lg" />
             {lang === "ar" ? "بحث" : "Search"}
           </button>
         </div>
