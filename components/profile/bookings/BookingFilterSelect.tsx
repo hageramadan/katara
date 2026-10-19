@@ -7,6 +7,7 @@ import { BookingCategory } from "@/lib/bookings/types";
 type BookingFilterSelectProps = {
   value: BookingCategory;
   onChange: (v: BookingCategory) => void;
+  className?: string;
 };
 
 const options: { value: BookingCategory; ar: string; en: string }[] = [
@@ -17,6 +18,7 @@ const options: { value: BookingCategory; ar: string; en: string }[] = [
 export default function BookingFilterSelect({
   value,
   onChange,
+  className = "",
 }: BookingFilterSelectProps) {
   const { lang } = useApp();
   const [open, setOpen] = useState(false);
@@ -45,7 +47,7 @@ export default function BookingFilterSelect({
   }, []);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={`relative ${className}`}>
       {/* ==================== Trigger Button ==================== */}
       <button
         type="button"
