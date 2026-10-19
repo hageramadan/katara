@@ -30,16 +30,16 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-full bg-gray-50 rounded-xl px-4 py-3 hover:bg-gray-100 transition text-start"
+        className="w-full bg-gray-50 rounded-xl px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-100 transition text-start"
       >
-        <label className="text-base text-[#4A4A4A] block mb-2 cursor-pointer">
+        <label className="text-xs sm:text-base text-[#4A4A4A] block mb-1 sm:mb-2 cursor-pointer">
           {lang === "ar" ? "المسافرون /درجة السفر" : "Travelers & Class"}
         </label>
         <div className="flex items-center justify-between">
-          <span className="text-primary font-semibold text-sm flex items-center gap-2">
+          <span className="text-primary font-semibold text-xs sm:text-sm flex items-center gap-2">
             {/* <FiUsers className="text-primary" /> */}
             {total} {lang === "ar" ? "مسافر" : "Traveler"}
-            <span className="text-sm text-[#333333] fot-bold">
+            <span className="text-xs sm:text-sm text-[#333333] fot-bold">
               / {lang === "ar"
                 ? cabin === "economy" ? "اقتصادية" : "درجة رجال أعمال"
                 : cabin === "economy" ? "Economy" : "Business"}
@@ -52,11 +52,11 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
       </button>
 
       {open && (
-        <div className="absolute top-full mt-2 inset-s-0 w-full lg:w-91 bg-white rounded-xl shadow-2xl  p-5 z-50">
+        <div className="absolute top-full mt-2 inset-s-0 w-full lg:w-91 bg-white rounded-xl shadow-2xl p-3 sm:p-5 z-50">
           {/* Adults */}
-          <div className="flex items-center justify-between py-2">
+          <div className="flex items-center justify-between py-1 sm:py-2">
             <div>
-              <p className="text-sm font-semibold text-primary">
+              <p className="text-xs sm:text-sm font-semibold text-primary">
                 {lang === "ar" ? "بالغ" : "Adult"}
               </p>
               {/* <p className="text-xs text-gray-400">
@@ -67,12 +67,12 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
           </div>
 
           {/* Children */}
-          <div className="flex items-center justify-between py-2">
+          <div className="flex items-center justify-between py-1 sm:py-2">
             <div className="flex items-center gap-1">
-              <p className="text-sm font-semibold text-primary">
+              <p className="text-xs sm:text-sm font-semibold text-primary">
                 {lang === "ar" ? "طفل" : "Child"}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-[10px] sm:text-xs text-gray-400">
                 ({lang === "ar" ? "2 - 12 العمر" : "2 - 12 years"})
               </p>
             </div>
@@ -80,12 +80,12 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
           </div>
 
           {/* Infants */}
-          <div className="flex items-center justify-between py-2">
+          <div className="flex items-center justify-between py-1 sm:py-2">
             <div className="flex items-center gap-1">
-              <p className="text-sm font-semibold text-primary">
+              <p className="text-xs sm:text-sm font-semibold text-primary">
                 {lang === "ar" ? "رضيع" : "Infant"}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-[10px] sm:text-xs text-gray-400">
                 ({lang === "ar" ? "0 - 2 العمر" : "0 - 2 years"})
               </p>
             </div>
@@ -93,7 +93,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-gray-200 my-3 mb-5" />
+          <div className="h-px bg-gray-200 my-2 sm:my-3 sm:mb-5" />
 
           {/* Cabin Class */}
           <div className="grid grid-cols-2 gap-2">
@@ -101,7 +101,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
               type="button"
               onClick={() => setCabin("economy")}
               className={`
-                py-2.5 rounded-lg text-sm font-semibold cursor-pointer transition
+                py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold cursor-pointer transition
                 ${
                   cabin === "economy"
                      ? "bg-[#E0FBFB] text-primary border border-primary/20"
@@ -115,7 +115,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
               type="button"
               onClick={() => setCabin("business")}
               className={`
-                py-2.5 rounded-lg text-sm cursor-pointer font-semibold transition
+                py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm cursor-pointer font-semibold transition
                 ${
                   cabin === "business"
                     ? "bg-[#E0FBFB] text-primary border border-primary/20"
@@ -131,7 +131,7 @@ export default function TravelersDropdown({ className = "" }: { className?: stri
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="w-full mt-4 bg-primary text-white py-2.5 rounded-lg font-semibold hover:opacity-90 transition"
+            className="w-full mt-3 sm:mt-4 bg-primary text-white py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold hover:opacity-90 transition"
           >
             {lang === "ar" ? "موافق" : "Done"}
           </button>

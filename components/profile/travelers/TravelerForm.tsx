@@ -28,7 +28,7 @@ export default function TravelerForm({ traveler, onChange }: TravelerFormProps) 
         <h2 className="text-lg md:text-xl font-bold text-[#0D0D0D] mb-2 md:mb-5 ">
           {lang === "ar" ? "البيانات الشخصية" : "Personal Information"}
         </h2>
-        <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-2">
+        <h3 className="text-sm md:text-lg font-bold text-[#172B35] mb-2">
           {lang === "ar" ? "تفاصيل شخصية" : "Personal Details"}
         </h3>
         <p className="text-[11px] md:text-xs text-[#A4A4A4] leading-relaxed mb-10">
@@ -155,7 +155,7 @@ export default function TravelerForm({ traveler, onChange }: TravelerFormProps) 
             : "Please ensure you carry valid documents. (Optional)"}
         </p>
 
-        <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-3 flex items-center gap-2">
+        <h3 className="text-sm md:text-lg font-bold text-[#172B35] mb-3 flex items-center gap-2">
           
           {lang === "ar" ? "جواز السفر" : "Passport"}
         </h3>
@@ -172,7 +172,7 @@ export default function TravelerForm({ traveler, onChange }: TravelerFormProps) 
           />
         </div>
 
-        <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-3 flex items-center gap-2">
+        <h3 className="text-sm md:text-lg font-bold text-[#172B35] mb-3 flex items-center gap-2">
           
           {lang === "ar" ? "الهوية الوطنية" : "National ID"}
         </h3>

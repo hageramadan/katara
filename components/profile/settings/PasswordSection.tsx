@@ -45,7 +45,7 @@ export default function PasswordSection() {
       <form onSubmit={handleSubmit} className="px-6 md:px-8 py-4 flex flex-col gap-5">
         {/* Section title */}
         <div className="mb-4">
-          <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-2">
+          <h3 className="text-sm md:text-lg font-bold text-[#172B35] mb-2">
             {lang === "ar" ? "تغيير كلمة المرور" : "Change Password"}
           </h3>
           <p className="text-xs md:text-sm text-[#6F7E89]">

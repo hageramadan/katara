@@ -19,7 +19,7 @@ export default function TripTypeSelector({
   const { lang } = useApp();
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5 sm:gap-2">
       {options.map((opt) => {
         const active = opt.key === value;
         return (
@@ -27,7 +27,8 @@ export default function TripTypeSelector({
             key={opt.key}
             onClick={() => onChange(opt.key)}
             className={`
-              px-5 py-2 rounded-lg text-base font-bold transition cursor-pointer
+              rounded-lg px-3 py-1.5 text-xs font-bold transition cursor-pointer
+              sm:px-5 sm:py-2 sm:text-base
               ${
                 active
                   ? "bg-primary text-white shadow-md"

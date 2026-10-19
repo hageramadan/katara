@@ -13,17 +13,17 @@ export default function Counter({
   max?: number;
 }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2 sm:gap-3">
       <button
         type="button"
         onClick={() => onChange(Math.max(min, value - 1))}
         disabled={value <= min}
-        className="w-5 h-5 rounded-full cursor-pointer border border-primary/20 flex items-center justify-center bg-primary text-whitehover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-primary"
+        className="w-4 h-4 sm:w-5 sm:h-5 rounded-full cursor-pointer border border-primary/20 flex items-center justify-center bg-primary text-whitehover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-primary"
       >
-        <FiMinus className="text-base text-white" />
+        <FiMinus className="text-xs sm:text-base text-white" />
       </button>
 
-      <span className="w-6 text-center font-semibold text-primary">
+      <span className="w-5 sm:w-6 text-center text-xs sm:text-base font-semibold text-primary">
         {value}
       </span>
 
@@ -31,9 +31,9 @@ export default function Counter({
         type="button"
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={value >= max}
-        className="w-5 h-5 rounded-full border border-primary/20 cursor-pointer flex items-center justify-center bg-primary text-whitehover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-primary"
+        className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border border-primary/20 cursor-pointer flex items-center justify-center bg-primary text-whitehover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-primary"
       >
-        <FiPlus className="text-base text-white" />
+        <FiPlus className="text-xs sm:text-base text-white" />
       </button>
     </div>
   );

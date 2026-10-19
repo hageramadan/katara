@@ -24,6 +24,13 @@
   --color-secondary-soft: #C4EAEB66;
 }
 
+/* Make the site's rem-based typography more comfortable on phones. */
+@media (max-width: 767px) {
+  html {
+    font-size: 15px;
+  }
+}
+
 /* ============================
    Base Styles
    ============================ */
@@ -113,6 +120,25 @@ body {
 
 .katra-daypicker .rdp-nav {
   gap: 4px;
+}
+
+@media (max-width: 639px) {
+  .katra-daypicker {
+    font-size: 12px;
+  }
+
+  .katra-daypicker .rdp-caption_label {
+    font-size: 13px;
+  }
+
+  .katra-daypicker .rdp-head_cell {
+    font-size: 10px;
+  }
+
+  .katra-daypicker .rdp-day {
+    width: 32px;
+    height: 32px;
+  }
 }
 /* ============================
    Utilities

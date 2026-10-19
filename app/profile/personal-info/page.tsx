@@ -148,7 +148,7 @@ export default function PersonalInfoPage() {
           {lang === "ar" ? "يرجى التأكد من أنك تحمل وثائق صحيحة وصالحة. (اختياري)" : "Please ensure valid documents. (Optional)"}
         </p>
 
-        <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-3 flex items-center gap-2">
+        <h3 className="text-sm md:text-lg font-bold text-[#172B35] mb-3 flex items-center gap-2">
           
           {lang === "ar" ? "جواز السفر" : "Passport"}
         </h3>
@@ -165,7 +165,7 @@ export default function PersonalInfoPage() {
           />
         </div>
 
-        <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-3 flex items-center gap-2">
+        <h3 className="text-sm md:text-lg font-bold text-[#172B35] mb-3 flex items-center gap-2">
           
           {lang === "ar" ? "الهوية الوطنية" : "National ID"}
         </h3>

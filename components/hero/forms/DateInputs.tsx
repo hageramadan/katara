@@ -41,7 +41,7 @@ export default function DateInputs({
       {/* Divider (only in round trip) */}
       {showReturn && (
         <div className="flex items-center justify-center bg-[#F7F7F7] px-0.5">
-          <div className="text-3xl text-gray-300">|</div>
+          <div className="text-xl sm:text-3xl text-gray-300">|</div>
         </div>
       )}
 

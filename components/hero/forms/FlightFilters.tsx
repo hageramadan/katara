@@ -25,13 +25,13 @@ export default function FlightFilters({
   };
 
   return (
-    <div className="flex flex-wrap gap-x-6 gap-y-3">
+    <div className="flex flex-wrap gap-x-4 gap-y-2 sm:gap-x-6 sm:gap-y-3">
       {filters.map((f) => {
         const checked = value.includes(f.key);
         return (
           <label
             key={f.key}
-            className="flex items-center gap-2 cursor-pointer group select-none"
+            className="flex items-center gap-1.5 sm:gap-2 cursor-pointer group select-none"
           >
             <input
               type="checkbox"
@@ -42,7 +42,7 @@ export default function FlightFilters({
             {/* ✅ مربع مع علامة صح */}
             <span
               className={`
-                w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200
+                w-4 h-4 sm:w-5 sm:h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200
                 ${
                   checked
                     ? "bg-primary border-primary scale-100"
@@ -60,7 +60,7 @@ export default function FlightFilters({
             </span>
             <span
               className={`
-                text-sm transition-colors
+                text-xs sm:text-sm transition-colors
                 ${checked ? "text-primary font-medium" : "text-gray-500 group-hover:text-primary"}
               `}
             >

@@ -59,22 +59,22 @@ export default function DatePicker({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-full h-full text-start px-4 py-3 hover:bg-gray-100 transition"
+        className="w-full h-full text-start px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-100 transition"
       >
         {label && (
-          <span className="text-base text-[#4A4A4A] block mb-2 cursor-pointer">
+          <span className="text-xs sm:text-base text-[#4A4A4A] block mb-1 sm:mb-2 cursor-pointer">
             {label}
           </span>
         )}
         <div className="flex items-center justify-between cursor-pointer">
           <span
-            className={`font-bold text-sm ${
+            className={`font-bold text-xs sm:text-sm ${
               value ? "text-[#333333]" : "text-gray-400"
             }`}
           >
             {displayValue}
           </span>
-          <FiCalendar className="text-[#777777] w-5 h-5" />
+          <FiCalendar className="text-[#777777] w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </button>
 
@@ -82,7 +82,7 @@ export default function DatePicker({
       {open && (
         <div
           className={`
-            absolute top-full mt-2 z-50 bg-white rounded-2xl shadow-2xl border border-primary/10 p-3
+            absolute top-full mt-2 z-50 w-[min(19rem,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl border border-primary/10 p-2 sm:p-3
             ${align === "end" ? "inset-e-0" : "inset-s-0"}
           `}
         >
