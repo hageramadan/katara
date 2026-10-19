@@ -89,8 +89,8 @@ export default function BookingsSection() {
   return (
     <section>
       {/* ==================== Header: Title + Filter ==================== */}
-      <div className="flex flex-wrap items-center justify-between gap-3 my-4 lg:my-8">
-        <h2 className="text-base md:text-xl font-bold text-[#0D0D0D]">
+      <div className="my-3 flex flex-col items-stretch gap-2 sm:my-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3 lg:my-8">
+        <h2 className="text-sm sm:text-base md:text-xl font-bold text-[#0D0D0D]">
           {lang === "ar" ? " حجوزاتي القادمة" : "My Upcoming Bookings"}
         </h2>
 
@@ -104,7 +104,7 @@ export default function BookingsSection() {
       </div>
 
       {/* ==================== Tabs ==================== */}
-      <div className="grid grid-cols-2 text-center justify-center items-center gap-6 border-b border-[#DCE3EC] mb-5">
+      <div className="grid grid-cols-2 text-center justify-center items-center gap-3 sm:gap-6 border-b border-[#DCE3EC] mb-4 sm:mb-5">
         {[
           {
             key: "flights" as TabKey,
@@ -126,7 +126,7 @@ export default function BookingsSection() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`
-                flex items-center gap-2 pb-3 text-sm md:text-base font-extrabold justify-center
+                flex items-center gap-1.5 sm:gap-2 pb-2.5 sm:pb-3 text-xs sm:text-sm md:text-base font-extrabold justify-center
                 transition-all cursor-pointer
                 ${
                   active
@@ -135,7 +135,7 @@ export default function BookingsSection() {
                 }
               `}
             >
-              <Icon className="text-2xl" />
+              <Icon className="text-lg sm:text-2xl" />
               {lang === "ar" ? tab.ar : tab.en}
             </button>
           );
@@ -148,6 +148,7 @@ export default function BookingsSection() {
           {bookings.map((b) => (
             <TicketCard
               key={b.id}
+              compactMobile
               image="/images/promo/travel.png"
               airlineLogo="/images/promo/Frame.png"
               imageAlt="Flight"

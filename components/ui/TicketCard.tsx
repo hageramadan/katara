@@ -55,6 +55,7 @@ export type TicketCardProps = {
 
   className?: string;
   onCardClick?: () => void;
+  compactMobile?: boolean;
 };
 
 // ==================== Component ====================
@@ -83,6 +84,7 @@ export default function TicketCard({
   onFavoriteToggle,
   className = "",
   onCardClick,
+  compactMobile = false,
 }: TicketCardProps) {
   const { lang } = useApp();
 
@@ -104,7 +106,7 @@ export default function TicketCard({
       tabIndex={onCardClick ? 0 : undefined}
     >
       {/* ==================== Image Side ==================== */}
-      <div className="relative h-48 md:h-60">
+      <div className={`relative ${compactMobile ? "h-32 sm:h-48 md:h-60" : "h-48 md:h-60"}`}>
         <Image
           src={image}
           alt={imageAlt}
@@ -117,7 +119,7 @@ export default function TicketCard({
       </div>
 
       {/* ==================== Content Side (White) ==================== */}
-      <div className="relative md:col-span-3 bg-white text-[#172B35] p-4 md:p-6 lg:py-5 lg:px-8 flex flex-col justify-between gap-4">
+      <div className={`relative md:col-span-3 bg-white text-[#172B35] ${compactMobile ? "p-3 sm:p-4 md:p-6 lg:py-5 lg:px-8 gap-2 sm:gap-4" : "p-4 md:p-6 lg:py-5 lg:px-8 gap-4"} flex flex-col justify-between`}>
         {showFavorite && (
           <button
             type="button"
@@ -145,7 +147,7 @@ export default function TicketCard({
           </button>
         )}
         {/* -------- Header: Logo + Date + Route + Travelers -------- */}
-        <div className="flex flex-wrap items-center gap-2 md:gap-3 pb-3 md:pb-4">
+        <div className={`flex flex-wrap items-center gap-2 md:gap-3 ${compactMobile ? "pb-2 md:pb-4" : "pb-3 md:pb-4"}`}>
           {/* <div className="shrink-0">
             <Image
               src="/images/promo/Qatar_Logo.png"
@@ -163,7 +165,7 @@ export default function TicketCard({
                 alt={airlineName || "Airline"}
                 width={590}
                 height={536}
-                className="object-contain w-14 md:w-17.5 lg:w-22.5 h-auto"
+                className={`object-contain ${compactMobile ? "w-10 sm:w-14 md:w-17.5 lg:w-22.5" : "w-14 md:w-17.5 lg:w-22.5"} h-auto`}
               />
             </div>
           )}
@@ -198,16 +200,16 @@ export default function TicketCard({
         <div className="flex items-center justify-between gap-2 md:gap-4 py-3 md:py-6">
           {/* Departure */}
           <div className="text-center shrink-0 flex flex-col gap-2">
-            <p className="text-xs md:text-sm lg:text-base font-bold text-[#4A4A4A]">
+            <p className={`${compactMobile ? "text-[11px] sm:text-xs md:text-sm lg:text-base" : "text-xs md:text-sm lg:text-base"} font-bold text-[#4A4A4A]`}>
               {departureCode}
             </p>
-            <p className="text-lg md:text-2xl font-bold text-[#0D0D0D]">
+            <p className={`${compactMobile ? "text-base sm:text-lg md:text-2xl" : "text-lg md:text-2xl"} font-bold text-[#0D0D0D]`}>
               {departureTime}
             </p>
           </div>
 
           {/* Middle: Stops + Duration + Line + Plane */}
-          <div className="flex-1 flex flex-col items-center min-w-0 px-1 md:px-4">
+          <div className={`flex-1 flex flex-col items-center min-w-0 ${compactMobile ? "px-0.5 sm:px-1 md:px-4" : "px-1 md:px-4"}`}>
             <p className="text-[10px] md:text-sm lg:text-base font-bold text-[#8E8E8E] mb-2 whitespace-nowrap">
               {stops || defaultStops} · {duration}
             </p>
@@ -219,7 +221,7 @@ export default function TicketCard({
 
               {/* Line */}
               <span
-                className="bg-[#D9D9D9] shrink-0 w-25 sm:w-40 md:w-50 lg:w-69.25"
+                className={`bg-[#D9D9D9] shrink-0 ${compactMobile ? "w-14 sm:w-25 md:w-50 lg:w-69.25" : "w-25 sm:w-40 md:w-50 lg:w-69.25"}`}
                 style={{ height: "2px" }}
               />
 
@@ -256,7 +258,7 @@ export default function TicketCard({
             <p className="text-xs md:text-sm lg:text-base font-bold text-[#4A4A4A]">
               {arrivalCode}
             </p>
-            <p className="text-lg md:text-2xl font-bold text-[#0D0D0D]">
+            <p className={`${compactMobile ? "text-base sm:text-lg md:text-2xl" : "text-lg md:text-2xl"} font-bold text-[#0D0D0D]`}>
               {arrivalTime}
             </p>
           </div>

@@ -25,22 +25,26 @@ export default function BookingsContent() {
   }, [category, activeTab]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-4 sm:gap-6">
 
       {/* ==================== Header: Title + Filter ==================== */}
-      <div className="flex flex-wrap items-start md:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-lg md:text-xl font-bold text-[#0D0D0D] mb-2 lg:mb-4">
+      <div className="flex min-w-0 flex-row items-center justify-between gap-2 sm:gap-3">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-base sm:text-lg md:text-xl font-bold text-[#0D0D0D] mb-1 sm:mb-2 lg:mb-4">
             {lang === "ar" ? "الحجوزات" : "Bookings"}
           </h1>
-          <p className="text-xs md:text-sm text-[#A4A4A4]">
+          <p className="text-[11px] sm:text-xs md:text-sm text-[#A4A4A4]">
             {lang === "ar"
               ? "التحقق من تفاصيل الحجز الخاصة بك أو استردادها."
               : "Check your booking details or request a refund."}
           </p>
         </div>
 
-        <BookingFilterSelect value={category} onChange={setCategory} />
+        <BookingFilterSelect
+          value={category}
+          onChange={setCategory}
+          className="w-[46%] shrink-0 sm:w-auto"
+        />
       </div>
 
       {/* ==================== Tabs ==================== */}
@@ -54,6 +58,7 @@ export default function BookingsContent() {
           {filteredBookings.map((b) => (
             <TicketCard
               key={b.id}
+              compactMobile
               image={b.image}
               
               airlineLogo="/images/promo/Frame.png"

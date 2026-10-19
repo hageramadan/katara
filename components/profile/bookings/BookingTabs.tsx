@@ -26,7 +26,7 @@ export default function BookingTabs({ active, onChange }: BookingTabsProps) {
   return (
     <div
       className="
-        flex items-center gap-6 md:gap-8
+        flex items-center gap-4 sm:gap-6 md:gap-8
         border-b border-[#DCE3EC]
         overflow-x-auto
         [&::-webkit-scrollbar]:hidden
@@ -45,8 +45,8 @@ export default function BookingTabs({ active, onChange }: BookingTabsProps) {
             className={`
               relative flex items-center gap-2
               whitespace-nowrap shrink-0
-              pb-3 pt-1
-              text-sm md:text-base font-bold
+              pb-2.5 pt-1 sm:pb-3
+              text-xs sm:text-sm md:text-base font-bold
               transition-colors duration-200
               cursor-pointer
               ${
@@ -56,7 +56,7 @@ export default function BookingTabs({ active, onChange }: BookingTabsProps) {
               }
             `}
           >
-            <Icon className="text-base md:text-lg" />
+            <Icon className="text-sm sm:text-base md:text-lg" />
             <span>{lang === "ar" ? tab.ar : tab.en}</span>
 
             {/* ✅ الخط السفلي للتاب النشط */}
