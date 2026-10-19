@@ -9,13 +9,25 @@ const languages: { code: Lang; name: string; native: string }[] = [
   { code: "en", name: "English", native: "English" },
 ];
 
-export default function LanguageDropdown() {
+export default function LanguageDropdown({
+  onSelect,
+  className,
+  triggerClassName,
+  width = "w-44",
+}: {
+  onSelect?: () => void;
+  className?: string;
+  triggerClassName?: string;
+  width?: string;
+} = {}) {
   const { lang, setLang } = useApp();
   const current = languages.find((l) => l.code === lang)!;
 
   return (
     <Dropdown
-      width="w-44"
+      width={width}
+      className={className}
+      triggerClassName={triggerClassName}
       trigger={
         <>
           {/* <FiGlobe className="text-sm" /> */}
@@ -37,6 +49,7 @@ export default function LanguageDropdown() {
                 onClick={() => {
                   setLang(l.code);
                   close();
+                  onSelect?.();
                 }}
                 className={`
                   w-full flex items-center justify-between px-4 py-2.5 text-sm

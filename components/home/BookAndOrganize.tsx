@@ -43,13 +43,13 @@ export default function BookAndOrganize() {
 
           {/* ==================== Right Side: Content ==================== */}
           <div className="flex flex-col gap-5 md:gap-6">
-            <h2 className="font-extrabold text-[28px] md:text-[36px] lg:text-[54px] leading-tight">
+            <h2 className="font-extrabold text-[22px] sm:text-[24px] md:text-[36px] lg:text-[54px] leading-tight">
               {lang === "ar"
                 ? "احجز ونظم رحلتك مع خدمات الأفضل"
                 : "Book and Organize Your Trip with Al-Afdal Services"}
             </h2>
 
-            <p className="text-white text-base md:text-lg leading-relaxed font-semibold">
+            <p className="text-white text-sm md:text-lg leading-relaxed font-semibold">
               {lang === "ar"
                 ? "الأفضل شركة مساهمة في جميع خطواتك نحو النجاح!"
                 : "Al-Afdal is a partner in all your steps toward success!"}
@@ -104,7 +104,7 @@ export default function BookAndOrganize() {
                     className="w-9 h-9 md:w-11 md:h-11 lg:w-12 lg:h-12 object-contain"
                   />
 
-                  <h3 className="text-white text-base md:text-lg lg:text-xl font-bold underline underline-offset-4 decoration-2">
+                  <h3 className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold underline underline-offset-4 decoration-2">
                     {lang === "ar" ? service.ar : service.en}
                   </h3>
 

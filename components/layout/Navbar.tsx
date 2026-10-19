@@ -1,16 +1,37 @@
 "use client";
 import Link from "next/link";
-import { FiUser, FiMenu, FiX } from "react-icons/fi";
-import { useState } from "react";
+import { FiUser, FiMenu, FiX, FiSettings } from "react-icons/fi";
+import { useEffect, useRef, useState } from "react";
 import { useApp } from "@/context/AppContext";
 import Image from "next/image";
 import CountryDropdown from "@/components/ui/CountryDropdown";
 import LanguageDropdown from "@/components/ui/LanguageDropdown";
 import { FaAngleDown } from "react-icons/fa6";
+import { RiPlaneLine } from "react-icons/ri";
 
 export default function Navbar() {
   const { t, lang, country } = useApp();
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (menuRef.current?.contains(target) || toggleRef.current?.contains(target)) return;
+      setOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
 
   // 🔐 بيانات المستخدم (مؤقتًا — هنربطها بـ Auth بعدين)
   const user = {
@@ -23,7 +44,7 @@ export default function Navbar() {
   const firstName = user.name.split(" ")[0];
 
   return (
-    <nav className="sticky bg-white top-0 z-50 shadow-md">
+    <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="shrink-0">
@@ -106,9 +127,12 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <button
+          ref={toggleRef}
           className="md:hidden text-2xl text-primary"
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          aria-label={open ? (lang === "ar" ? "إغلاق القائمة" : "Close menu") : (lang === "ar" ? "فتح القائمة" : "Open menu")}
+          aria-expanded={open}
+          aria-controls="mobile-navigation-menu"
         >
           {open ? <FiX /> : <FiMenu />}
         </button>
@@ -116,73 +140,97 @@ export default function Navbar() {
 
       {/* ==================== Mobile Menu ==================== */}
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-6">
-          <CountryDropdown />
-          <span className="w-px h-5 bg-primary/20" />
-          <LanguageDropdown />
-
-          <div className="text-start text-sm text-gray-500">
-            {lang === "ar" ? "العملة" : "Currency"}:{" "}
-            <span className="text-primary font-semibold">
-              {country.currency}
-            </span>
-          </div>
-
-          <Link
-            href="/trips"
-            className="text-base underline font-bold text-primary hover:opacity-80 transition block"
+        <>
+          <button
+            type="button"
+            aria-label={lang === "ar" ? "إغلاق القائمة" : "Close menu"}
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-[55] bg-[#07102F]/45 backdrop-blur-[2px] md:hidden"
+          />
+          <div
+            ref={menuRef}
+            id="mobile-navigation-menu"
+            className="fixed inset-y-0 inset-e-0 z-[60] flex w-[min(88vw,360px)] flex-col overflow-y-auto bg-white shadow-2xl md:hidden"
           >
-            {lang === "ar" ? "رحلاتي" : "My Trips"}
-          </Link>
-         <Link
-              href="/login"
-              className="flex items-center justify-center gap-2 bg-primary text-white px-4 py-2.5 rounded-md text-sm font-semibold"
-            >
-              <FiUser /> {t.navbar.login}
-            </Link>
-             <Link
-              href="/profile"
-              className="flex items-center gap-3 bg-[#FAFCFE] border border-[#DCE3EC] rounded-xl p-3 hover:bg-[#F0F4F8] transition"
-            >
-              <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
-                {initial}
+            <div className="flex items-center justify-between border-b border-white/15 bg-primary px-5 py-5 text-white">
+              <div className="flex items-center gap-3">
+                <Image src="/logo.png" alt="Katra Go" width={90} height={45} className="h-10 w-20 rounded-lg bg-white object-contain p-1" />
+                <div>
+                  <p className="text-sm font-bold">{lang === "ar" ? "أهلاً بك" : "Welcome"}</p>
+                  <p className="mt-0.5 text-xs text-white/70">{lang === "ar" ? "استكشف خدمات الأفضل" : "Explore Al-Afdal"}</p>
+                </div>
               </div>
-              <div className="flex flex-col text-start">
-                <span className="text-sm font-bold text-primary">
-                  {firstName}
-                </span>
-                <span className="text-xs text-gray-400 truncate max-w-[180px]">
-                  {user.email}
-                </span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label={lang === "ar" ? "إغلاق القائمة" : "Close menu"}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-xl transition hover:bg-white/20"
+              >
+                <FiX />
+              </button>
+            </div>
+
+            <div className="flex-1 space-y-6 px-5 py-6">
+              <Link
+                href="/profile"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-2xl bg-[#F3F7FA] p-4 transition hover:bg-[#EAF1F5]"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#55BBC4] text-lg font-bold text-white">{initial}</div>
+                <div className="min-w-0 flex-1 text-start">
+                  <span className="block text-sm font-bold text-primary">{firstName}</span>
+                  <span className="mt-1 block truncate text-xs text-[#84909E]">{user.email}</span>
+                </div>
+                <FaAngleDown className="-rotate-90 text-primary rtl:rotate-90" />
+              </Link>
+
+              <div>
+                <p className="mb-2 px-1 text-xs font-bold text-[#9AA3AF]">{lang === "ar" ? "حسابك" : "Your account"}</p>
+                <Link
+                  href="/trips"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3.5 text-sm font-semibold text-[#243247] transition hover:bg-[#F3F7FA]"
+                >
+                  <RiPlaneLine className="text-xl text-[#55BBC4]" />
+                  {lang === "ar" ? "رحلاتي" : "My Trips"}
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="mt-1 flex items-center gap-3 rounded-xl px-3 py-3.5 text-sm font-semibold text-[#243247] transition hover:bg-[#F3F7FA]"
+                >
+                  <FiUser className="text-xl text-[#55BBC4]" />
+                  {t.navbar.login}
+                </Link>
               </div>
-            </Link>
-          {/* User OR Login */}
-          {/* {user.isLoggedIn ? (
-            <Link
-              href="/profile"
-              className="flex items-center gap-3 bg-[#FAFCFE] border border-[#DCE3EC] rounded-xl p-3 hover:bg-[#F0F4F8] transition"
-            >
-              <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg">
-                {initial}
+
+              <div className="border-t border-[#E9EDF1] pt-5">
+                <p className="mb-3 flex items-center gap-2 px-1 text-xs font-bold text-[#9AA3AF]"><FiSettings />{lang === "ar" ? "التفضيلات" : "Preferences"}</p>
+                <div className="flex flex-col gap-2.5">
+                  <CountryDropdown
+                    width="w-full"
+                    onSelect={() => setOpen(false)}
+                    className="w-full"
+                    triggerClassName="w-full justify-between rounded-xl bg-[#F6F8FA] px-3 py-3 text-sm"
+                  />
+                  <LanguageDropdown
+                    width="w-full"
+                    onSelect={() => setOpen(false)}
+                    className="w-full"
+                    triggerClassName="w-full justify-between rounded-xl bg-[#F6F8FA] px-3 py-3 text-sm"
+                  />
+                </div>
+                <p className="mt-3 px-1 text-start text-xs text-[#84909E]">
+                  {lang === "ar" ? "العملة" : "Currency"}: <span className="font-semibold text-primary">{country.currency}</span>
+                </p>
               </div>
-              <div className="flex flex-col text-start">
-                <span className="text-sm font-bold text-primary">
-                  {firstName}
-                </span>
-                <span className="text-xs text-gray-400 truncate max-w-[180px]">
-                  {user.email}
-                </span>
-              </div>
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="flex items-center justify-center gap-2 bg-primary text-white px-4 py-2.5 rounded-md text-sm font-semibold"
-            >
-              <FiUser /> {t.navbar.login}
-            </Link>
-          )} */}
-        </div>
+            </div>
+
+            <div className="border-t border-[#E9EDF1] p-5">
+              <p className="text-center text-[11px] text-[#9AA3AF]">{lang === "ar" ? "رحلتك تبدأ من هنا" : "Your journey starts here"}</p>
+            </div>
+          </div>
+        </>
       )}
     </nav>
   );

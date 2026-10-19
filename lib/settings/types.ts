@@ -3,7 +3,8 @@ export type SettingsTab = "security" | "notifications" | "account";
 export type NotificationPreferences = {
   travelTips: boolean;
   specialOffers: boolean;
-  flightAlerts: boolean;
+  flightEmail: boolean;
+  flightSms: boolean;
 };
 
 export type ContactSettings = {

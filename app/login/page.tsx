@@ -19,7 +19,7 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="relative lg:min-h-screen flex items-center justify-center px-4 py-10">
+    <section className="relative flex min-h-[calc(100svh-4rem)] items-center justify-center px-3 py-6 sm:px-4 sm:py-10 lg:min-h-screen">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -39,19 +39,19 @@ export default function LoginPage() {
           />
 
           {/* Form — نفس ارتفاع السيدبار + محتوى في المنتصف */}
-          <div className="md:col-span-9 p-6 md:p-10 flex items-center justify-center">
+          <div className="md:col-span-9 p-4 sm:p-6 md:p-10 flex items-center justify-center">
             <form
               onSubmit={handleSubmit}
-              className="flex flex-col gap-5 lg:gap-6 w-full mx-auto"
+              className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full mx-auto"
             >
               {/* ==================== Title + Description ==================== */}
-              <div className="text-center mb-2 lg:mb-8">
-                <h1 className="text-xl md:text-2xl lg:text-[26px] font-extrabold text-[#163B45] mb-2">
+              <div className="text-center mb-1 sm:mb-2 lg:mb-8">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-[26px] font-extrabold text-[#163B45] mb-2">
                   {lang === "ar"
                     ? "أهلاً بك في منصة الأفضل"
                     : "Welcome to Al-Afdal Platform"}
                 </h1>
-                <p className="text-sm md:text-[15px] text-[#6F7E89]">
+                <p className="text-xs sm:text-sm md:text-[15px] text-[#6F7E89]">
                   {lang === "ar"
                     ? "سجّل الدخول للوصول إلى حسابك"
                     : "Sign in to access your account"}
@@ -137,7 +137,7 @@ export default function LoginPage() {
               </button>
 
               {/* Register */}
-              <p className="text-center text-xs md:text-base text-[#6F7E89]">
+              <p className="text-center text-xs sm:text-sm md:text-base text-[#6F7E89]">
                 {lang === "ar"
                   ? "لا تمتلك حساب بعد؟"
                   : "Don't have an account?"}{" "}

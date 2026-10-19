@@ -7,9 +7,11 @@ import TicketCard from "@/components/ui/TicketCard";
 import BookingFilterSelect from "./BookingFilterSelect";
 import BookingTabs from "./BookingTabs";
 import BookingEmptyState from "./BookingEmptyState";
+import { useRouter } from "next/navigation";
 
 export default function BookingsContent() {
   const { lang } = useApp();
+  const router = useRouter();
   const [category, setCategory] = useState<BookingCategory>("flights");
   const [activeTab, setActiveTab] = useState<BookingTab>("all");
 
@@ -69,6 +71,7 @@ export default function BookingsContent() {
               showFavorite={true}
               isFavorite={false}
               onFavoriteToggle={() => console.log("Toggle fav", b.id)}
+              onCardClick={() => router.push(`/profile/bookings/${b.id}`)}
             />
           ))}
         </div>

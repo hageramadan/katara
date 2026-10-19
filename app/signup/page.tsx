@@ -36,17 +36,17 @@ export default function SignUpPage() {
   };
 
   return (
-    <section className="relative lg:min-h-screen flex items-center justify-center px-4 py-10">
+    <section className="relative flex min-h-[calc(100svh-4rem)] items-center justify-center bg-[#F7F9FB] px-3 py-6 sm:px-4 sm:py-10 lg:min-h-screen">
       
     
 
-      <div className="relative z-10 container mx-auto">
-       <div className="flex flex-wrap gap-3 justify-center items-center lg:justify-between mb-8 px-4">
-            <h1 className="text-2xl md:text-3xl lg:text-[32px] text-[#0D0D0D] font-bold text-center">
+      <div className="relative z-10 container mx-auto w-full">
+       <div className="mb-4 flex flex-col items-center gap-2 px-1 text-center sm:mb-6 sm:flex-row sm:justify-between sm:gap-3 sm:px-4 sm:text-start lg:mb-8">
+            <h1 className="text-xl font-bold text-[#0D0D0D] sm:text-2xl md:text-3xl lg:text-[32px]">
           {lang === "ar" ? "انضم لمنصة الأفضل" : "Join the Best Platform"}
         </h1>
          {/* Link at top */}
-            <p className=" text-base md:text-lg text-[#8E8E8E] font-semibold">
+            <p className="text-xs font-semibold text-[#8E8E8E] sm:text-sm md:text-lg">
               {lang === "ar" ? "لدي حساب بالفعل؟" : "Already have an account?"}{" "}
               <Link
                 href="/login"
@@ -57,7 +57,7 @@ export default function SignUpPage() {
             </p>
        </div>
 
-        <div className=" w-full max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 md:items-stretch">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-xl sm:rounded-3xl md:grid-cols-12 md:items-stretch">
           
           {/* Sidebar */}
           <AuthSidebar
@@ -67,7 +67,7 @@ export default function SignUpPage() {
           />
 
           {/* Form */}
-          <div className="md:col-span-9 p-5 md:p-8">
+          <div className="min-w-0 md:col-span-9 p-3.5 sm:p-5 md:p-8">
           
 
             {/* Render the form for the active role */}

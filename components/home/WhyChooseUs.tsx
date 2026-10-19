@@ -44,7 +44,7 @@ export default function WhyChooseUs() {
     <section className="py-5 lg:py-10 px-4">
       <div className="container mx-auto">
         {/* ============ Title ============ */}
-        <h2 className="text-center font-bold text-[24px] md:text-[32px] lg:text-[40px] text-[#333333] mb-3 lg:mb-12">
+        <h2 className="text-center font-bold text-[20px] sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#333333] mb-3 lg:mb-12">
           {lang === "ar"
             ? "لماذا تستخدم منصة الأفضل"
             : "Why Use Al-Afdal Platform"}
@@ -75,7 +75,7 @@ export default function WhyChooseUs() {
               </div>
 
               {/* Title */}
-              <h3 className="text-center font-bold text-[16px] md:text-[20px] text-[#0D154B] leading-tight">
+              <h3 className="text-center font-bold text-[14px] sm:text-[15px] md:text-[20px] text-[#0D154B] leading-tight">
                 {lang === "ar" ? card.ar : card.en}
               </h3>
             </div>

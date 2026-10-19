@@ -11,7 +11,7 @@ import {
   FiHeart,
   FiSettings,
   FiHelpCircle,
-  FiLogOut,
+  FiX,
 } from "react-icons/fi";
 import { FaAngleLeft } from "react-icons/fa6";
 
@@ -77,6 +77,8 @@ const menuItems = [
 
 // ==================== Component ====================
 type ProfileSidebarProps = {
+  mobileOpen?: boolean;
+  onClose?: () => void;
   user?: {
     name: string;
     email: string;
@@ -85,6 +87,8 @@ type ProfileSidebarProps = {
 };
 
 export default function ProfileSidebar({
+  mobileOpen = false,
+  onClose,
   user = {
     name: "Mo3tz Elrawy",
     email: "mo3tzelrawy111@gmail.com",
@@ -99,88 +103,61 @@ export default function ProfileSidebar({
     .map((w) => w.charAt(0).toUpperCase())
     .join("");
 
-  return (
-    <aside className="w-full lg:w-72 bg-white lg:rounded-2xl shadow-sm border border-gray-100 overflow-hidden lg:sticky lg:top-24 h-fit">
-      {/* ==================== User Info ==================== */}
-      <div className="bg-[#FAFCFE] p-6 border-b border-gray-100">
-        <div className="flex items-start gap-1.5">
-          {/* Avatar */}
-          <div className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center font-semibold text-base lg:text-[22px] shadow-md">
+  const content = (
+    <>
+      <div className="border-b border-gray-100 bg-[#FAFCFE] p-3 sm:p-4 lg:p-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-base font-semibold text-white shadow-md sm:h-12 sm:w-12 lg:h-14 lg:w-14 lg:text-[22px]">
             {initial}
           </div>
-          <div className="flex flex-col gap-2">
-            {/* Name */}
-            <h3 className="text-base md:text-xl font-meduim text-[#0D0D0D] ">
-              {user.name}
-            </h3>
-
-            {/* Email */}
-            <p className="text-xs md:text-xs text-[#8E8E8E]  break-all">
-              {user.email}
-            </p>
+          <div className="flex min-w-0 flex-col gap-1 lg:gap-2">
+            <h3 className="truncate text-sm font-medium text-[#0D0D0D] md:text-xl">{user.name}</h3>
+            <p className="truncate text-[11px] text-[#8E8E8E] md:text-xs">{user.email}</p>
           </div>
         </div>
       </div>
-
-      {/* ==================== Menu ==================== */}
-      <nav className="p-3">
+      <nav aria-label={lang === "ar" ? "قائمة الملف الشخصي" : "Profile navigation"} className="p-2 sm:p-3">
         <ul className="flex flex-col gap-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const active =
-              item.href === "/profile"
-                ? pathname === "/profile"
-                : pathname.startsWith(item.href);
-
+            const active = item.href === "/profile" ? pathname === "/profile" : pathname.startsWith(item.href);
             return (
               <li key={item.key}>
                 <Link
                   href={item.href}
-                  className={`
-                    flex items-center justify-between px-4 py-3 rounded-xl
-                    text-sm md:text-base font-semibold
-                    transition-all duration-200
-                    ${
-                      active
-                        ? "bg-[#E5F6F7] text-[#163B45]"
-                        : "text-[#0D154B] hover:bg-gray-50"
-                    }
-                  `}
+                  onClick={onClose}
+                  className={`flex items-center justify-between gap-2 rounded-xl px-4 py-3 text-start text-sm font-semibold transition-all duration-200 md:text-base ${active ? "bg-[#E5F6F7] text-[#163B45]" : "text-[#0D154B] hover:bg-gray-50"}`}
                 >
-                 
-                  <div className="flex items-center gap-2">
-                     <Icon
-                    className={`text-lg shrink-0 ${
-                      active ? "text-[#55BBC4]" : "text-[#6F7E89]"
-                    }`}
-                  />
+                  <span className="flex items-center gap-2">
+                    <Icon className={`shrink-0 text-lg ${active ? "text-[#55BBC4]" : "text-[#6F7E89]"}`} />
                     <span>{lang === "ar" ? item.ar : item.en}</span>
-                
-                  </div>
-                    <FaAngleLeft
-                    className={` ${active ? "block" : "hidden"} ltr:rotate-180 `}
-                  />
+                  </span>
+                  {active && <FaAngleLeft className="ltr:rotate-180" />}
                 </Link>
               </li>
             );
           })}
         </ul>
-
-        {/* ==================== Logout ==================== */}
-        {/* <div className="mt-3 pt-3 border-t border-gray-100">
-          <button
-            type="button"
-            className="
-              w-full flex items-center gap-3 px-4 py-3 rounded-xl
-              text-sm md:text-sm font-semibold
-              text-[#D1454A] hover:bg-[#D1454A]/5 transition
-            "
-          >
-            <FiLogOut className="text-lg shrink-0" />
-            <span>{lang === "ar" ? "تسجيل الخروج" : "Logout"}</span>
-          </button>
-        </div> */}
       </nav>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      <aside id="profile-sidebar-desktop" className="hidden h-fit w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm lg:sticky lg:top-24 lg:block lg:w-72">
+        {content}
+      </aside>
+      {mobileOpen && (
+        <aside id="profile-sidebar-mobile" className="fixed inset-y-0 inset-e-0 z-[70] h-dvh w-[min(88vw,320px)] overflow-y-auto rounded-s-2xl border border-gray-100 bg-white shadow-2xl lg:hidden">
+          <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+            <span className="text-sm font-bold text-primary">{lang === "ar" ? "القائمة" : "Menu"}</span>
+            <button type="button" onClick={onClose} aria-label={lang === "ar" ? "إغلاق القائمة" : "Close menu"} className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F3F6FA] text-lg text-primary">
+              <FiX />
+            </button>
+          </div>
+          {content}
+        </aside>
+      )}
+    </>
   );
 }

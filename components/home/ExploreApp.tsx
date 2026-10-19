@@ -52,17 +52,17 @@ export default function ExploreApp() {
             {/* ==================== Content Side ==================== */}
             <div className="p-6 md:p-10 order-1 md:order-2 flex flex-col gap-4 md:gap-5">
               {/* Title */}
-              <h2 className="font-bold text-[22px] md:text-[28px] text-[#0D0D0D] lg:text-[32px] leading-tight">
+              <h2 className="font-bold text-[20px] sm:text-[21px] md:text-[28px] text-[#0D0D0D] lg:text-[32px] leading-tight">
                 {lang === "ar"
                   ? "اكتشف أفضل عروض السفر في الكون مع تطبيق الأفضل"
                   : "Discover the Best Travel Deals in the Universe with Al-Afdal App"}
               </h2>
 
               {/* Description */}
-              <div className="flex flex-col gap-2.5 text-sm md:text-base leading-relaxed">
+              <div className="flex flex-col gap-2.5 text-xs sm:text-sm md:text-base leading-relaxed">
                 <div className="flex items-start gap-2">
                   <IoCheckmarkCircleSharp className="text-[#44B50C] text-xl md:text-2xl shrink-0 mt-0.5" />
-                  <p className="text-[#1D1D1D] text-sm lg:text-base">
+                  <p className="text-[#1D1D1D] text-xs sm:text-sm lg:text-base">
                     {lang === "ar"
                       ? "ابحث وقارن واحجز أفضل عروض الرحلات والفنادق — كل ذلك في تطبيق واحد."
                       : "Search, compare, and book the best flight and hotel deals — all in one app."}
@@ -70,7 +70,7 @@ export default function ExploreApp() {
                 </div>
                 <div className="flex items-start gap-2">
                   <IoCheckmarkCircleSharp className="text-[#44B50C] text-xl md:text-2xl shrink-0 mt-0.5" />
-                  <p className="text-[#1D1D1D] text-sm lg:text-base">
+                  <p className="text-[#1D1D1D] text-xs sm:text-sm lg:text-base">
                     {lang === "ar"
                       ? "وفّر أكثر مع رموز الخصم داخل التطبيق. اختر أرخص يوم للسفر."
                       : "Save more with in-app discount codes. Choose the cheapest day to travel."}
@@ -78,7 +78,7 @@ export default function ExploreApp() {
                 </div>
                 <div className="flex items-start gap-2">
                   <IoCheckmarkCircleSharp className="text-[#44B50C] text-xl md:text-2xl shrink-0 mt-0.5" />
-                  <p className="text-[#1D1D1D] text-sm lg:text-base">
+                  <p className="text-[#1D1D1D] text-xs sm:text-sm lg:text-base">
                     {lang === "ar"
                       ? "عبر الدردشة وواتساب والهاتف والبريد الإلكتروني."
                       : "Chat, WhatsApp, call, and email."}

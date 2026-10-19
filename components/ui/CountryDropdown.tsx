@@ -5,7 +5,17 @@ import { countries } from "@/lib/countries";
 import Dropdown from "./Dropdown";
 import * as Flags from "country-flag-icons/react/3x2";
 
-export default function CountryDropdown() {
+export default function CountryDropdown({
+  onSelect,
+  className,
+  triggerClassName,
+  width = "w-64",
+}: {
+  onSelect?: () => void;
+  className?: string;
+  triggerClassName?: string;
+  width?: string;
+} = {}) {
   const { lang, country, setCountry } = useApp();
 
   // ✅ دالة تجيب علم الدولة كـ component
@@ -16,7 +26,9 @@ export default function CountryDropdown() {
 
   return (
     <Dropdown
-      width="w-64"
+      width={width}
+      className={className}
+      triggerClassName={triggerClassName}
       trigger={
         <>
          <span>{lang === "ar" ? country.nameAr : country.nameEn}</span>
@@ -40,6 +52,7 @@ export default function CountryDropdown() {
                 onClick={() => {
                   setCountry(c);
                   close();
+                  onSelect?.();
                 }}
                 className={`
                   w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm

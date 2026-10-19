@@ -12,12 +12,12 @@ export default function PromoSection() {
       <div className="container mx-auto">
         {/* ============ Title & Description ============ */}
         <div className="mb-3 lg:mb-10">
-          <h1 className="font-bold text-[24px] md:text-[32px] lg:text-[40px] text-[#0D0D0D] mb-3 leading-tight">
+          <h1 className="font-bold text-[20px] sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#0D0D0D] mb-2 sm:mb-3 leading-tight">
             {lang === "ar"
               ? "هل زيارة لندن ما تزال ضمن خططك؟"
               : "Is Your London Trip Still on the Agenda?"}
           </h1>
-          <p className="text-[#8E8E8E] text-sm md:text-base lg:text-lg leading-relaxed font-semibold">
+          <p className="text-[#8E8E8E] text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-semibold">
             {lang === "ar"
               ? "عدد المقاعد المتوفرة محدود. استكمل حجزك لضمان حصولك على مقعد والانطلاق نحو مغامرة جديدة."
               : "Seats are limited. Complete your booking to secure your seat and embark on a new adventure."}

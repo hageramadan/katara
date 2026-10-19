@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { useApp } from "@/context/AppContext";
-import { FiCheck, FiCircle, FiLock } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 import FloatingLabelInput from "@/components/auth/common/FloatingLabelInput";
 
 export default function PasswordSection() {
@@ -35,19 +35,17 @@ export default function PasswordSection() {
   return (
     <div className="bg-white rounded-2xl border border-[#DCE3EC] overflow-hidden">
       {/* Header */}
-      <div className="p-6 md:p-8 border-b border-[#DCE3EC]">
-        <h2 className="text-base md:text-lg font-extrabold text-[#163B45] mb-1">
+      <div className="px-6 md:px-8 py-4 mt-4">
+        <h1 className="text-base md:text-xl font-bold text-[#0D0D0D] mb-1">
           {lang === "ar" ? "أمان الحساب" : "Account Security"}
-        </h2>
-        <p className="text-xs md:text-sm text-[#6F7E89]">
-          {lang === "ar" ? "تغيير كلمة المرور" : "Change Password"}
-        </p>
+        </h1>
+     
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6 md:p-8 flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="px-6 md:px-8 py-4 flex flex-col gap-5">
         {/* Section title */}
-        <div>
-          <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-1">
+        <div className="mb-4">
+          <h3 className="text-sm md:text-base font-bold text-[#172B35] mb-2">
             {lang === "ar" ? "تغيير كلمة المرور" : "Change Password"}
           </h3>
           <p className="text-xs md:text-sm text-[#6F7E89]">
@@ -62,6 +60,7 @@ export default function PasswordSection() {
           label={lang === "ar" ? "كلمة المرور القديمة" : "Old Password"}
           required
           type="password"
+          showPasswordToggle
           value={oldPassword}
           onChange={setOldPassword}
         />
@@ -71,6 +70,7 @@ export default function PasswordSection() {
           label={lang === "ar" ? "كلمة المرور الجديدة" : "New Password"}
           required
           type="password"
+          showPasswordToggle
           value={newPassword}
           onChange={setNewPassword}
         />
@@ -84,12 +84,13 @@ export default function PasswordSection() {
           }
           required
           type="password"
+          showPasswordToggle
           value={confirmPassword}
           onChange={setConfirmPassword}
         />
 
         {/* ==================== Password Requirements ==================== */}
-        <div className="bg-[#FAFCFE] border border-[#DCE3EC] rounded-xl p-4">
+        <div className="rounded-xl p-4">
           <p className="text-xs md:text-sm font-bold text-[#172B35] mb-3">
             {lang === "ar" ? "متطلبات كلمة المرور" : "Password Requirements"}
           </p>
@@ -153,21 +154,23 @@ export default function PasswordSection() {
           </ul>
         </div>
 
-        {/* Submit */}
+       <div className="flex justify-end">
+         {/* Submit */}
         <button
           type="submit"
           disabled={!canSubmit}
           className="
-            w-full flex items-center justify-center gap-2
+            w-full md:w-fit flex items-center justify-center gap-2
             bg-[#0D154B] text-white font-bold text-sm md:text-base
-            py-3.5 rounded-full mt-2
+            py-3.5 rounded-xl mt-2
             hover:opacity-90 active:scale-[0.99] transition
-            disabled:opacity-40 disabled:cursor-not-allowed
+             disabled:cursor-not-allowed px-4
           "
         >
-          <FiLock className="text-base" />
+         
           {lang === "ar" ? "تغيير كلمة المرور" : "Change Password"}
         </button>
+       </div>
       </form>
     </div>
   );

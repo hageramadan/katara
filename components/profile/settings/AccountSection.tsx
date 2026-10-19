@@ -17,7 +17,7 @@ export default function AccountSection() {
     <>
       <div className="bg-white rounded-2xl border border-[#DCE3EC] overflow-hidden">
         {/* Header */}
-        <div className="p-6 md:p-8 border-b border-[#DCE3EC]">
+        <div className="px-5 py-4 sm:px-6 md:px-8">
           <h2 className="text-base md:text-lg font-extrabold text-[#163B45] mb-1">
             {lang === "ar" ? "الحساب" : "Account"}
           </h2>
@@ -42,12 +42,12 @@ export default function AccountSection() {
               onClick={() => setConfirmOpen(true)}
               className="
                 inline-flex items-center justify-center gap-2 shrink-0
-                border-2 border-[#D1454A] text-[#D1454A] font-bold
-                text-sm md:text-base px-6 py-3 rounded-full
-                hover:bg-[#D1454A] hover:text-white transition
+                border-2 border-[#D00416] bg-[#D00416] font-bold
+                text-sm md:text-base px-6 py-3 rounded-xl
+                hover:bg-white hover:text-[#D00416] text-white transition
               "
             >
-              <FiTrash2 className="text-base" />
+              {/* <FiTrash2 className="text-base" /> */}
               {lang === "ar" ? "حذف" : "Delete"}
             </button>
           </div>

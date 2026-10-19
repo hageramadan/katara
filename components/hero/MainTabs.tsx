@@ -31,7 +31,7 @@ export default function MainTabs({
   const { lang } = useApp();
 
   return (
-    <div className="hidden lg:flex flex-wrap justify-center gap-2 bg-white/40 backdrop-blur-md rounded-full px-2.5 py-2 max-w-4xl">
+    <div className="flex w-full max-w-4xl flex-nowrap justify-start gap-1.5 overflow-x-auto rounded-2xl bg-white/25 p-2 backdrop-blur-md sm:flex-wrap sm:justify-center sm:gap-2 sm:rounded-full sm:px-2.5 sm:py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {tabs.map((tab, index) => {
         const Icon = tab.icon;
         const isActive = tab.key === active;
@@ -43,7 +43,7 @@ export default function MainTabs({
             disabled={!isEnabled}
             onClick={() => isEnabled && onChange(tab.key)}
             className={`
-              flex items-center gap-2 px-2.5 md:px-3 py-2 rounded-full text-sm font-semibold
+              flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-2 text-xs font-semibold sm:gap-2 sm:px-3 sm:text-sm
               transition-all duration-300
               ${
                 !isEnabled
@@ -67,7 +67,7 @@ export default function MainTabs({
                 }
               `}
             />
-            <span className="text-lg font-bold">
+            <span className="text-xs font-bold sm:text-base lg:text-lg">
               {lang === "ar" ? tab.ar : tab.en}
             </span>
           </button>

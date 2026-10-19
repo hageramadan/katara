@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useApp } from "@/context/AppContext";
 
 type FloatingLabelInputProps = {
   label: string;
@@ -11,6 +12,7 @@ type FloatingLabelInputProps = {
   error?: string;
   className?: string;
   disabled?: boolean;
+  showPasswordToggle?: boolean;
 };
 
 export default function FloatingLabelInput({
@@ -23,8 +25,11 @@ export default function FloatingLabelInput({
   error,
   className = "",
   disabled,
+  showPasswordToggle = false,
 }: FloatingLabelInputProps) {
   const [focused, setFocused] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const { lang } = useApp();
 
   // الليبل بيطلع فوق لو الحقل فيه قيمة أو متفوکس عليه
   const isFloating = focused || value !== "";
@@ -33,7 +38,7 @@ export default function FloatingLabelInput({
     <div className={className}>
       <div className="relative">
         <input
-          type={type}
+          type={showPasswordToggle && passwordVisible ? "text" : type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => setFocused(true)}
@@ -42,7 +47,7 @@ export default function FloatingLabelInput({
           placeholder=" "
           className={`
             peer w-full bg-[#FAFCFE] rounded-[10px]
-            px-4 pt-6 pb-2
+            px-4 pt-6 pb-2 ${showPasswordToggle ? "pe-12" : ""}
             text-[#0D154B] text-sm md:text-base font-medium
             border outline-none transition
             ${
@@ -55,6 +60,23 @@ export default function FloatingLabelInput({
             disabled:opacity-60 disabled:cursor-not-allowed
           `}
         />
+
+        {showPasswordToggle && (
+          <button
+            type="button"
+            onClick={() => setPasswordVisible((visible) => !visible)}
+            aria-label={passwordVisible
+              ? lang === "ar" ? "إخفاء كلمة المرور" : "Hide password"
+              : lang === "ar" ? "إظهار كلمة المرور" : "Show password"}
+            className="absolute inset-e-3 top-1/2 -translate-y-1/2 rounded p-1 text-[#6F7E89] transition hover:text-[#0D154B]"
+          >
+            <span className="text-xs font-semibold underline underline-offset-2">
+              {passwordVisible
+                ? lang === "ar" ? "إخفاء" : "Hide"
+                : lang === "ar" ? "إظهار" : "Show"}
+            </span>
+          </button>
+        )}
 
         {/* 🏷️ Label على الحد */}
         <label

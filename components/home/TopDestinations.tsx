@@ -54,7 +54,7 @@ export default function TopDestinations() {
     <section className="py-5 md:py-12 px-4 bg-white">
       <div className="container mx-auto">
         {/* ============ Title ============ */}
-        <h2 className="font-bold text-[24px]  lg:text-[32px] text-[#0D0D0D] mb-4 md:mb-8">
+        <h2 className="font-bold text-[20px] sm:text-[22px] lg:text-[32px] text-[#0D0D0D] mb-3 md:mb-8">
           {lang === "ar"
             ? "اكتشف أفضل الوجهات السياحية"
             : "Discover the Best Travel Destinations"}
@@ -87,7 +87,7 @@ export default function TopDestinations() {
               <div className="absolute inset-0 flex flex-col justify-end p-3 md:p-6">
                 {/* Price Badge */}
                 <div className="flex justify-start mb-1.5 lg:mb-3">
-                  <span className="bg-white text-[#4A4A4A] text-sm md:text-base font-medium px-4 py-1.5 rounded-full shadow-md">
+                  <span className="bg-white text-[#4A4A4A] text-xs sm:text-sm md:text-base font-medium px-3 sm:px-4 py-1.5 rounded-full shadow-md">
                     {lang === "ar" ? "إبتداء من" : "Starting from"}{" "}
                     <span >
                       {dest.price} KWD
@@ -96,7 +96,7 @@ export default function TopDestinations() {
                 </div>
 
                 {/* Destination Name */}
-                <h3 className="text-white text-sm lg:text-lg mt-2 font-bold text-start">
+                <h3 className="text-white text-xs sm:text-sm lg:text-lg mt-2 font-bold text-start">
                   {lang === "ar" ? dest.ar : dest.en}
                 </h3>
               </div>

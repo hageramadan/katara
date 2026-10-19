@@ -27,7 +27,7 @@ export default function SubTabs({
   const { lang } = useApp();
 
   return (
-    <div className="hidden lg:grid grid-cols-3  rounded-2xl rounded-b-none overflow-hidden bg-[#F7F7F766] text-white  backdrop-blur-md">
+    <div className="grid grid-cols-3 overflow-hidden rounded-xl bg-[#0D154B]/80 text-white backdrop-blur-md lg:rounded-2xl lg:rounded-b-none">
       {subTabs.map((tab, index) => {
         const Icon = tab.icon;
         const isActive = tab.key === active;
@@ -37,17 +37,17 @@ export default function SubTabs({
             key={tab.key}
             onClick={() => onChange(tab.key)}
             className={`
-              flex items-center gap-2 px-5 py-2.5 text-lg font-bold cursor-pointer
+              flex flex-col items-center justify-center gap-1 px-1 py-2 text-[10px] font-bold leading-tight cursor-pointer sm:flex-row sm:gap-2 sm:px-3 sm:py-2.5 sm:text-sm lg:px-5 lg:text-lg
               transition-all duration-200 justify-center
               ${
                 isActive
-                  ? "bg-white text-primary shadow-md"
+                ? "bg-white text-primary shadow-md"
                   : "hover:bg-white/20"
               }
             `}
           >
             <Icon
-              className={`${index === 0 ? "text-3xl" : "text-xl "} ${
+              className={`${index === 0 ? "text-lg sm:text-2xl lg:text-3xl" : "text-base sm:text-lg"} ${
                 isActive ? "text-primary" : "text-white"
               }`}
             />

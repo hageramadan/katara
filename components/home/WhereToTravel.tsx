@@ -158,17 +158,17 @@ export default function WhereToTravel() {
   const [activeTab, setActiveTab] = useState("kuwait");
 
   return (
-    <section className="py-8 md:py-16 px-4 bg-white">
-      <div className="container mx-auto">
+    <section className="w-full overflow-x-clip bg-white px-3 py-7 sm:px-4 md:py-16">
+      <div className="container mx-auto w-full min-w-0">
         {/* ============ Title ============ */}
-        <h2 className="font-bold text-[22px] md:text-[28px] lg:text-[32px] text-[#0D0D0D] mb-4 md:mb-8">
+        <h2 className="font-bold text-[20px] sm:text-[21px] md:text-[28px] lg:text-[32px] text-[#0D0D0D] mb-3 md:mb-8">
           {lang === "ar" ? "إلى أين ستسافر؟" : "Where Will You Travel?"}
         </h2>
 
         {/* ============ Tabs + Country Dropdown ============ */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-0">
+        <div className="mb-0 flex items-center justify-between gap-2 sm:gap-4">
           {/* Tabs — scroll أفقي على الموبايل */}
-          <div className="flex items-center gap-5 md:gap-7 overflow-x-auto scrollbar-hide pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="flex min-w-0 flex-1 items-center gap-4 overflow-x-auto pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-7">
             {tabs.map((tab) => {
               const active = tab.key === activeTab;
               return (
@@ -176,7 +176,7 @@ export default function WhereToTravel() {
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
                   className={`
-                    pb-3 md:pb-5 text-sm md:text-lg whitespace-nowrap transition cursor-pointer shrink-0
+                    pb-2 text-xs whitespace-nowrap transition cursor-pointer shrink-0 sm:pb-3 sm:text-sm md:pb-5 md:text-lg
                     ${
                       active
                         ? "text-[#0D154B] font-extrabold border-b-2 border-[#0D154B]"
@@ -192,8 +192,9 @@ export default function WhereToTravel() {
 
           {/* Country Dropdown */}
           <Dropdown
-            width="w-56"
-            triggerClassName="bg-white/80 px-3 py-2 rounded-full border border-primary/20 shadow-sm hover:shadow-md transition text-xs md:text-sm"
+            width="w-[132px] sm:w-56"
+            className="w-[132px] shrink-0 sm:w-56"
+            triggerClassName="w-full justify-center bg-white/80 px-2 py-2 rounded-full border border-primary/20 shadow-sm hover:shadow-md transition text-[11px] sm:px-3 sm:text-xs md:text-sm"
             trigger={
               <>
                 <span>{lang === "ar" ? country.nameAr : country.nameEn}</span>
@@ -241,17 +242,17 @@ export default function WhereToTravel() {
         </div>
 
         {/* ============ Divider ============ */}
-        <div className="h-px bg-gray-200 mb-5 md:mb-8 mt-0" />
+        <div className="mt-0 mb-4 h-px bg-gray-200 sm:mb-5 md:mb-8" />
 
         {/* ============ 3 Rows of Cards ============ */}
         <div className="flex flex-col gap-4 md:gap-5">
           {dealsGroups.map((group) => (
             <div
               key={group.id}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5"
+              className="grid min-w-0 grid-cols-2 gap-2.5 sm:gap-4 md:gap-5 lg:grid-cols-2"
             >
               {/* ============ Big Card ============ */}
-              <div className="relative rounded-2xl overflow-hidden group h-56 md:h-80 lg:h-107">
+              <div className="group relative col-span-2 h-48 overflow-hidden rounded-2xl sm:h-64 md:h-80 lg:col-span-1 lg:h-107">
                 <Image
                   src={group.big.image}
                   alt={lang === "ar" ? group.big.cityAr : group.big.cityEn}
@@ -261,21 +262,21 @@ export default function WhereToTravel() {
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/30 via-black/20 to-transparent" />
 
-                <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-7 text-white">
-                  <div className="flex items-end justify-between gap-3 md:gap-4">
-                    <div className="flex flex-col gap-1 md:gap-2">
-                      <h3 className="text-lg md:text-2xl lg:text-[32px] font-extrabold">
+                <div className="absolute inset-0 flex flex-col justify-end p-3 text-white sm:p-4 md:p-7">
+                  <div className="flex items-end justify-between gap-2 sm:gap-3 md:gap-4">
+                    <div className="flex min-w-0 flex-col gap-1 md:gap-2">
+                      <h3 className="text-base sm:text-lg md:text-2xl lg:text-[32px] font-extrabold">
                         {lang === "ar" ? group.big.cityAr : group.big.cityEn}
                       </h3>
-                      <p className="text-white text-xs md:text-base lg:text-lg font-bold">
+                      <p className="text-[10px] leading-snug sm:text-xs md:text-base lg:text-lg font-bold">
                         {lang === "ar" ? group.big.dateAr : group.big.dateEn}
                       </p>
                     </div>
-                    <div className="flex flex-col items-end gap-1 md:gap-2 text-end shrink-0">
-                      <p className="bg-white text-[#4A4A4A] text-xs md:text-base lg:text-lg font-semibold px-3 md:px-4 py-1 md:py-1.5 rounded-full shadow-md whitespace-nowrap">
+                    <div className="flex shrink-0 flex-col items-end gap-1 text-end md:gap-2">
+                      <p className="rounded-full bg-white px-2 py-1 text-[9px] font-semibold leading-tight text-[#4A4A4A] shadow-md sm:px-3 sm:text-xs md:px-4 md:py-1.5 md:text-base lg:text-lg">
                         {lang === "ar" ? group.big.priceAr : group.big.priceEn}
                       </p>
-                      <p className="text-white font-bold text-xs md:text-base lg:text-lg">
+                      <p className="text-[10px] font-bold leading-tight text-white sm:text-xs md:text-base lg:text-lg">
                         {lang === "ar" ? group.big.metaAr : group.big.metaEn}
                       </p>
                     </div>
@@ -284,11 +285,11 @@ export default function WhereToTravel() {
               </div>
 
               {/* ============ 2 Small Cards ============ */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+              <div className="col-span-2 grid grid-cols-2 gap-2.5 sm:gap-4 md:gap-5 lg:col-span-1">
                 {group.smalls.map((deal) => (
                   <div
                     key={deal.id}
-                    className="relative rounded-2xl overflow-hidden group h-56 md:h-80 lg:h-107"
+                    className="group relative h-48 overflow-hidden rounded-2xl sm:h-64 md:h-80 lg:h-107"
                   >
                     <Image
                       src={deal.image}
@@ -299,18 +300,18 @@ export default function WhereToTravel() {
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/30 via-black/20 to-transparent" />
 
-                    <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-5 text-white">
-                      <div className="flex flex-col gap-1.5 md:gap-2.5">
-                        <h3 className="text-lg md:text-2xl lg:text-[32px] font-extrabold">
+                    <div className="absolute inset-0 flex flex-col justify-end p-2.5 text-white sm:p-3 md:p-5">
+                      <div className="flex flex-col gap-1 sm:gap-1.5 md:gap-2.5">
+                        <h3 className="text-base sm:text-lg md:text-2xl lg:text-[32px] font-extrabold">
                           {lang === "ar" ? deal.cityAr : deal.cityEn}
                         </h3>
-                        <p className="text-white text-xs md:text-base lg:text-lg font-bold">
+                        <p className="text-[9px] leading-snug text-white sm:text-[10px] md:text-base lg:text-lg font-bold">
                           {lang === "ar" ? deal.dateAr : deal.dateEn}
                         </p>
-                        <p className="bg-white text-[#4A4A4A] w-fit text-xs md:text-base lg:text-lg font-semibold px-3 md:px-4 py-1 md:py-1.5 rounded-full shadow-md whitespace-nowrap">
+                        <p className="w-fit rounded-full bg-white px-2 py-1 text-[9px] font-semibold leading-tight text-[#4A4A4A] shadow-md sm:text-[10px] md:px-4 md:py-1.5 md:text-base lg:text-lg">
                           {lang === "ar" ? deal.priceAr : deal.priceEn}
                         </p>
-                        <p className="text-white font-bold text-xs md:text-base lg:text-lg">
+                        <p className="text-[9px] font-bold leading-tight text-white sm:text-[10px] md:text-base lg:text-lg">
                           {lang === "ar" ? deal.metaAr : deal.metaEn}
                         </p>
                       </div>

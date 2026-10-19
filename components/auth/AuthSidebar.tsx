@@ -50,7 +50,7 @@ export default function AuthSidebar({
   return (
     <aside
       className={`
-        bg-white p-4 md:p-6
+        bg-white p-2.5 sm:p-4 md:p-6
         border-b md:border-b-0 md:border-e border-gray-200
         ${className}
       `}
@@ -74,8 +74,8 @@ export default function AuthSidebar({
                 type="button"
                 onClick={() => onRoleChange(role.key)}
                 className={`
-                  w-full flex flex-col items-center gap-3 px-4 py-3 rounded-xl
-                  text-sm md:text-sm font-semibold whitespace-nowrap
+                  w-full flex flex-row md:flex-col items-center justify-center gap-2 md:gap-3 px-3 py-2.5 md:px-4 md:py-3 rounded-full md:rounded-xl
+                  text-xs sm:text-sm font-semibold whitespace-nowrap
                   transition-all duration-200 cursor-pointer
                   ${
                     active

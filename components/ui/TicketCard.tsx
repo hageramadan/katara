@@ -54,6 +54,7 @@ export type TicketCardProps = {
   onFavoriteToggle?: () => void; // عند الضغط
 
   className?: string;
+  onCardClick?: () => void;
 };
 
 // ==================== Component ====================
@@ -81,6 +82,7 @@ export default function TicketCard({
   isFavorite = false,
   onFavoriteToggle,
   className = "",
+  onCardClick,
 }: TicketCardProps) {
   const { lang } = useApp();
 
@@ -94,8 +96,12 @@ export default function TicketCard({
         relative rounded-2xl overflow-hidden 
         grid grid-cols-1 md:grid-cols-4
         bg-white border border-[#E8E8E8]
-        ${className}
+        ${className} ${onCardClick ? "cursor-pointer transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-[#0D154B]" : ""}
       `}
+      onClick={onCardClick}
+      onKeyDown={onCardClick ? (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onCardClick(); } } : undefined}
+      role={onCardClick ? "link" : undefined}
+      tabIndex={onCardClick ? 0 : undefined}
     >
       {/* ==================== Image Side ==================== */}
       <div className="relative h-48 md:h-60">
@@ -115,7 +121,7 @@ export default function TicketCard({
         {showFavorite && (
           <button
             type="button"
-            onClick={onFavoriteToggle}
+            onClick={(event) => { event.stopPropagation(); onFavoriteToggle?.(); }}
             aria-label="Toggle favorite"
             className={`
               absolute top-3 inset-e-3
