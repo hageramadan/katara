@@ -12,6 +12,7 @@ type CustomSelectProps = {
   onChange: (v: string) => void;
   options: SelectOption[];
   placeholder?: string;
+  ariaLabel?: string;
   className?: string;
   width?: string; // مثال: "w-56" أو "w-full"
 };
@@ -21,6 +22,7 @@ export default function CustomSelect({
   onChange,
   options,
   placeholder = "اختر...",
+  ariaLabel,
   className = "",
   width = "w-full sm:w-auto",
 }: CustomSelectProps) {
@@ -54,6 +56,8 @@ export default function CustomSelect({
       {/* ==================== Trigger ==================== */}
       <button
         type="button"
+        aria-label={ariaLabel}
+        aria-expanded={open}
         onClick={() => setOpen(!open)}
         className={`
           w-full flex items-center justify-between gap-2

@@ -72,9 +72,9 @@ export default function Modal({
               <FiX className="text-xl" />
             </button>
 
-            <div className="text-center pe-8 ps-8">
+            <div className="text-start pe-8 ps-8">
               {title && (
-                <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#4B5563] mb-1 md:mb-3">
+                <h2 className="text-base md:text-lg lg:text-xl font-bold text-[#0D0D0D]">
                   {title}
                 </h2>
               )}
@@ -88,7 +88,7 @@ export default function Modal({
         )}
 
         {/* Body */}
-        <div className="p-5 md:p-6">{children}</div>
+        <div className="px-5 md:px-6 py-3">{children}</div>
       </div>
     </div>
   );

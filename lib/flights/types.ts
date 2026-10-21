@@ -16,7 +16,7 @@ export type FlightResult = {
   baggage: number;
 };
 
-export type FlightSort = "cheapest" | "fastest" | "best";
+export type FlightSort = "cheapest" | "fastest" | "best" | "departure" | "arrival";
 
 export type CabinClass = "economy" | "business";
 

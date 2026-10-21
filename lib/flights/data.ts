@@ -3,7 +3,7 @@ import { FlightResult } from "./types";
 export const flightResults: FlightResult[] = [
   {
     id: "turkish-1",
-    airline: "الخطوط التركية",
+    airline: "الخطوط السعودية",
     airlineEn: "Turkish Airlines",
     price: 1832,
     seatsLeft: 3,
@@ -20,7 +20,7 @@ export const flightResults: FlightResult[] = [
   },
   {
     id: "turkish-2",
-    airline: "الخطوط التركية",
+    airline: "الخطوط السعودية",
     airlineEn: "Turkish Airlines",
     price: 2079,
     seatsLeft: 3,

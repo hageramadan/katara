@@ -13,11 +13,13 @@ export default function SearchSelect({
   value,
   options,
   onChange,
+  hideLabel = false,
 }: {
   label: string;
   value: string;
   options: SearchSelectOption[];
   onChange: (value: string) => void;
+  hideLabel?: boolean;
 }) {
   const selectedOption = options.find((option) => option.value === value);
 
@@ -29,8 +31,8 @@ export default function SearchSelect({
       triggerClassName="w-full min-w-0 justify-between rounded-xl border border-[#E4E8EE] bg-[#F8F9FB] px-3 py-2.5 text-start transition hover:border-[#AAB4C2] sm:px-4 sm:py-3"
       panelClassName="max-h-64 overflow-y-auto"
       trigger={
-        <span className="flex min-w-0 flex-1 flex-col items-start gap-1">
-          <span className="text-[11px] font-medium text-[#77808D] sm:text-xs">{label}</span>
+        <span className={`flex min-w-0 flex-1 items-start ${hideLabel ? "flex-row" : "flex-col gap-1"}`}>
+          {!hideLabel && <span className="text-[11px] font-medium text-[#77808D] sm:text-xs">{label}</span>}
           <span className="w-full truncate text-sm font-bold text-[#263142] sm:text-base">
             {selectedOption?.label}
           </span>

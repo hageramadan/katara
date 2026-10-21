@@ -4,14 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { FiChevronDown, FiRotateCcw, FiSliders } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 import { localizeDigits } from "@/lib/flights/format";
+import FlightMoreFiltersModal from "./FlightMoreFiltersModal";
 
 export type FlightFilterState = {
   airlines: string[];
   refundableOnly: boolean;
   maxPrice: number;
+  minPrice: number;
   stops: "any" | "direct" | "one";
   maxDuration: number;
   departureTime: "any" | "day" | "night";
+  departureWindow: [number, number];
+  arrivalWindow: [number, number];
 };
 
 type FilterKey =
@@ -23,7 +27,7 @@ type FilterKey =
   | "time";
 
 const airlineOptions = [
-  { key: "Turkish Airlines", ar: "الخطوط التركية", en: "Turkish Airlines" },
+  { key: "Turkish Airlines", ar: "الخطوط السعودية", en: "Turkish Airlines" },
   { key: "Emirates", ar: "الخطوط الإماراتية", en: "Emirates" },
   { key: "Qatar Airways", ar: "الخطوط القطرية", en: "Qatar Airways" },
 ];
@@ -40,7 +44,7 @@ export default function FlightFilters({
   const { lang } = useApp();
   const ar = lang === "ar";
   const [openFilter, setOpenFilter] = useState<FilterKey | null>(null);
-  const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
   const openMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,12 +77,12 @@ export default function FlightFilters({
   };
 
   const filterKeys: FilterKey[] = [
-    "refundable",
-    "airlines",
-    "duration",
-    "stops",
-    "price",
     "time",
+    "price",
+     "stops",
+      "duration",
+    "airlines",
+    "refundable",
   ];
 
   return (
@@ -88,7 +92,7 @@ export default function FlightFilters({
          <FiSliders className="shrink-0" />
           
           <span>{ar ? "خيارات بحث متقدمة" : "Advanced search options"}</span>
-          <FiChevronDown className={`shrink-0 transition ${showMoreFilters ? "rotate-180" : ""}`} />
+          <FiChevronDown className="shrink-0" />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap">
@@ -98,12 +102,12 @@ export default function FlightFilters({
             (key === "refundable" && filters.refundableOnly) ||
             (key === "airlines" && filters.airlines.length > 0) ||
             (key === "stops" && filters.stops !== "any") ||
-            (key === "price" && filters.maxPrice < 3000) ||
+            (key === "price" && (filters.minPrice > 0 || filters.maxPrice < 3000)) ||
             (key === "duration" && filters.maxDuration < 360) ||
             (key === "time" && filters.departureTime !== "any");
 
           return (
-            <div key={key} className={`relative min-w-0 lg:flex-1 ${index >= 4 && !showMoreFilters ? "hidden lg:block" : ""}`}>
+            <div key={key} className="relative min-w-0 lg:flex-1">
               <button
                 type="button"
                 aria-expanded={isOpen}
@@ -264,14 +268,28 @@ export default function FlightFilters({
         </button>
         <button
           type="button"
-          onClick={() => setShowMoreFilters((show) => !show)}
-          aria-expanded={showMoreFilters}
+          onClick={() => setIsMoreFiltersOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={isMoreFiltersOpen}
           className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#F1F2F4] px-3 py-2.5 text-xs font-bold text-[#465264] transition hover:bg-[#E8EAED] sm:text-sm"
         >
           <FiSliders className="shrink-0" />
-          {showMoreFilters ? (ar ? "عرض أقل" : "Show less") : (ar ? "عرض المزيد من التصفية" : "More filters")}
+          {ar ? "عرض المزيد من التصفية" : "More filters"}
         </button>
       </div>
+      <FlightMoreFiltersModal
+        open={isMoreFiltersOpen}
+        filters={filters}
+        onClose={() => setIsMoreFiltersOpen(false)}
+        onApply={(nextFilters) => {
+          onChange(nextFilters);
+          setIsMoreFiltersOpen(false);
+        }}
+        onReset={() => {
+          onReset();
+          setIsMoreFiltersOpen(false);
+        }}
+      />
     </section>
   );
 }

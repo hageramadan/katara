@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Kufi_Arabic, Inter } from "next/font/google";
 import { AppProvider } from "@/context/AppContext";
+import { BookingFlowProvider } from "@/context/BookingFlowContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
@@ -35,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <AppProvider>
           <Navbar />
-          {children}
+          <BookingFlowProvider>{children}</BookingFlowProvider>
           <Footer />
         </AppProvider>
       </body>

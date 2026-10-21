@@ -6,6 +6,7 @@ type DateFieldProps = {
   value: string;
   onChange: (v: string) => void;
   helper?: string;
+  max?: string;
 };
 
 export default function DateField({
@@ -14,6 +15,7 @@ export default function DateField({
   value,
   onChange,
   helper,
+  max,
 }: DateFieldProps) {
   return (
     <div>
@@ -24,6 +26,7 @@ export default function DateField({
       <div className="relative">
         <input
           type="date"
+          max={max}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="
