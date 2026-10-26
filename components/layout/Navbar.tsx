@@ -75,10 +75,10 @@ export default function Navbar() {
           <span className="w-3" />
 
           <Link
-            href="/trips"
+            href="/profile/bookings"
             className="text-base me-2 underline font-bold text-primary hover:opacity-80 transition"
           >
-            {lang === "ar" ? "رحلاتي" : "My Trips"}
+            {lang === "ar" ? "حجوزاتي" : "My Bookings"}
           </Link>
          <Link
               href="/profile"

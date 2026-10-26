@@ -20,13 +20,14 @@ export default function MemberForm() {
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState("");
+  const [landline, setLandline] = useState("");
+  const [landlineCode, setLandlineCode] = useState("+965");
   const [whatsapp, setWhatsapp] = useState("");
   const [whatsappCode, setWhatsappCode] = useState("+965");
   const [phone, setPhone] = useState("");
   const [phoneCode, setPhoneCode] = useState("+965");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [agreed, setAgreed] = useState(false);
 
   const clearAll = () => {
@@ -36,11 +37,14 @@ export default function MemberForm() {
     setEmail("");
     setGender("");
     setBirthDate("");
+    setLandline("");
+    setLandlineCode("+965");
     setWhatsapp("");
+    setWhatsappCode("+965");
     setPhone("");
+    setPhoneCode("+965");
     setPassword("");
     setConfirmPassword("");
-    setUsername("");
     setAgreed(false);
   };
 
@@ -53,39 +57,52 @@ export default function MemberForm() {
       email,
       gender,
       birthDate,
+      landline,
+      landlineCode,
       whatsapp,
+      whatsappCode,
       phone,
-      password,
-      username,
+      phoneCode,
       agreed,
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:gap-6">
       <FormHeader
         title={lang === "ar" ? "إنشاء حساب عضو" : "Create Member Account"}
         onClear={clearAll}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mb-3 grid grid-cols-1 gap-4 md:mb-5 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,2fr)]">
+        <SelectField
+          label={lang === "ar" ? "النوع" : "Gender"}
+          required
+          value={gender}
+          onChange={setGender}
+          placeholder={lang === "ar" ? "حدد النوع" : "Select gender"}
+          options={[
+            { value: "male", label: lang === "ar" ? "ذكر" : "Male" },
+            { value: "female", label: lang === "ar" ? "أنثى" : "Female" },
+          ]}
+        />
         <InputField
           label={lang === "ar" ? "الاسم الأول" : "First Name"}
           required
-          placeholder={lang === "ar" ? "أدخل الاسم الأول" : "Enter first name"}
+          placeholder={lang === "ar" ? "الاسم الأول" : "First name"}
           value={firstName}
           onChange={setFirstName}
         />
         <InputField
-          label={lang === "ar" ? "اسم العائلة" : "Last Name"}
+          label={lang === "ar" ? "الاسم الأخير" : "Last Name"}
           required
-          placeholder={lang === "ar" ? "أدخل اسم العائلة" : "Enter last name"}
+          placeholder={lang === "ar" ? "اسم العائلة" : "Last name"}
           value={lastName}
           onChange={setLastName}
         />
       </div>
 
-      {/* الدولة + النوع */}
+      {/* البريد + الدولة */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* البريد */}
         <InputField
@@ -111,9 +128,6 @@ export default function MemberForm() {
             label: lang === "ar" ? c.nameAr : c.nameEn,
           }))}
         />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* تاريخ الميلاد */}
         <DateField
           label={lang === "ar" ? "تاريخ الميلاد" : "Birth Date"}
@@ -121,18 +135,14 @@ export default function MemberForm() {
           value={birthDate}
           onChange={setBirthDate}
         />
-        <SelectField
-          label={lang === "ar" ? "النوع" : "Gender"}
+        <PhoneInput
+          label={lang === "ar" ? "رقم الأرضي" : "Landline"}
           required
-          value={gender}
-          onChange={setGender}
-          options={[
-            { value: "male", label: lang === "ar" ? "ذكر" : "Male" },
-            { value: "female", label: lang === "ar" ? "أنثى" : "Female" },
-          ]}
+          value={landline}
+          dialCode={landlineCode}
+          onValueChange={setLandline}
+          onDialCodeChange={setLandlineCode}
         />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <PhoneInput
           label={lang === "ar" ? "رقم الهاتف" : "Phone Number"}
           required
@@ -140,11 +150,6 @@ export default function MemberForm() {
           dialCode={phoneCode}
           onValueChange={setPhone}
           onDialCodeChange={setPhoneCode}
-          helper={
-            lang === "ar"
-              ? "أدخل رقم الجوال بدون رمز الدولة"
-              : "Enter phone without country code"
-          }
         />
         {/* واتساب + هاتف */}
         <PhoneInput
@@ -161,16 +166,7 @@ export default function MemberForm() {
           }
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* اسم المستخدم */}
-        <InputField
-          label={lang === "ar" ? "اسم المستخدم" : "Username"}
-          required
-          placeholder="••••••••"
-          value={username}
-          onChange={setUsername}
-        />
-
+      <div className="mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-2">
         {/* الباسورد + تأكيد */}
 
         <PasswordField
@@ -196,7 +192,7 @@ export default function MemberForm() {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="w-full lg:w-fit px-9 rounded-full  bg-[#0D154B] text-white py-3 cursor-pointer hover:scale-105  font-bold text-sm md:text-base hover:opacity-90 active:scale-[0.99] transition  "
+          className="w-full lg:w-fit px-9 rounded-full  bg-[#00A8B5] text-white py-3 cursor-pointer hover:scale-105  font-bold text-sm md:text-base hover:opacity-90 active:scale-[0.99] transition  "
         >
           {lang === "ar" ? "إنشاء الحساب" : "Create Account"}
           <FaTelegramPlane className="inline-block ms-2 w-5 h-5" />

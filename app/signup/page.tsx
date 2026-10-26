@@ -43,7 +43,7 @@ export default function SignUpPage() {
       <div className="relative z-10 container mx-auto w-full">
        <div className="mb-4 flex flex-col items-center gap-2 px-1 text-center sm:mb-6 sm:flex-row sm:justify-between sm:gap-3 sm:px-4 sm:text-start lg:mb-8">
             <h1 className="text-xl font-bold text-[#0D0D0D] sm:text-2xl md:text-3xl lg:text-[32px]">
-          {lang === "ar" ? "انضم لمنصة الأفضل" : "Join the Best Platform"}
+          {lang === "ar" ? "انضم لمنصة كتارا جو" : "Join the Katara go"}
         </h1>
          {/* Link at top */}
             <p className="text-xs font-semibold text-[#8E8E8E] sm:text-sm md:text-lg">

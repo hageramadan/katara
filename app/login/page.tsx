@@ -9,13 +9,13 @@ import { FaArrowRight  } from "react-icons/fa6";
 export default function LoginPage() {
   const { lang } = useApp();
   const [activeRole, setActiveRole] = useState<RoleKey>("members");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ role: activeRole, username, password });
+    console.log({ role: activeRole, email, password });
   };
 
   return (
@@ -48,8 +48,8 @@ export default function LoginPage() {
               <div className="text-center mb-1 sm:mb-2 lg:mb-8">
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-[26px] font-extrabold text-[#163B45] mb-2">
                   {lang === "ar"
-                    ? "أهلاً بك في منصة الأفضل"
-                    : "Welcome to Al-Afdal Platform"}
+                    ? "أهلاً بك في كتارا جو"
+                    : "Welcome to Katara go"}
                 </h1>
                 <p className="text-xs sm:text-sm md:text-[15px] text-[#6F7E89]">
                   {lang === "ar"
@@ -58,15 +58,18 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              {/* Username */}
+              {/* Email */}
               <div>
                 <div className="relative">
                   <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    aria-label={lang === "ar" ? "البريد الإلكتروني" : "Email address"}
                     placeholder={
-                      lang === "ar" ? " اسم المستخدم" : "Enter username"
+                      lang === "ar" ? "البريد الإلكتروني" : "Enter email address"
                     }
                     className="
                       w-full border border-[#E5EBEE] rounded-xl
