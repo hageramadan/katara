@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { FiChevronDown, FiCheck } from "react-icons/fi";
+import { useEffect, useId, useRef, useState } from "react";
+import { FiChevronDown, FiCheck, FiSearch } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 
 type Option = { value: string; label: string };
@@ -13,6 +13,9 @@ type SelectFieldProps = {
   options: Option[];
   placeholder?: string;
   helper?: string;
+  disabled?: boolean;
+  error?: string;
+  name?: string;
 };
 
 export default function SelectField({
@@ -23,10 +26,18 @@ export default function SelectField({
   options,
   placeholder,
   helper,
+  disabled = false,
+  error,
+  name,
 }: SelectFieldProps) {
   const { lang } = useApp();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const id = useId();
+  const [search, setSearch] = useState("");
+  const searchable = options.length > 10;
+  const visibleOptions = options.filter((option) => option.label.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()));
 
   const defaultPlaceholder =
     placeholder ?? (lang === "ar" ? "اختر..." : "Select...");
@@ -47,35 +58,46 @@ export default function SelectField({
   // إغلاق بـ Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape" && ref.current?.contains(document.activeElement)) {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative min-w-0" onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+    }}>
       {/* ==================== Label ==================== */}
-      <label className="block text-xs md:text-sm font-semibold text-[#1E2A3A] mb-2">
+      <label htmlFor={id} className="block text-xs md:text-sm font-semibold text-[#1E2A3A] mb-2">
         {label}
         {required && <span className="text-[#D1454A] font-bold ms-1">*</span>}
       </label>
 
       {/* ==================== Trigger Button ==================== */}
       <button
+        id={id}
+        ref={triggerRef}
         type="button"
-        onClick={() => setOpen(!open)}
+        disabled={disabled}
+        aria-expanded={open}
+        aria-controls={open ? `${id}-options` : undefined}
+        aria-describedby={error ? `${id}-error` : helper ? `${id}-helper` : undefined}
+        onClick={() => { setSearch(""); setOpen(!open); }}
         className={`
           w-full flex items-center justify-between gap-2
           bg-[#FAFCFE] rounded-[10px]
           px-4 py-3 border
           text-sm md:text-sm font-medium
           outline-none transition
-          cursor-pointer
+          cursor-pointer text-start disabled:cursor-not-allowed disabled:opacity-60
           ${
             open
               ? "border-[#0D154B] ring-2 ring-[#0D154B]/10"
-              : "border-[#DCE3EC] hover:border-[#0D154B]/40"
+              : error ? "border-[#D1454A]" : "border-[#DCE3EC] hover:border-[#0D154B]/40"
           }
           ${selected ? "text-[#0D154B]" : "text-gray-400"}
         `}
@@ -90,9 +112,11 @@ export default function SelectField({
           `}
         />
       </button>
+      {name && <input type="hidden" name={name} value={value} disabled={disabled} />}
 
       {/* ==================== Dropdown Panel ==================== */}
-      <div
+      {open && !disabled && <div
+        id={`${id}-options`}
         className={`
           absolute top-full mt-2 inset-s-0 w-full z-50
           bg-white rounded-[10px]
@@ -107,14 +131,23 @@ export default function SelectField({
           overflow-hidden
         `}
       >
+        {searchable && (
+          <div className="flex items-center gap-2 border-b border-[#E5EBEE] px-3 py-2">
+            <FiSearch aria-hidden="true" className="shrink-0 text-[#6F7E89]" />
+            <input type="search" value={search} onChange={(event) => setSearch(event.target.value)}
+              aria-label={lang === "ar" ? `بحث في ${label}` : `Search ${label}`}
+              placeholder={lang === "ar" ? "بحث..." : "Search..."}
+              className="min-w-0 flex-1 rounded-md bg-[#FAFCFE] px-2 py-2 text-sm text-[#0D154B] outline-none focus:ring-2 focus:ring-[#0D154B]/10" />
+          </div>
+        )}
         <ul className="max-h-64 overflow-y-auto py-1">
-          {options.length === 0 && (
+          {visibleOptions.length === 0 && (
             <li className="px-4 py-3 text-sm text-gray-400 text-center">
-              {lang === "ar" ? "لا توجد خيارات" : "No options"}
+              {lang === "ar" ? "لا توجد نتائج" : "No results"}
             </li>
           )}
 
-          {options.map((o) => {
+          {visibleOptions.map((o) => {
             const active = o.value === value;
             return (
               <li key={o.value}>
@@ -123,6 +156,7 @@ export default function SelectField({
                   onClick={() => {
                     onChange(o.value);
                     setOpen(false);
+                    triggerRef.current?.focus();
                   }}
                   className={`
                     w-full flex items-center justify-between gap-3
@@ -130,8 +164,8 @@ export default function SelectField({
                     transition cursor-pointer
                     ${
                       active
-                        ? " text-[#0D154B] font-semibold"
-                        : "text-[#1E2A3A] hover:bg-blue-50"
+                        ? "bg-[#E5F6F7] text-[#163B45] font-semibold"
+                        : "text-[#1E2A3A] hover:bg-[#F0F8F9] focus-visible:bg-[#F0F8F9]"
                     }
                   `}
                 >
@@ -142,11 +176,12 @@ export default function SelectField({
             );
           })}
         </ul>
-      </div>
+      </div>}
 
       {/* ==================== Helper ==================== */}
+      {error && <p id={`${id}-error`} className="mt-1.5 text-xs text-[#D1454A]">{error}</p>}
       {helper && (
-        <p className="text-[11px] md:text-xs text-gray-400 mt-1.5">{helper}</p>
+        <p id={`${id}-helper`} className="text-[11px] md:text-xs text-gray-400 mt-1.5">{helper}</p>
       )}
     </div>
   );

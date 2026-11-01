@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { FiChevronDown, FiCheck } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 import { countries } from "@/lib/countries";
@@ -52,6 +52,13 @@ type PhoneInputProps = {
   onDialCodeChange: (v: string) => void;
   helper?: string;
   placeholder?: string;
+  name?: string;
+  dialCodeName?: string;
+  dialCodeLabel?: string;
+  dialCodeRequired?: boolean;
+  error?: string;
+  dialCodeError?: string;
+  validateLength?: boolean;
 };
 
 export default function PhoneInput({
@@ -62,10 +69,19 @@ export default function PhoneInput({
   onValueChange,
   onDialCodeChange,
   helper,
+  placeholder,
+  name,
+  dialCodeName,
+  dialCodeLabel,
+  dialCodeRequired,
+  error,
+  dialCodeError,
+  validateLength = true,
 }: PhoneInputProps) {
   const { lang, dir } = useApp();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const id = useId();
 
   // ✅ الدولة الحالية
   const currentCountry =
@@ -74,7 +90,8 @@ export default function PhoneInput({
   // ✅ الفلديشن حسب الدولة
   const maxDigits = phoneLengths[currentCountry.code] || 10;
   const digitsOnly = value.replace(/\s/g, "");
-  const isInvalid = digitsOnly.length > 0 && digitsOnly.length !== maxDigits;
+  const isInvalid = validateLength && digitsOnly.length > 0 && digitsOnly.length !== maxDigits;
+  const hasError = Boolean(error || dialCodeError || isInvalid);
 
   // ✅ Placeholder ديناميكي
   const dynamicPlaceholder =
@@ -102,14 +119,18 @@ export default function PhoneInput({
 
   // ✅ تنسيق الرقم أثناء الكتابة (مسافة كل 4 أرقام)
   const formatPhone = (v: string) => {
-    const digits = v.replace(/\D/g, "").slice(0, maxDigits);
+    const rawDigits = v.replace(/\D/g, "");
+    if (!validateLength) return rawDigits;
+    const digits = rawDigits.slice(0, maxDigits);
     return digits.replace(/(\d{4})(?=\d)/g, "$1 ");
   };
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative min-w-0" onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+    }}>
       {/* ==================== Label ==================== */}
-      <label className="block text-xs md:text-sm font-semibold text-[#1E2A3A] mb-2">
+      <label htmlFor={id} className="block text-xs md:text-sm font-semibold text-[#1E2A3A] mb-2">
         {label}
         {required && <span className="text-[#D1454A] font-bold ms-1">*</span>}
       </label>
@@ -120,12 +141,16 @@ export default function PhoneInput({
         className={`
           flex items-stretch bg-[#FAFCFE] border rounded-[10px] overflow-hidden
           transition
-          ${isInvalid ? "border-[#D1454A]" : "border-[#DCE3EC] focus-within:border-[#0D154B] focus-within:ring-2 focus-within:ring-[#0D154B]/10"}
+          ${hasError ? "border-[#D1454A]" : "border-[#DCE3EC] focus-within:border-[#0D154B] focus-within:ring-2 focus-within:ring-[#0D154B]/10"}
         `}
       >
         {/* ============ Country Code Trigger (ثابت على الشمال) ============ */}
         <button
           type="button"
+          aria-label={`${dialCodeLabel ?? (lang === "ar" ? "كود الدولة" : "Country calling code")}: ${currentCountry.dialCode}`}
+          aria-expanded={open}
+          aria-controls={`${id}-countries`}
+          aria-describedby={dialCodeError ? `${id}-code-error` : undefined}
           onClick={() => setOpen(!open)}
           className="
             flex items-center gap-1.5
@@ -151,13 +176,19 @@ export default function PhoneInput({
         </button>
 
         {/* ============ Phone Number Input ============ */}
+        {dialCodeName && <input type="hidden" name={dialCodeName} value={dialCode} required={dialCodeRequired} />}
         <input
-        
+          id={id}
+          name={name}
           type="tel"
           inputMode="numeric"
+          autoComplete="tel-national"
+          required={required}
+          aria-invalid={Boolean(error || isInvalid)}
+          aria-describedby={error ? `${id}-error` : undefined}
           value={value}
           onChange={(e) => onValueChange(formatPhone(e.target.value))}
-          placeholder={dynamicPlaceholder}
+          placeholder={placeholder ?? dynamicPlaceholder}
           className="
             flex-1 bg-transparent
             px-4 py-3
@@ -182,7 +213,7 @@ export default function PhoneInput({
             ${dir === "rtl" ? "inset-e-0" : "inset-s-0"}
           `}
         >
-          <ul className="max-h-64 overflow-y-auto py-1">
+          <ul id={`${id}-countries`} className="max-h-64 overflow-y-auto py-1">
             {countries.map((c) => {
               const active = c.code === currentCountry.code;
               return (
@@ -230,7 +261,8 @@ export default function PhoneInput({
       )}
 
       {/* ==================== Helper / Error ==================== */}
-      {isInvalid ? (
+      {dialCodeError && <p id={`${id}-code-error`} className="mt-1.5 text-xs text-[#D1454A]">{dialCodeError}</p>}
+      {error ? <p id={`${id}-error`} className="mt-1.5 text-xs text-[#D1454A]">{error}</p> : isInvalid ? (
         <p className="text-[11px] md:text-xs text-[#D1454A] mt-1.5 font-medium">
           {lang === "ar"
             ? `يجب أن يكون الرقم ${maxDigits} أرقام`

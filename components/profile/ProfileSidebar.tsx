@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import { useAuth } from "@/context/AuthContext";
 import {
   FiGrid,
   FiUser,
@@ -89,12 +90,14 @@ type ProfileSidebarProps = {
 export default function ProfileSidebar({
   mobileOpen = false,
   onClose,
-  user = {
-    name: "Mo3tz Elrawy",
-    email: "mo3tzelrawy111@gmail.com",
-  },
+  user: providedUser,
 }: ProfileSidebarProps) {
   const { lang } = useApp();
+  const { user: authenticatedUser } = useAuth();
+  const user = providedUser ?? {
+    name: authenticatedUser?.display_name ?? (lang === "ar" ? "حسابي" : "My account"),
+    email: authenticatedUser?.email ?? "",
+  };
   const pathname = usePathname();
 
   const initial = user.name

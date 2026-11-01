@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Noto_Kufi_Arabic, Inter } from "next/font/google";
 import { AppProvider } from "@/context/AppContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { BookingFlowProvider } from "@/context/BookingFlowContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import AppToaster from "@/components/ui/AppToaster";
 import "./globals.css";
 
 const notoKufi = Noto_Kufi_Arabic({
@@ -35,9 +37,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
 
         <AppProvider>
-          <Navbar />
-          <BookingFlowProvider>{children}</BookingFlowProvider>
-          <Footer />
+          <AuthProvider>
+            <AppToaster />
+            <Navbar />
+            <BookingFlowProvider>{children}</BookingFlowProvider>
+            <Footer />
+          </AuthProvider>
         </AppProvider>
       </body>
     </html>

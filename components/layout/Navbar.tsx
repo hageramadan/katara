@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FiUser, FiMenu, FiX, FiSettings } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "@/context/AppContext";
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import CountryDropdown from "@/components/ui/CountryDropdown";
 import LanguageDropdown from "@/components/ui/LanguageDropdown";
@@ -11,6 +12,7 @@ import { RiPlaneLine } from "react-icons/ri";
 
 export default function Navbar() {
   const { t, lang, country } = useApp();
+  const { user: authenticatedUser } = useAuth();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -33,11 +35,10 @@ export default function Navbar() {
     };
   }, [open]);
 
-  // 🔐 بيانات المستخدم (مؤقتًا — هنربطها بـ Auth بعدين)
   const user = {
-    name: "Mo3tz Elrawy",
-    email: "mo3tzelrawy111@gmail.com",
-    isLoggedIn: true, // غيّرها لـ false لو مش مسجل
+    name: authenticatedUser?.display_name ?? "",
+    email: authenticatedUser?.email ?? "",
+    isLoggedIn: Boolean(authenticatedUser),
   };
 
   const initial = user.name.charAt(0).toUpperCase();
@@ -74,13 +75,13 @@ export default function Navbar() {
 
           <span className="w-3" />
 
-          <Link
+          {user.isLoggedIn && <Link
             href="/profile/bookings"
             className="text-base me-2 underline font-bold text-primary hover:opacity-80 transition"
           >
             {lang === "ar" ? "حجوزاتي" : "My Bookings"}
-          </Link>
-         <Link
+          </Link>}
+          {user.isLoggedIn ? <Link
               href="/profile"
               className="flex items-center gap-2.5 hover:opacity-90 transition group border rounded-full px-3 py-1 border-gray-300 bg-gray-100"
             >
@@ -93,36 +94,12 @@ export default function Navbar() {
                 {firstName}
               </span>
               <FaAngleDown className="text-primary text-lg"/>
-            </Link>
-            <Link
+            </Link> : <Link
               href="/login"
               className="flex items-center gap-1.5 bg-primary text-white px-5 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
             >
               <FiUser /> {t.navbar.login}
-            </Link>
-          {/* ==================== User OR Login ==================== */}
-          {/* {user.isLoggedIn ? (
-            <Link
-              href="/profile"
-              className="flex items-center gap-2.5 hover:opacity-90 transition group"
-            >
-             
-              <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-base shadow-sm group-hover:shadow-md transition">
-                {initial}
-              </div>
-             
-              <span className="text-base font-bold text-primary">
-                {firstName}
-              </span>
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="flex items-center gap-1.5 bg-primary text-white px-5 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition"
-            >
-              <FiUser /> {t.navbar.login}
-            </Link>
-          )} */}
+            </Link>}
         </div>
 
         {/* Mobile Toggle */}
@@ -171,7 +148,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex-1 space-y-6 px-5 py-6">
-              <Link
+              {user.isLoggedIn && <Link
                 href="/profile"
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-3 rounded-2xl bg-[#F3F7FA] p-4 transition hover:bg-[#EAF1F5]"
@@ -182,26 +159,25 @@ export default function Navbar() {
                   <span className="mt-1 block truncate text-xs text-[#84909E]">{user.email}</span>
                 </div>
                 <FaAngleDown className="-rotate-90 text-primary rtl:rotate-90" />
-              </Link>
+              </Link>}
 
               <div>
                 <p className="mb-2 px-1 text-xs font-bold text-[#9AA3AF]">{lang === "ar" ? "حسابك" : "Your account"}</p>
-                <Link
-                  href="/trips"
+                {user.isLoggedIn ? <Link
+                  href="/profile/bookings"
                   onClick={() => setOpen(false)}
                   className="flex items-center gap-3 rounded-xl px-3 py-3.5 text-sm font-semibold text-[#243247] transition hover:bg-[#F3F7FA]"
                 >
                   <RiPlaneLine className="text-xl text-[#55BBC4]" />
-                  {lang === "ar" ? "رحلاتي" : "My Trips"}
-                </Link>
-                <Link
+                  {lang === "ar" ? "حجوزاتي" : "My Bookings"}
+                </Link> : <Link
                   href="/login"
                   onClick={() => setOpen(false)}
                   className="mt-1 flex items-center gap-3 rounded-xl px-3 py-3.5 text-sm font-semibold text-[#243247] transition hover:bg-[#F3F7FA]"
                 >
                   <FiUser className="text-xl text-[#55BBC4]" />
                   {t.navbar.login}
-                </Link>
+                </Link>}
               </div>
 
               <div className="border-t border-[#E9EDF1] pt-5">

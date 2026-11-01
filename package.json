@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:auth": "node --experimental-strip-types --test tests/registration-schema.test.mjs tests/registration.test.mjs tests/registration-api.test.mjs tests/registration-client.test.mjs tests/login-api.test.mjs tests/auth-storage.test.mjs"
   },
   "dependencies": {
     "country-flag-icons": "^1.6.20",
@@ -15,6 +16,7 @@
     "react": "19.3.0",
     "react-day-picker": "^10.0.2",
     "react-dom": "19.3.0",
+    "react-hot-toast": "^2.6.1",
     "react-icons": "^5.7.0"
   },
   "devDependencies": {

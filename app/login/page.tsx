@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import AuthSidebar, { RoleKey } from "@/components/auth/AuthSidebar";
 import { FaArrowRight  } from "react-icons/fa6";
+import { useLogin } from "@/lib/auth/use-login";
 
 export default function LoginPage() {
   const { lang } = useApp();
@@ -12,10 +13,16 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { submitting, message, errors, submit, clearErrors } = useLogin(lang);
+  const feedbackRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ role: activeRole, email, password });
+    if (await submit(activeRole, email, password)) {
+      setPassword("");
+    } else {
+      requestAnimationFrame(() => feedbackRef.current?.focus());
+    }
   };
 
   return (
@@ -34,7 +41,8 @@ export default function LoginPage() {
           {/* ✅ Sidebar Component */}
           <AuthSidebar
             activeRole={activeRole}
-            onRoleChange={setActiveRole}
+            disabled={submitting}
+            onRoleChange={(role) => { setActiveRole(role); clearErrors(); }}
             className="md:col-span-3"
           />
 
@@ -42,6 +50,8 @@ export default function LoginPage() {
           <div className="md:col-span-9 p-4 sm:p-6 md:p-10 flex items-center justify-center">
             <form
               onSubmit={handleSubmit}
+              noValidate
+              aria-busy={submitting}
               className="flex flex-col gap-4 sm:gap-5 lg:gap-6 w-full mx-auto"
             >
               {/* ==================== Title + Description ==================== */}
@@ -58,11 +68,22 @@ export default function LoginPage() {
                 </p>
               </div>
 
+              {(message || Object.keys(errors).length > 0) && (
+                <div ref={feedbackRef} role="alert" tabIndex={-1} className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 outline-none focus:ring-2 focus:ring-red-300">
+                  {message && <p>{message}</p>}
+                  {Object.entries(errors).map(([key, messages]) => <p key={key} id={`login-${key}-error`} className="mt-1">{messages.join(" ")}</p>)}
+                </div>
+              )}
+
               {/* Email */}
               <div>
                 <div className="relative">
                   <input
                     type="email"
+                    required
+                    disabled={submitting}
+                    aria-invalid={Boolean(errors.email)}
+                    aria-describedby={errors.email ? "login-email-error" : undefined}
                     name="email"
                     autoComplete="email"
                     value={email}
@@ -87,6 +108,13 @@ export default function LoginPage() {
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
+                    autoComplete="current-password"
+                    required
+                    disabled={submitting}
+                    aria-label={lang === "ar" ? "كلمة المرور" : "Password"}
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={errors.password ? "login-password-error" : undefined}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={
@@ -102,6 +130,8 @@ export default function LoginPage() {
                   />
                   <button
                     type="button"
+                    disabled={submitting}
+                    aria-label={showPassword ? (lang === "ar" ? "إخفاء كلمة المرور" : "Hide password") : (lang === "ar" ? "إظهار كلمة المرور" : "Show password")}
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute top-1/2 -translate-y-1/2 inset-e-4 text-gray-400 hover:text-[#0D154B] transition"
                   >
@@ -127,15 +157,16 @@ export default function LoginPage() {
               {/* Submit */}
               <button
                 type="submit"
+                disabled={submitting}
                 className="
                   w-full bg-[#55BBC4] text-white
                   py-3.5 rounded-xl
                   font-bold text-sm md:text-lg cursor-pointer
                   hover:opacity-90 active:scale-[0.99]
-                  transition
+                  transition disabled:cursor-wait disabled:opacity-60
                 "
               >
-                {lang === "ar" ? "تسجيل الدخول" : "Sign In"}
+                {submitting ? (lang === "ar" ? "جاري تسجيل الدخول..." : "Signing in...") : (lang === "ar" ? "تسجيل الدخول" : "Sign In")}
                 <FaArrowRight  className="inline-block ms-2 text-lg rtl:rotate-180" />
               </button>
 

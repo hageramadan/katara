@@ -1,37 +1,37 @@
 "use client";
 import Image from "next/image";
 import { useApp } from "@/context/AppContext";
+import offersImage from "@/public/images/why-us/offers.png";
+import flightsImage from "@/public/images/why-us/flights.png";
+import expertsImage from "@/public/images/why-us/experts.png";
+import valueImage from "@/public/images/why-us/value.png";
 
 const cards = [
   {
     key: "offers",
-    image: "/images/why-us/offers.png",
+    image: offersImage,
     width: 185,
-    height: 119,
     ar: "أفضل عروض السفر في الكويت",
     en: "Best Travel Offers in Kuwait",
   },
   {
     key: "flights",
-    image: "/images/why-us/flights.png",
+    image: flightsImage,
     width: 101,
-    height: 117,
     ar: "آلاف من عروض الرحلات والفنادق",
     en: "Thousands of Flight & Hotel Offers",
   },
   {
     key: "experts",
-    image: "/images/why-us/experts.png",
+    image: expertsImage,
     width: 121,
-    height: 120,
     ar: "إرشادات الخبراء",
     en: "Expert Guidance",
   },
   {
     key: "value",
-    image: "/images/why-us/value.png",
+    image: valueImage,
     width: 102,
-    height: 120,
     ar: "أفضل القيم والخدمات المميزة",
     en: "Best Value & Premium Services",
   },
@@ -68,9 +68,9 @@ export default function WhyChooseUs() {
                 <Image
                   src={card.image}
                   alt={lang === "ar" ? card.ar : card.en}
-                  width={card.width}
-                  height={card.height}
-                  className="object-contain max-w-full h-auto"
+                  style={{ width: card.width, height: "auto", maxWidth: "100%" }}
+                  sizes={`${card.width}px`}
+                  className="object-contain"
                 />
               </div>
 

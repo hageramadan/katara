@@ -1,24 +1,32 @@
 "use client";
 import { useState } from "react";
 import { useApp } from "@/context/AppContext";
-import { FiLock } from "react-icons/fi";
+import { useAuth } from "@/context/AuthContext";
+import type { RegistrationUser } from "@/lib/auth/types";
+import toast from "react-hot-toast";
 import FloatingLabelInput from "@/components/auth/common/FloatingLabelInput";
 import FloatingLabelDate from "@/components/auth/common/FloatingLabelDate";
 import FloatingLabelPhone from "@/components/auth/common/FloatingLabelPhone";
 import { MdVpnKey } from "react-icons/md";
 
 export default function PersonalInfoPage() {
+  const { user } = useAuth();
+  return <PersonalInfoForm key={`${user?.id ?? "guest"}:${user?.updated_at ?? ""}`} user={user} />;
+}
+
+function PersonalInfoForm({ user }: { user: RegistrationUser | null }) {
   const { lang } = useApp();
 
-  const [lastName, setLastName] = useState("Elrawy");
-  const [firstName, setFirstName] = useState("Mo3tz");
+  const nameParts = user?.display_name.trim().split(/\s+/) ?? [];
+  const [lastName, setLastName] = useState(nameParts.slice(1).join(" "));
+  const [firstName, setFirstName] = useState(nameParts[0] ?? "");
   const [birthDate, setBirthDate] = useState("");
   const [nationality, setNationality] = useState("");
-  const [gender, setGender] = useState("female");
+  const [gender, setGender] = useState("");
 
-  const [phone, setPhone] = useState("1068622014");
-  const [phoneCode, setPhoneCode] = useState("+20");
-  const [email, setEmail] = useState("mo3tzelrawy111@gmail.com");
+  const [phone, setPhone] = useState(user?.phone ?? "");
+  const [phoneCode, setPhoneCode] = useState(user?.country_code ?? "");
+  const [email, setEmail] = useState(user?.email ?? "");
 
   const [passportNumber, setPassportNumber] = useState("");
   const [passportExpiry, setPassportExpiry] = useState("");
@@ -27,7 +35,7 @@ export default function PersonalInfoPage() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ lastName, firstName, birthDate, nationality, gender, phone, phoneCode, email, passportNumber, passportExpiry, idNumber, idExpiry });
+    toast.error(lang === "ar" ? "تحديث البيانات غير متاح حاليًا." : "Updating your information is currently unavailable.");
   };
 
   return (

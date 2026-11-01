@@ -15,9 +15,11 @@ type Props = {
   selectAll?: boolean;
   placeholder?: string;
   helper?: string;
+  disabled?: boolean;
+  error?: string;
 };
 
-export default function MultiSelectField({ label, required, value, onChange, options, selectAll, placeholder, helper }: Props) {
+export default function MultiSelectField({ label, required, value, onChange, options, selectAll, placeholder, helper, disabled = false, error }: Props) {
   const { lang } = useApp();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -53,14 +55,15 @@ export default function MultiSelectField({ label, required, value, onChange, opt
         {label}{required && <span className="ms-1 font-bold text-[#D1454A]">*</span>}
       </span>
       <button type="button" aria-labelledby={`${id}-label ${id}-value`} aria-expanded={open}
-        aria-controls={`${id}-options`} onClick={() => setOpen(!open)}
-        className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-[10px] border border-[#DCE3EC] bg-[#FAFCFE] px-4 py-3 text-start text-sm outline-none focus-visible:ring-2 focus-visible:ring-[#0D154B]/20">
+        disabled={disabled} aria-describedby={error ? `${id}-error` : helper ? `${id}-helper` : undefined}
+        aria-controls={open ? `${id}-options` : undefined} onClick={() => setOpen(!open)}
+        className={`flex w-full cursor-pointer items-center justify-between gap-2 rounded-[10px] border bg-[#FAFCFE] px-4 py-3 text-start text-sm outline-none transition hover:border-[#0D154B]/40 focus-visible:ring-2 focus-visible:ring-[#0D154B]/20 disabled:cursor-not-allowed disabled:opacity-60 ${error ? "border-[#D1454A]" : open ? "border-[#0D154B] ring-2 ring-[#0D154B]/10" : "border-[#DCE3EC]"}`}>
         <span id={`${id}-value`} className={`truncate ${selected.length ? "text-[#0D154B]" : "text-gray-400"}`}>
           {selectAll && allSelected ? (lang === "ar" ? "الجميع" : "All") : selected.map((option) => option.label).join(lang === "ar" ? "، " : ", ") || placeholder || (lang === "ar" ? "اختر..." : "Select...")}
         </span>
         <FiChevronDown className={`shrink-0 text-[#0D154B] transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && (
+      {open && !disabled && (
         <fieldset id={`${id}-options`} aria-labelledby={`${id}-label`} className="absolute inset-x-0 top-full z-50 mt-2 max-h-64 overflow-y-auto rounded-[10px] border border-[#DCE3EC] bg-white p-2 shadow-xl">
           {selectAll && (
             <label className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-3 text-sm text-[#1E2A3A] hover:bg-[#FAFCFE]">
@@ -76,7 +79,8 @@ export default function MultiSelectField({ label, required, value, onChange, opt
           ))}
         </fieldset>
       )}
-      {helper && <p className="mt-1.5 text-[11px] text-gray-400 md:text-xs">{helper}</p>}
+      {error && <p id={`${id}-error`} className="mt-1.5 text-xs text-[#D1454A]">{error}</p>}
+      {helper && <p id={`${id}-helper`} className="mt-1.5 text-[11px] text-gray-400 md:text-xs">{helper}</p>}
     </div>
   );
 }

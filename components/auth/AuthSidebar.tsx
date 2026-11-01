@@ -3,15 +3,10 @@
 import { useApp } from "@/context/AppContext";
 import { FaUserCircle, FaPlaneDeparture, FaUsers } from "react-icons/fa";
 import { FaUserTie, FaHandshake, FaBuilding } from "react-icons/fa6";
+import type { AuthRoleKey } from "@/lib/auth/types";
 
 // ==================== Roles Types ====================
-export type RoleKey =
-  | "members"
-  | "agents"
-  | "travelCompanies"
-  | "brokers"
-  | "companies"
-  | "partners";
+export type RoleKey = AuthRoleKey;
 
 // ==================== Roles Data ====================
 export const roles: {
@@ -38,12 +33,14 @@ type AuthSidebarProps = {
   activeRole: RoleKey;
   onRoleChange: (role: RoleKey) => void;
   className?: string;
+  disabled?: boolean;
 };
 
 export default function AuthSidebar({
   activeRole,
   onRoleChange,
   className = "",
+  disabled = false,
 }: AuthSidebarProps) {
   const { lang } = useApp();
 
@@ -72,11 +69,12 @@ export default function AuthSidebar({
             <li key={role.key} className="shrink-0 md:shrink">
               <button
                 type="button"
+                disabled={disabled}
                 onClick={() => onRoleChange(role.key)}
                 className={`
                   w-full flex flex-row md:flex-col items-center justify-center gap-2 md:gap-3 px-3 py-2.5 md:px-4 md:py-3 rounded-full md:rounded-xl
                   text-xs sm:text-sm font-semibold whitespace-nowrap
-                  transition-all duration-200 cursor-pointer
+                  transition-all duration-200 cursor-pointer disabled:cursor-wait disabled:opacity-60
                   ${
                     active
                       ? "bg-[#E5F6F7] text-[#163B45]"
