@@ -51,6 +51,16 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
       return code ? [[phone.key, code] as const] : [];
     }));
   const groupedCodeKeys = new Set([...phoneCodeFields.values()].map((field) => field.key));
+  const phoneFields = ["landline_phone", "phone", "whatsapp"].flatMap((key) => {
+    const field = fields.find((item) => item.key === key && phoneCodeFields.has(key));
+    return field ? [field] : [];
+  });
+  const groupPhones = phoneFields.length === 3;
+  const brokerFields = type === "broker" ? ["country_id", "services"].flatMap((key) => {
+    const field = fields.find((item) => item.key === key);
+    return field ? [field] : [];
+  }) : [];
+  const groupBrokerFields = brokerFields.length === 2;
   const identityFields = ["gender", "first_name", "last_name"].flatMap((key) => {
     const field = fields.find((item) => item.key === key);
     return field ? [field] : [];
@@ -66,6 +76,21 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
     password_confirmation: lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password",
     terms: lang === "ar" ? "الشروط والأحكام" : "Terms",
   };
+
+  function renderPhoneField(field: (typeof fields)[number]) {
+    const codeField = phoneCodeFields.get(field.key);
+    if (!codeField) return null;
+    return (
+      <PhoneInput key={field.key} label={field.label} name={field.key}
+        required={field.is_required} value={String(formValues[field.key] ?? "")}
+        dialCode={String(formValues[codeField.key])} dialCodeName={codeField.key}
+        dialCodeLabel={codeField.label} dialCodeRequired={codeField.is_required}
+        error={errors[field.key]?.join(" ")} dialCodeError={errors[codeField.key]?.join(" ")}
+        validateLength={false}
+        onValueChange={(value) => setValues((previous) => ({ ...previous, [field.key]: value }))}
+        onDialCodeChange={(value) => setValues((previous) => ({ ...previous, [codeField.key]: value }))} />
+    );
+  }
 
   function clearAll() {
     setValues({});
@@ -156,6 +181,16 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
         <fieldset disabled={submitting} className="flex min-w-0 flex-col gap-5 md:gap-6">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {fields.filter((field) => !groupedCodeKeys.has(field.key) && field.key !== headerLogo?.key).map((field) => {
+              if (groupBrokerFields && field.key === "country_id") return (
+                <div key="broker-country-services" className="grid min-w-0 grid-cols-1 gap-4 md:col-span-2 md:grid-cols-2">
+                  {brokerFields.map((brokerField) => (
+                    <RegistrationField key={brokerField.key} field={brokerField} value={formValues[brokerField.key]}
+                      error={errors[brokerField.key]?.join(" ")}
+                      onChange={(value) => setValues((previous) => ({ ...previous, [brokerField.key]: value }))} />
+                  ))}
+                </div>
+              );
+              if (groupBrokerFields && field.key === "services") return null;
               if (groupIdentity && field.key === "gender") return (
                 <div key="identity" className="grid min-w-0 grid-cols-1 gap-4 md:col-span-2 lg:grid-cols-3">
                   {identityFields.map((identityField) => (
@@ -166,24 +201,24 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
                 </div>
               );
               if (groupIdentity && (field.key === "first_name" || field.key === "last_name")) return null;
-              const codeField = phoneCodeFields.get(field.key);
-              if (codeField) return (
-                <PhoneInput key={field.key} label={field.label} name={field.key}
-                  required={field.is_required} value={String(formValues[field.key] ?? "")}
-                  dialCode={String(formValues[codeField.key])} dialCodeName={codeField.key}
-                  dialCodeLabel={codeField.label} dialCodeRequired={codeField.is_required}
-                  error={errors[field.key]?.join(" ")} dialCodeError={errors[codeField.key]?.join(" ")}
-                  validateLength={false}
-                  onValueChange={(value) => setValues((previous) => ({ ...previous, [field.key]: value }))}
-                  onDialCodeChange={(value) => setValues((previous) => ({ ...previous, [codeField.key]: value }))} />
+              if (groupPhones && field.key === phoneFields[0].key) return (
+                <div key="phones" className="grid min-w-0 grid-cols-1 gap-4 md:col-span-2 lg:grid-cols-3">
+                  {phoneFields.map(renderPhoneField)}
+                </div>
               );
+              if (groupPhones && phoneFields.some((phone) => phone.key === field.key)) return null;
+              if (phoneCodeFields.has(field.key)) return renderPhoneField(field);
               return <RegistrationField key={field.key} field={field} value={formValues[field.key]}
                 error={errors[field.key]?.join(" ")}
                 onChange={(value) => setValues((previous) => ({ ...previous, [field.key]: value }))} />;
             })}
+            {type === "third_party_partner" && !fields.some((field) => field.key === "email") && (
+              <InputField label={lang === "ar" ? "البريد الإلكتروني" : "Email"} type="email" required
+                value={email} onChange={setEmail} placeholder="example@email.com" />
+            )}
           </div>
           {/* Existing account controls stay separate from the API-defined profile fields. */}
-          {!fields.some((field) => field.key === "email") && <InputField label={lang === "ar" ? "البريد الإلكتروني" : "Email"} type="email" required value={email} onChange={setEmail} placeholder="example@email.com" />}
+          {type !== "third_party_partner" && !fields.some((field) => field.key === "email") && <InputField label={lang === "ar" ? "البريد الإلكتروني" : "Email"} type="email" required value={email} onChange={setEmail} placeholder="example@email.com" />}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <PasswordField label={lang === "ar" ? "كلمة المرور" : "Password"} required minLength={8}
               helper={lang === "ar" ? "8 أحرف أو أرقام على الأقل" : "At least 8 characters"}
