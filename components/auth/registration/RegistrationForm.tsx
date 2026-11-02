@@ -40,10 +40,14 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState<RegistrationSuccess | null>(null);
   const feedbackRef = useRef<HTMLDivElement>(null);
+  const headerLogo = ["agency_employee", "travel_company", "company"].includes(type)
+    ? fields.find((field) => field.key === "logo" && field.type === "file")
+    : undefined;
   const phoneCodeFields = new Map(fields
     .filter((field) => field.type === "tel")
     .flatMap((phone) => {
-      const code = fields.find((field) => field.key === `${phone.key}_country_code`);
+      const codeKey = phone.key === "landline_phone" ? "landline_country_code" : `${phone.key}_country_code`;
+      const code = fields.find((field) => field.key === codeKey);
       return code ? [[phone.key, code] as const] : [];
     }));
   const groupedCodeKeys = new Set([...phoneCodeFields.values()].map((field) => field.key));
@@ -118,7 +122,14 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5 md:gap-6" aria-busy={status === "loading" || submitting}>
-      <FormHeader title={titles[type][lang]} onClear={submitting ? undefined : clearAll} />
+      <FormHeader title={titles[type][lang]} onClear={submitting ? undefined : clearAll}
+        center={status === "ready" && headerLogo ? (
+          <fieldset disabled={submitting} className="min-w-0">
+            <RegistrationField field={headerLogo} appearance="logo" value={formValues[headerLogo.key]}
+              error={errors[headerLogo.key]?.join(" ")}
+              onChange={(value) => setValues((previous) => ({ ...previous, [headerLogo.key]: value }))} />
+          </fieldset>
+        ) : undefined} />
       {(message || Object.keys(errors).length > 0) && (
         <div ref={feedbackRef} tabIndex={-1} role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 outline-none focus:ring-2 focus:ring-red-300">
           <p>{message || (lang === "ar" ? "راجعي البيانات التالية:" : "Please check the following:")}</p>
@@ -144,7 +155,7 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
       {status === "ready" && (
         <fieldset disabled={submitting} className="flex min-w-0 flex-col gap-5 md:gap-6">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {fields.filter((field) => !groupedCodeKeys.has(field.key)).map((field) => {
+            {fields.filter((field) => !groupedCodeKeys.has(field.key) && field.key !== headerLogo?.key).map((field) => {
               if (groupIdentity && field.key === "gender") return (
                 <div key="identity" className="grid min-w-0 grid-cols-1 gap-4 md:col-span-2 lg:grid-cols-3">
                   {identityFields.map((identityField) => (

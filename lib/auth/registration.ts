@@ -1,5 +1,9 @@
 import type { RegistrationField, RegistrationValues, RegistrationPayload, RegistrationType, RegistrationErrors } from "./types";
 
+export function isRegistrationFile(value: unknown): value is File {
+  return typeof File !== "undefined" && value instanceof File;
+}
+
 export function buildRegistrationPayload(
   type: RegistrationType, email: string, password: string,
   fields: RegistrationField[], values: RegistrationValues,
@@ -9,12 +13,8 @@ export function buildRegistrationPayload(
     fields: fields.flatMap((field) => {
       const value = values[field.key];
       if (value === undefined || value === "" || (Array.isArray(value) && !value.length)) return [];
-      // The agency_type field is advertised as multiselect but accepts a string.
-      // Other multiselect fields, including services, require actual arrays.
-      const serialized = Array.isArray(value)
-        ? type === "agency_employee" && field.key === "agency_type"
-          ? JSON.stringify(value.map(String))
-          : value.map(String)
+      const serialized = isRegistrationFile(value) ? value : Array.isArray(value)
+        ? value.map(String)
         : String(value);
       return [{ field_id: field.id, value: serialized }];
     }),
@@ -32,6 +32,8 @@ export function validateRegistration(
     const empty = value === undefined || (typeof value === "string" && !value.trim()) || (Array.isArray(value) && !value.length);
     if (field.is_required && empty) {
       errors[field.key] = [required];
+    } else if (!empty && field.type === "file" && !isRegistrationFile(value)) {
+      errors[field.key] = [language === "ar" ? "اختاري ملفًا صالحًا." : "Choose a valid file."];
     } else if (!empty && (field.type === "select" || field.type === "multiselect")) {
       const selected = Array.isArray(value) ? value : [value];
       if ((field.type === "multiselect" && !Array.isArray(value)) ||

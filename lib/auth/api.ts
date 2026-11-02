@@ -1,5 +1,5 @@
 import type { RegistrationField, RegistrationType, RegistrationPayload, RegistrationSuccess, RegistrationErrors, LoginPayload, AuthSuccess } from "./types";
-import { normalizeRegistrationErrors } from "./registration";
+import { isRegistrationFile, normalizeRegistrationErrors } from "./registration";
 import { parseRegistrationFields } from "./registration-schema";
 import { parsePublicUser } from "./public-user";
 import { storeAuthToken } from "@/lib/auth/storage";
@@ -44,10 +44,29 @@ export async function loginAccount(payload: LoginPayload, language: "ar" | "en")
 
 export async function registerAccount(payload: RegistrationPayload, language: "ar" | "en"): Promise<RegistrationSuccess> {
   const fallback = language === "ar" ? "تعذر إنشاء الحساب. حاولي مرة أخرى." : "Unable to create your account. Please try again.";
+  let requestBody: string | FormData;
+  const headers: Record<string, string> = { Accept: "application/json", "Accept-Language": language };
+  if (payload.fields.some(({ value }) => isRegistrationFile(value))) {
+    const form = new FormData();
+    form.append("email", payload.email.trim());
+    form.append("password", payload.password);
+    form.append("user_type", payload.user_type);
+    payload.fields.forEach(({ field_id, value }, index) => {
+      form.append(`fields[${index}][field_id]`, String(field_id));
+      if (Array.isArray(value)) {
+        value.forEach((item) => form.append(`fields[${index}][value][]`, item));
+      } else {
+        form.append(`fields[${index}][value]`, value);
+      }
+    });
+    requestBody = form;
+  } else {
+    headers["Content-Type"] = "application/json";
+    requestBody = JSON.stringify({ ...payload, email: payload.email.trim() });
+  }
   const response = await fetch(kataraUrl("auth/register"), {
     method: "POST", credentials: "omit", cache: "no-store",
-    headers: { Accept: "application/json", "Content-Type": "application/json", "Accept-Language": language },
-    body: JSON.stringify({ ...payload, email: payload.email.trim() }),
+    headers, body: requestBody,
   });
   const body = await response.json();
   const message = typeof body?.message === "string" ? body.message : fallback;

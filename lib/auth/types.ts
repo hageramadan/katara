@@ -14,18 +14,18 @@ export type RegistrationField = {
   id: number;
   key: string;
   label: string;
-  type: "text" | "tel" | "date" | "email" | "number" | "select" | "multiselect";
+  type: "text" | "tel" | "date" | "email" | "number" | "select" | "multiselect" | "file";
   is_required: boolean;
   options: RegistrationOption[];
   sort_order: number;
 };
-export type RegistrationValues = Record<string, string | number | (string | number)[]>;
+export type RegistrationValues = Record<string, string | number | (string | number)[] | File>;
 
 export type RegistrationPayload = {
   email: string;
   password: string;
   user_type: RegistrationType;
-  fields: { field_id: number; value: string | string[] }[];
+  fields: { field_id: number; value: string | string[] | File }[];
 };
 
 export type RegistrationUser = {

@@ -62,11 +62,17 @@ The form posts JSON directly to `https://katara.tawajood.com/api/auth/register`
 with `Accept-Language: ar` (or `en`); the upstream must support CORS for this POST.
 Profile values use `{ field_id, value }` entries from the
 loaded schema; scalar values are strings and multiselect values (including
-`services`) are string arrays. The `agency_employee` field `agency_type` is an
-API exception: its selections are encoded as a JSON array string.
+`services` and `agency_type`) are string arrays.
 Empty optional values are omitted. The form validates required fields, available
 options, email, an eight-character password, matching confirmation, and terms.
 The API remains authoritative for additional validation rules.
+
+File fields (such as the optional agency logo) are supported. When a file is
+selected, direct registration sends multipart form data using
+`fields[index][field_id]` and `fields[index][value]`; multiselect entries use
+`fields[index][value][]`. The browser supplies the multipart boundary. Requests
+without files retain the JSON format. Multipart acceptance and file validation
+rules must also be supported by the upstream API.
 
 Validation failures are shown without clearing entered values. Submission is
 locked while pending and successful registration shows a confirmation. The

@@ -9,6 +9,17 @@ const fields = [
 ];
 const values = { country_id: 1, services: ["flights"] };
 
+test("preserves selected files, omits an unselected optional logo and validates required uploads", () => {
+  const logo = { id: 12, key: "logo", label: "Logo", type: "file", is_required: false, options: [], sort_order: 1 };
+  const file = new File(["image bytes"], "logo.png", { type: "image/png" });
+  assert.deepEqual(buildRegistrationPayload("agency_employee", "user@example.com", "test1234", [logo], {}).fields, []);
+  const payload = buildRegistrationPayload("agency_employee", "user@example.com", "test1234", [logo], { logo: file });
+  assert.equal(payload.fields[0].value, file);
+  assert.deepEqual(validateRegistration([logo], { logo: file }, "user@example.com", "test1234", "test1234", true, "en"), {});
+  assert.ok(validateRegistration([{ ...logo, is_required: true }], {}, "user@example.com", "test1234", "test1234", true, "en").logo);
+  assert.ok(validateRegistration([logo], { logo: "fake path" }, "user@example.com", "test1234", "test1234", true, "en").logo);
+});
+
 test("serializes scalar IDs as strings, preserves multiselect arrays and omits empty optional values and unknown keys", () => {
   for (const type of ["member", "agency_employee", "broker", "travel_company", "company", "third_party_partner"]) {
     const payload = buildRegistrationPayload(type, " user@example.com ", "test1234", fields, { ...values, ignored: "never sent" });
@@ -20,11 +31,10 @@ test("serializes scalar IDs as strings, preserves multiselect arrays and omits e
   }
 });
 
-test("agency registration sends field 14 as a string and services as an array together", () => {
+test("agency registration sends agency_type and services as arrays together", () => {
   const agencyFields = [{ ...fields[1], id: 14, key: "agency_type" }, { ...fields[1], id: 15 }];
   const payload = buildRegistrationPayload("agency_employee", "user@example.com", "12345678", agencyFields, { agency_type: ["flights", "hotels"], services: ["flights", "hotels"] });
-  assert.equal(typeof payload.fields[0].value, "string");
-  assert.deepEqual(JSON.parse(payload.fields[0].value), ["flights", "hotels"]);
+  assert.deepEqual(payload.fields[0].value, ["flights", "hotels"]);
   assert.deepEqual(payload.fields[1], { field_id: 15, value: ["flights", "hotels"] });
   assert.equal(isRegistrationPayload(payload), true);
   assert.deepEqual(mapRegistrationErrors({ field_14: ["The value field must be a string."] }, payload, agencyFields), {

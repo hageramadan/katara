@@ -28,7 +28,7 @@ export function parseRegistrationFields(payload: unknown): RegistrationField[] {
     throw new Error("Invalid registration fields response");
   }
   const keys = new Set<string>();
-  const supported = ["text", "tel", "date", "email", "number", "select", "multiselect"];
+  const supported = ["text", "tel", "date", "email", "number", "select", "multiselect", "file"];
   return payload.data.fields.map((field: unknown): RegistrationField => {
     if (!isRecord(field) || typeof field.id !== "number" ||
       typeof field.key !== "string" || !/^[a-z][a-z0-9_]*$/.test(field.key) ||

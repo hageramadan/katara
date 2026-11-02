@@ -8,6 +8,16 @@ const field = (overrides = {}) => ({
 });
 const response = (fields) => ({ result: true, data: { fields } });
 
+test("accepts an optional logo file without rejecting the remaining agency fields", () => {
+  const fields = parseRegistrationFields(response([
+    field({ id: 12, key: "logo", type: "file", is_required: 0 }),
+    field({ id: 13, key: "name_ar", sort_order: 2 }),
+  ]));
+  assert.equal(fields.length, 2);
+  assert.equal(fields[0].type, "file");
+  assert.equal(fields[0].is_required, false);
+});
+
 test("accepts both option formats and preserves numeric IDs", () => {
   const fields = parseRegistrationFields(response([
     field({ key: "iata_type", type: "select", options: { agency: "Agency", standard: "Standard" } }),
