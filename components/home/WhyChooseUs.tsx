@@ -46,8 +46,8 @@ export default function WhyChooseUs() {
         {/* ============ Title ============ */}
         <h2 className="text-center font-bold text-[20px] sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#333333] mb-3 lg:mb-12">
           {lang === "ar"
-            ? "لماذا تستخدم منصة الأفضل"
-            : "Why Use Al-Afdal Platform"}
+            ? "لماذا تستخدم منصة كتارا جو"
+            : "Why Use Katara go Platform"}
         </h2>
 
         {/* ============ Cards Grid ============ */}

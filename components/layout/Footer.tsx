@@ -25,7 +25,7 @@ const servicesCol2 = [
 
 const servicesCol3 = [
   { ar: "الشركة", en: "Company" },
-  { ar: "عن الأفضل", en: "About Al-Afdal" },
+  { ar: "عن كتارا جو", en: "About Katara go" },
   { ar: "الدعم", en: "Support" },
 ];
 

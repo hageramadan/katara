@@ -17,14 +17,7 @@ export default function CheckboxField({
 
   return (
     <label className="flex items-center gap-2 cursor-pointer select-none pb-4 border-b border-gray-200">
-      <span className="text-xs md:text-sm text-[#2A3A4A]">
-        {lang === "ar" ? "أوافق على" : "I agree to"}{" "}
-         {required && <span className="text-[#D1454A] font-bold mx-1">*</span>}
-        <Link href="/terms" className="text-[#00A8B5] hover:underline">
-          {lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions"}
-        </Link>
-       
-      </span>
+     
       <input
         type="checkbox"
         checked={checked}
@@ -49,7 +42,14 @@ export default function CheckboxField({
           </svg>
         )}
       </span>
-      
+       <span className="text-xs md:text-sm text-[#2A3A4A]">
+        {lang === "ar" ? "أوافق على" : "I agree to"}{" "}
+         {required && <span className="text-[#D1454A] font-bold mx-1">*</span>}
+        <Link href="/terms" className="text-[#00A8B5] hover:underline">
+          {lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions"}
+        </Link>
+       
+      </span>
     </label>
   );
 }

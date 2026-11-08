@@ -54,8 +54,8 @@ export default function ExploreApp() {
               {/* Title */}
               <h2 className="font-bold text-[20px] sm:text-[21px] md:text-[28px] text-[#0D0D0D] lg:text-[32px] leading-tight">
                 {lang === "ar"
-                  ? "اكتشف أفضل عروض السفر في الكون مع تطبيق الأفضل"
-                  : "Discover the Best Travel Deals in the Universe with Al-Afdal App"}
+                  ? "اكتشف أفضل عروض السفر في الكون مع تطبيق كتارا جو"
+                  : "Discover the Best Travel Deals in the Universe with Katara go App"}
               </h2>
 
               {/* Description */}

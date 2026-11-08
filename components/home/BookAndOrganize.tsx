@@ -45,14 +45,14 @@ export default function BookAndOrganize() {
           <div className="flex flex-col gap-5 md:gap-6">
             <h2 className="font-extrabold text-[22px] sm:text-[24px] md:text-[36px] lg:text-[54px] leading-tight">
               {lang === "ar"
-                ? "احجز ونظم رحلتك مع خدمات الأفضل"
-                : "Book and Organize Your Trip with Al-Afdal Services"}
+                ? "احجز ونظم رحلتك مع خدمات كتارا جو"
+                : "Book and Organize Your Trip with Katara go Services"}
             </h2>
 
             <p className="text-white text-sm md:text-lg leading-relaxed font-semibold">
               {lang === "ar"
                 ? "الأفضل شركة مساهمة في جميع خطواتك نحو النجاح!"
-                : "Al-Afdal is a partner in all your steps toward success!"}
+                : "Katara go is a partner in all your steps toward success!"}
             </p>
 
             <div>

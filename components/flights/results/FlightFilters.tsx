@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { FiChevronDown, FiRotateCcw, FiSliders } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
+import { useBookingFlow } from "@/context/BookingFlowContext";
 import { localizeDigits } from "@/lib/flights/format";
 import FlightMoreFiltersModal from "./FlightMoreFiltersModal";
 
@@ -16,6 +17,8 @@ export type FlightFilterState = {
   departureTime: "any" | "day" | "night";
   departureWindow: [number, number];
   arrivalWindow: [number, number];
+  includeNearbyAirports: boolean;
+  baggageOnly: boolean;
 };
 
 type FilterKey =
@@ -43,6 +46,9 @@ export default function FlightFilters({
 }) {
   const { lang } = useApp();
   const ar = lang === "ar";
+  const { promoCode, updatePromoCode } = useBookingFlow();
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+  const advancedId = useId();
   const [openFilter, setOpenFilter] = useState<FilterKey | null>(null);
   const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
   const openMenuRef = useRef<HTMLDivElement>(null);
@@ -88,11 +94,60 @@ export default function FlightFilters({
   return (
     <section>
       <div className="mb-2 flex justify-start">
-        <div className="inline-flex items-center gap-2 py-1 text-sm font-bold text-[#465264] sm:text-base">
+        <button
+          type="button"
+          aria-expanded={advancedOpen}
+          aria-controls={advancedId}
+          onClick={() => setAdvancedOpen((value) => !value)}
+          className={`inline-flex items-center gap-2 rounded py-1 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0D154B] sm:text-base ${advancedOpen ? "text-[#0D154B]" : "text-[#465264] hover:text-[#0D154B]"}`}
+        >
          <FiSliders className="shrink-0" />
           
           <span>{ar ? "خيارات بحث متقدمة" : "Advanced search options"}</span>
-          <FiChevronDown className="shrink-0" />
+          <FiChevronDown className={`shrink-0 transition-transform ${advancedOpen ? "rotate-180" : ""}`} />
+        </button>
+      </div>
+      <div id={advancedId} hidden={!advancedOpen}>
+        <div className="mb-4 flex flex-wrap items-center gap-x-8 gap-y-4 border-b border-[#E8EBF0] bg-white px-3 py-4 text-sm text-[#666666] sm:text-base lg:justify-between">
+          <label className="inline-flex cursor-pointer items-center gap-3">
+            <span>{ar ? "يشمل مطارات قريبة" : "Include nearby airports"}</span>
+            <input
+              type="checkbox"
+              checked={filters.includeNearbyAirports}
+              onChange={(event) => onChange({ ...filters, includeNearbyAirports: event.target.checked })}
+              className="h-5 w-5 shrink-0 cursor-pointer accent-[#0D154B]"
+            />
+          </label>
+          <label className="inline-flex cursor-pointer items-center gap-3">
+            <span>{ar ? "شامل الأمتعة فقط" : "Baggage included only"}</span>
+            <input
+              type="checkbox"
+              checked={filters.baggageOnly}
+              onChange={(event) => onChange({ ...filters, baggageOnly: event.target.checked })}
+              className="h-5 w-5 shrink-0 cursor-pointer accent-[#0D154B]"
+            />
+          </label>
+          <label className="inline-flex cursor-pointer items-center gap-3">
+            <span>{ar ? "رحلات مباشرة فقط" : "Direct flights only"}</span>
+            <input
+              type="checkbox"
+              checked={filters.stops === "direct"}
+              onChange={(event) => onChange({ ...filters, stops: event.target.checked ? "direct" : "any" })}
+              className="h-5 w-5 shrink-0 cursor-pointer accent-[#0D154B]"
+            />
+          </label>
+          <label className="inline-flex items-center gap-3">
+            <span className="whitespace-nowrap">{ar ? "كود الخصم" : "Discount code"}</span>
+            <select
+              value={promoCode}
+              onChange={(event) => updatePromoCode(event.target.value)}
+              className="h-8 w-40 rounded-sm border border-[#919191] bg-white px-2 text-sm text-[#666666] focus-visible:outline-2 focus-visible:outline-[#0D154B] sm:w-48"
+            >
+              <option value="">{ar ? "اختر الكود" : "Select code"}</option>
+              <option value="SAVE20">SAVE20</option>
+              {promoCode && promoCode !== "SAVE20" && <option value={promoCode}>{promoCode}</option>}
+            </select>
+          </label>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap">
@@ -260,7 +315,7 @@ export default function FlightFilters({
         })}
         <button
           type="button"
-          onClick={onReset}
+          onClick={() => { onReset(); updatePromoCode(""); }}
           className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#0D154B] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#E8EAED] sm:text-sm hover:text-[#0D154B] border hover:border-[#0D154B] "
         >
           <FiRotateCcw className="shrink-0" />

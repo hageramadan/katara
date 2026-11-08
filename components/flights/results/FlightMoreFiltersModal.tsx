@@ -128,6 +128,8 @@ export default function FlightMoreFiltersModal({
     departureTime: "any",
     departureWindow: [0, 24],
     arrivalWindow: [0, 24],
+    includeNearbyAirports: false,
+    baggageOnly: false,
   });
 
   const resetLabel = ar ? "إعادة ضبط" : "Reset";

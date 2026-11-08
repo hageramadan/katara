@@ -12,6 +12,8 @@ export const initialFlightFilters: FlightFilterState = {
   departureTime: "any",
   departureWindow: [0, 24],
   arrivalWindow: [0, 24],
+  includeNearbyAirports: false,
+  baggageOnly: false,
 };
 
 function sortFlights(flights: FlightResult[], sort: FlightSort) {
@@ -34,6 +36,7 @@ export function getVisibleFlights(filters: FlightFilterState, sort: FlightSort) 
   const filtered = flightResults.filter((flight) => {
     if (filters.airlines.length > 0 && !filters.airlines.includes(flight.airlineEn)) return false;
     if (filters.refundableOnly && !flight.refundable) return false;
+    if (filters.baggageOnly && flight.baggage <= 0) return false;
     if (flight.price < filters.minPrice || flight.price > filters.maxPrice) return false;
     if (filters.stops === "direct" && flight.stops !== 0) return false;
     if (filters.stops === "one" && flight.stops !== 1) return false;

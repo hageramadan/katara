@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import { FaPlane, FaPlaneArrival } from "react-icons/fa";
 import { FaPlaneDeparture } from "react-icons/fa6";
 import Image from "next/image";
@@ -41,6 +41,8 @@ type FlightSegmentCardProps = {
   ar: boolean;
   onSelect?: () => void;
   showHeader?: boolean;
+  groupName: string;
+  selected: boolean;
 };
 
 function FlightSegmentCard({
@@ -51,10 +53,11 @@ function FlightSegmentCard({
   airline,
   baggage,
   durationMinutes,
-  stops,
   ar,
   onSelect,
   showHeader = true,
+  groupName,
+  selected,
 }: FlightSegmentCardProps) {
   const radioRef = useRef<HTMLInputElement>(null);
   const isReturn = direction === "return";
@@ -122,7 +125,8 @@ function FlightSegmentCard({
         <input
           ref={radioRef}
           type="radio"
-          name={`flight-${direction}`}
+          name={groupName}
+          checked={selected}
           value={flightNumber}
           aria-label={`${label}: ${flightNumber}`}
           onChange={onSelect}
@@ -186,6 +190,10 @@ export default function FlightSegments({
   airline,
   ar,
   tripKind,
+  expanded,
+  optionsId,
+  returnSelected,
+  outboundSelected,
 }: {
   flight: FlightResult;
   availableFlights?: FlightResult[];
@@ -194,25 +202,15 @@ export default function FlightSegments({
   airline: string;
   ar: boolean;
   tripKind: "multi" | "oneway" | "round";
+  expanded: boolean;
+  optionsId: string;
+  returnSelected: boolean;
+  outboundSelected: boolean;
 }) {
-  const segments = [
-    {
-      direction: "outbound" as const,
-      departure: flight.outboundDeparture,
-      arrival: flight.outboundArrival,
-      flightNumber: flight.outboundFlight,
-    },
-    {
-      direction: "return" as const,
-      departure: flight.returnDeparture,
-      arrival: flight.returnArrival,
-      flightNumber: flight.returnFlight,
-    },
-  ];
-  const visibleSegments = tripKind === "oneway" ? segments.slice(0, 1) : segments;
-
-  if (tripKind === "multi" || tripKind === "round") {
-    const outboundOptions = availableFlights?.length ? availableFlights : [flight];
+  const groupId = useId();
+    const outboundOptions = expanded && availableFlights?.length
+      ? availableFlights
+      : [flight];
     const outboundCards = outboundOptions.map((option, index) => (
       <FlightSegmentCard
         key={option.id}
@@ -225,47 +223,32 @@ export default function FlightSegments({
         durationMinutes={option.durationMinutes}
         stops={option.stops}
         ar={ar}
+        groupName={`${groupId}-outbound`}
+        selected={outboundSelected && option.id === flight.id}
         onSelect={() => onSelectFlight?.(option)}
-        showHeader={tripKind === "multi" || index === 0}
+        showHeader={index === 0}
       />
     ));
 
     return (
-      <div className={`grid grid-cols-1 gap-3 p-3 sm:gap-4 sm:p-4 ${tripKind === "round" ? "lg:grid-cols-2" : ""}`}>
-        <div className="grid min-w-0 ">{outboundCards}</div>
+      <div id={optionsId} className={`grid grid-cols-1 items-start gap-3 p-3 sm:gap-4 sm:p-4 ${tripKind === "round" ? "lg:grid-cols-2" : ""}`}>
+        <div className="grid min-w-0">{outboundCards}</div>
         {tripKind === "round" && (
           <FlightSegmentCard
             direction="return"
             departure={localizeDigits(flight.returnDeparture, false)}
             arrival={localizeDigits(flight.returnArrival, false)}
             flightNumber={flight.returnFlight}
-            airline={ar ? flight.airline : flight.airlineEn}
+            airline={airline}
             baggage={flight.baggage}
             durationMinutes={flight.durationMinutes}
             stops={flight.stops}
             ar={ar}
+            groupName={`${groupId}-return`}
+            selected={returnSelected}
             onSelect={onSelectReturn}
           />
         )}
       </div>
     );
-  }
-
-  return (
-    <div className={`grid grid-cols-1 gap-3 p-3 sm:gap-4 sm:p-4 ${tripKind === "oneway" ? "" : "sm:grid-cols-2"}`}>
-      {visibleSegments.map((segment) => (
-        <FlightSegmentCard
-          key={segment.direction}
-          {...segment}
-          departure={localizeDigits(segment.departure, false)}
-          arrival={localizeDigits(segment.arrival, false)}
-          airline={airline}
-          baggage={flight.baggage}
-          durationMinutes={flight.durationMinutes}
-          stops={flight.stops}
-          ar={ar}
-        />
-      ))}
-    </div>
-  );
 }

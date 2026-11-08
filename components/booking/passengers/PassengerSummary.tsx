@@ -63,29 +63,29 @@ export default function PassengerSummary({ onBookingDetails, onCancellationPolic
             </b>
           </span>
         </div>
-        <button
-          type="button"
-          onClick={onBookingDetails}
-          aria-haspopup="dialog"
-          className="mt-4 flex w-full items-center justify-between gap-3 rounded-lg bg-primary-50 px-3 py-2.5 text-sm font-semibold text-primary transition hover:bg-[var(--color-primary-100)]"
-        >
-          {lang === "ar" ? "تفاصيل الحجز" : "Booking details"}
-          <FiChevronDown aria-hidden="true" />
-        </button>
         {/* ==================== Flight Details ==================== */}
         <FlightSummary />
         <FlightSummary returning />
-        <button
-          type="button"
-          onClick={onCancellationPolicy}
-          aria-haspopup="dialog"
-          className="mt-4 flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-primary underline underline-offset-4 transition hover:bg-[var(--color-primary-50)]"
-        >
-          {lang === "ar" ? "سياسة الإلغاء" : "Cancellation policy"}
-          <FiChevronDown aria-hidden="true" />
-        </button>
+        <div className="grid grid-cols-2 gap-3 py-2 text-xs font-semibold text-[#4757B8]">
+          <button
+            type="button"
+            onClick={onCancellationPolicy}
+            aria-haspopup="dialog"
+            className="min-h-8 rounded underline underline-offset-2 transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            {lang === "ar" ? "سياسة الإلغاء" : "Cancellation policy"}
+          </button>
+          <button
+            type="button"
+            onClick={onBookingDetails}
+            aria-haspopup="dialog"
+            className="min-h-8 rounded underline underline-offset-2 transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            {lang === "ar" ? "عرض التفاصيل" : "View details"}
+          </button>
+        </div>
         {/* ==================== Fare + Taxes + Total ==================== */}
-        <div className="mt-3.5 border-t border-slate-100 pt-3.5 text-sm">
+        <div className="border-t border-slate-100 pt-3.5 text-sm">
           <details className="mb-2.75">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
               <span className="flex items-center gap-1">

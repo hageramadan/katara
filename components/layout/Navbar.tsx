@@ -134,7 +134,7 @@ export default function Navbar() {
                 <Image src="/logo.png" alt="Katra Go" width={90} height={45} className="h-10 w-20 rounded-lg bg-white object-contain p-1" />
                 <div>
                   <p className="text-sm font-bold">{lang === "ar" ? "أهلاً بك" : "Welcome"}</p>
-                  <p className="mt-0.5 text-xs text-white/70">{lang === "ar" ? "استكشف خدمات الأفضل" : "Explore Al-Afdal"}</p>
+                  <p className="mt-0.5 text-xs text-white/70">{lang === "ar" ? "استكشف خدمات كتارا جو" : "Explore Katara go"}</p>
                 </div>
               </div>
               <button
