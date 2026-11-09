@@ -99,24 +99,12 @@ export default function ProfileSidebar({
   const { user: authenticatedUser, logout } = useAuth();
   const router = useRouter();
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
-  const [logoutError, setLogoutError] = useState("");
 
-  async function handleLogout() {
-    if (loggingOut) return;
-    setLoggingOut(true);
-    setLogoutError("");
-    try {
-      await logout();
-      setLogoutOpen(false);
-      onClose?.();
-      router.replace("/");
-      router.refresh();
-    } catch {
-      setLogoutError(lang === "ar" ? "تعذر تسجيل الخروج. حاولي مرة أخرى." : "Unable to sign out. Please try again.");
-    } finally {
-      setLoggingOut(false);
-    }
+  function handleLogout() {
+    logout();
+    setLogoutOpen(false);
+    onClose?.();
+    router.replace("/");
   }
   const user = providedUser ?? {
     name: authenticatedUser?.display_name ?? (lang === "ar" ? "حسابي" : "My account"),
@@ -167,7 +155,7 @@ export default function ProfileSidebar({
           <li className="mt-1 border-t border-gray-100 pt-1">
             <button
               type="button"
-              onClick={() => { setLogoutError(""); setLogoutOpen(true); }}
+              onClick={() => setLogoutOpen(true)}
               className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-start text-sm font-semibold text-[#D1454A] transition hover:bg-red-50 md:text-base"
             >
               <FiLogOut className="shrink-0 text-lg" />
@@ -197,9 +185,7 @@ export default function ProfileSidebar({
       )}
       <LogoutDialog
         open={logoutOpen}
-        pending={loggingOut}
-        error={logoutError}
-        onClose={() => { if (!loggingOut) setLogoutOpen(false); }}
+        onClose={() => setLogoutOpen(false)}
         onConfirm={handleLogout}
       />
     </>

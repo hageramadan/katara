@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { storeAuthToken, storeAuthUser, readStoredAuthUser } from "../lib/auth/storage.ts";
+import { clearStoredAuthUser, storeAuthToken, storeAuthUser, readStoredAuthUser } from "../lib/auth/storage.ts";
 
 function mockWindow(t, localStorage) {
   const original = Object.getOwnPropertyDescriptor(globalThis, "window");
@@ -10,6 +10,21 @@ function mockWindow(t, localStorage) {
     else delete globalThis.window;
   });
 }
+
+test("local logout removes authentication and preserves unrelated preferences without requests", (t) => {
+  const values = new Map([["token", "test-token"], ["user", JSON.stringify({ id: 1, email: "user@example.test", display_name: "Test", user_type: "member" })], ["lang", "ar"]]);
+  mockWindow(t, {
+    getItem: (key) => values.get(key) ?? null,
+    removeItem: (key) => values.delete(key),
+  });
+  const fetchMock = t.mock.method(globalThis, "fetch", () => { throw new Error("Logout must be local"); });
+  clearStoredAuthUser();
+  assert.equal(values.has("token"), false);
+  assert.equal(values.has("user"), false);
+  assert.equal(values.get("lang"), "ar");
+  assert.equal(readStoredAuthUser(), null);
+  assert.equal(fetchMock.mock.callCount(), 0);
+});
 
 test("stores the complete token under the token key and replaces a previous token", (t) => {
   const values = new Map([["token", "old-token"]]);

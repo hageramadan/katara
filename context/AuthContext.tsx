@@ -2,13 +2,13 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { RegistrationUser } from "@/lib/auth/types";
-import { readStoredAuthUser, storeAuthUser } from "@/lib/auth/storage";
+import { clearStoredAuthUser, readStoredAuthUser, storeAuthUser } from "@/lib/auth/storage";
 
 type AuthContextValue = {
   user: RegistrationUser | null;
   isLoading: boolean;
   setAuthenticatedUser: (user: RegistrationUser) => void;
-  logout: () => Promise<void>;
+  logout: () => void;
 };
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -23,14 +23,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const logout = useCallback(async () => {
-    const response = await fetch("/api/auth/logout", { method: "POST" });
-    if (!response.ok) throw new Error("Unable to sign out");
+  const logout = useCallback(() => {
     version.current += 1;
-    try {
-      window.localStorage.removeItem("token");
-      window.localStorage.removeItem("user");
-    } catch { /* Browser storage may be unavailable. */ }
+    clearStoredAuthUser();
     setUser(null);
     setIsLoading(false);
   }, []);

@@ -1,5 +1,14 @@
 import type { RegistrationUser } from "./types";
 
+export function clearStoredAuthUser(): void {
+  if (typeof window === "undefined") return;
+  for (const key of ["token", "user"]) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch { /* Browser storage may be unavailable. */ }
+  }
+}
+
 export function storeAuthUser(user: RegistrationUser): void {
   if (typeof window === "undefined") return;
   try {
