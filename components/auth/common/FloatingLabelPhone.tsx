@@ -56,9 +56,14 @@ export default function FloatingLabelPhone({
   const currentCountry =
     countries.find((c) => c.dialCode === dialCode) || countries[0];
 
-  const maxDigits = phoneLengths[currentCountry.code] || 10;
+  const minDigits = phoneLengths[currentCountry.code] || 10;
+  const maxDigits = currentCountry.code === "EG" ? 11 : minDigits;
+  const digitCountLabel = minDigits === maxDigits
+    ? `${maxDigits}`
+    : lang === "ar" ? `${minDigits} أو ${maxDigits}` : `${minDigits} or ${maxDigits}`;
   const digitsOnly = value.replace(/\s/g, "");
-  const isInvalid = digitsOnly.length > 0 && digitsOnly.length !== maxDigits;
+  const isInvalid = digitsOnly.length > 0 &&
+    (digitsOnly.length < minDigits || digitsOnly.length > maxDigits);
 
   const dynamicPlaceholder =
     phonePlaceholders[currentCountry.code]?.[lang] || "000 000 0000";
@@ -177,8 +182,8 @@ export default function FloatingLabelPhone({
         >
           {isInvalid
             ? lang === "ar"
-              ? `يجب أن يكون الرقم ${maxDigits} أرقام`
-              : `Number must be ${maxDigits} digits`
+              ? `يجب أن يكون الرقم ${digitCountLabel} أرقام`
+              : `Number must be ${digitCountLabel} digits`
             : helper}
         </p>
       )}
