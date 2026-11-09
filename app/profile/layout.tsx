@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Suspense } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FiMenu } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
+import { useAuth } from "@/context/AuthContext";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 
 export default function ProfileLayout({
@@ -12,16 +13,35 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense fallback={<section className="min-h-screen bg-[#F7F9FB] py-6 md:py-10">{children}</section>}>
+    <Suspense fallback={<ProfileLoading />}>
       <ProfileLayoutContent>{children}</ProfileLayoutContent>
     </Suspense>
   );
 }
 
+function ProfileLoading() {
+  const { lang } = useApp();
+  return (
+    <section className="flex min-h-screen items-center justify-center bg-[#F7F9FB]">
+      <p role="status" className="text-sm text-[#6F7E89]">
+        {lang === "ar" ? "جارٍ التحميل..." : "Loading..."}
+      </p>
+    </section>
+  );
+}
+
 function ProfileLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
   const { lang } = useApp();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !user) router.replace("/login");
+  }, [isLoading, user, router]);
+
+  if (isLoading || !user) return <ProfileLoading />;
 
   if (pathname?.startsWith("/profile/bookings/")) {
     return (

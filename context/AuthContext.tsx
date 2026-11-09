@@ -8,6 +8,7 @@ type AuthContextValue = {
   user: RegistrationUser | null;
   isLoading: boolean;
   setAuthenticatedUser: (user: RegistrationUser) => void;
+  logout: () => Promise<void>;
 };
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -19,6 +20,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     version.current += 1;
     storeAuthUser(user);
     setUser(user);
+    setIsLoading(false);
+  }, []);
+
+  const logout = useCallback(async () => {
+    const response = await fetch("/api/auth/logout", { method: "POST" });
+    if (!response.ok) throw new Error("Unable to sign out");
+    version.current += 1;
+    try {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("user");
+    } catch { /* Browser storage may be unavailable. */ }
+    setUser(null);
     setIsLoading(false);
   }, []);
 
@@ -44,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return <AuthContext.Provider value={{ user, isLoading, setAuthenticatedUser }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, isLoading, setAuthenticatedUser, logout }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

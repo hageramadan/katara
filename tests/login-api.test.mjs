@@ -6,6 +6,7 @@ import { loadProjectModule } from "./helpers/load-project-module.mjs";
 const { NextRequest } = createRequire(import.meta.url)("next/server");
 const { POST } = loadProjectModule("app/api/auth/login/route.ts");
 const { GET } = loadProjectModule("app/api/auth/session/route.ts");
+const { POST: logout } = loadProjectModule("app/api/auth/logout/route.ts");
 const { userTypeByRole } = loadProjectModule("lib/auth/types.ts");
 const url = "http://localhost:3000/api/auth/login?lang=en";
 const payload = { email: " user@example.test ", password: " pass+&=word ", user_type: "member" };
@@ -14,6 +15,25 @@ const user = { id: 1, email: payload.email.trim(), display_name: "Test User", us
 const send = (body = payload, headers = {}, endpoint = url) => POST(new Request(endpoint, {
   method: "POST", headers: { "Content-Type": "application/json", ...headers }, body: JSON.stringify(body),
 }));
+
+test("logout expires both session cookies and prevents cross-origin logout", async () => {
+  const endpoint = "http://localhost:3000/api/auth/logout";
+  const response = await logout(new Request(endpoint, { method: "POST", headers: { Origin: "http://localhost:3000" } }));
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { success: true });
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  const cookies = response.headers.getSetCookie();
+  for (const name of ["katara_session", "katara_user"]) {
+    const cookie = cookies.find((value) => value.startsWith(`${name}=`));
+    assert.ok(cookie);
+    assert.match(cookie, /Max-Age=0/i);
+    assert.match(cookie, /Path=\//i);
+    assert.match(cookie, /HttpOnly/i);
+  }
+  const rejected = await logout(new Request(endpoint, { method: "POST", headers: { Origin: "https://other.test" } }));
+  assert.equal(rejected.status, 403);
+  assert.equal(rejected.headers.get("set-cookie"), null);
+});
 
 test("maps every sidebar role and forwards form fields with password characters intact", async (t) => {
   t.mock.method(globalThis, "fetch", async (url, init) => {
