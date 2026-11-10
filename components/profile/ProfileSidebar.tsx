@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import LogoutDialog from "./LogoutDialog";
 import { useApp } from "@/context/AppContext";
@@ -99,12 +99,26 @@ export default function ProfileSidebar({
   const { user: authenticatedUser, logout } = useAuth();
   const router = useRouter();
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
+  const logoutPending = useRef(false);
 
-  function handleLogout() {
-    logout();
-    setLogoutOpen(false);
-    onClose?.();
-    router.replace("/");
+  async function handleLogout() {
+    if (logoutPending.current) return;
+    logoutPending.current = true;
+    setLoggingOut(true);
+    setLogoutError("");
+    try {
+      await logout(lang);
+      setLogoutOpen(false);
+      onClose?.();
+      router.replace("/");
+    } catch {
+      setLogoutError(lang === "ar" ? "تعذر تسجيل الخروج. حاولي مرة أخرى." : "Unable to log out. Please try again.");
+    } finally {
+      logoutPending.current = false;
+      setLoggingOut(false);
+    }
   }
   const user = providedUser ?? {
     name: authenticatedUser?.display_name ?? (lang === "ar" ? "حسابي" : "My account"),
@@ -155,7 +169,7 @@ export default function ProfileSidebar({
           <li className="mt-1 border-t border-gray-100 pt-1">
             <button
               type="button"
-              onClick={() => setLogoutOpen(true)}
+              onClick={() => { setLogoutError(""); setLogoutOpen(true); }}
               className="flex w-full items-center gap-2 rounded-xl px-4 py-3 text-start text-sm font-semibold text-[#D1454A] transition hover:bg-red-50 md:text-base"
             >
               <FiLogOut className="shrink-0 text-lg" />
@@ -185,8 +199,10 @@ export default function ProfileSidebar({
       )}
       <LogoutDialog
         open={logoutOpen}
-        onClose={() => setLogoutOpen(false)}
+        onClose={() => { if (!logoutPending.current) setLogoutOpen(false); }}
         onConfirm={handleLogout}
+        pending={loggingOut}
+        error={logoutError}
       />
     </>
   );

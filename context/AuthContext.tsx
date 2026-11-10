@@ -3,12 +3,13 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { RegistrationUser } from "@/lib/auth/types";
 import { clearStoredAuthUser, readStoredAuthUser, storeAuthUser } from "@/lib/auth/storage";
+import { logoutAccount } from "@/lib/auth/api";
 
 type AuthContextValue = {
   user: RegistrationUser | null;
   isLoading: boolean;
   setAuthenticatedUser: (user: RegistrationUser) => void;
-  logout: () => void;
+  logout: (language: "ar" | "en") => Promise<void>;
 };
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -23,7 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async (language: "ar" | "en") => {
+    await logoutAccount(language);
     version.current += 1;
     clearStoredAuthUser();
     setUser(null);

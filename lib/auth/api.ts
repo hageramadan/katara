@@ -2,7 +2,7 @@ import type { RegistrationField, RegistrationType, RegistrationPayload, Registra
 import { isRegistrationFile, normalizeRegistrationErrors } from "./registration";
 import { parseRegistrationFields } from "./registration-schema";
 import { parsePublicUser } from "./public-user";
-import { storeAuthToken } from "@/lib/auth/storage";
+import { readStoredAuthToken, storeAuthToken } from "@/lib/auth/storage";
 
 function kataraUrl(path: string) {
   const baseUrl = process.env.NEXT_PUBLIC_KATARA_API_BASE_URL ?? "https://katara.tawajood.com/api";
@@ -20,6 +20,23 @@ export class LoginApiError extends Error {
   constructor(message: string, public errors: RegistrationErrors = {}) {
     super(message);
     this.name = "LoginApiError";
+  }
+}
+
+export async function logoutAccount(language: "ar" | "en"): Promise<void> {
+  const token = readStoredAuthToken();
+  if (!token) return;
+  const fallback = language === "ar" ? "تعذر تسجيل الخروج. حاولي مرة أخرى." : "Unable to log out. Please try again.";
+  const response = await fetch(kataraUrl("auth/logout"), {
+    method: "POST", credentials: "omit", cache: "no-store",
+    headers: { Accept: "application/json", "Accept-Language": language, Authorization: `Bearer ${token}` },
+    signal: AbortSignal.timeout(15000),
+  });
+  // An expired or revoked token already represents a signed-out session.
+  if (response.status === 401 || response.status === 204) return;
+  const body = await response.json().catch(() => null);
+  if (!response.ok || body?.result !== true) {
+    throw new Error(typeof body?.message === "string" ? body.message : fallback);
   }
 }
 

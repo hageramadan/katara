@@ -3,9 +3,45 @@ import test from "node:test";
 import { loadProjectModule } from "./helpers/load-project-module.mjs";
 import { buildRegistrationPayload } from "../lib/auth/registration.ts";
 
-const { getRegistrationFields, registerAccount, RegistrationApiError, loginAccount, LoginApiError } = loadProjectModule("lib/auth/api.ts");
+const { getRegistrationFields, registerAccount, RegistrationApiError, loginAccount, LoginApiError, logoutAccount } = loadProjectModule("lib/auth/api.ts");
 const payload = { email: " member@example.test ", password: " test1234 ", user_type: "member", fields: [{ field_id: 5, value: "1" }] };
 const user = { id: 42, email: "member@example.test", display_name: "Member", user_type: "member", token: "test-only-token" };
+
+test("logout authenticates the POST request and handles success, expired tokens and failures", async (t) => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, "window");
+  const values = new Map([["token", user.token], ["user", JSON.stringify(user)]]);
+  Object.defineProperty(globalThis, "window", { configurable: true, value: { localStorage: { getItem: (key) => values.get(key) ?? null } } });
+  t.after(() => { if (original) Object.defineProperty(globalThis, "window", original); else delete globalThis.window; });
+  t.mock.method(globalThis, "fetch", async (url, init) => {
+    assert.equal(url, "https://katara.tawajood.com/api/auth/logout");
+    assert.equal(init.method, "POST");
+    assert.equal(init.headers.Authorization, `Bearer ${user.token}`);
+    assert.equal(init.headers["Accept-Language"], "ar");
+    assert.equal(init.credentials, "omit");
+    assert.equal(init.cache, "no-store");
+    assert.equal(init.body, undefined);
+    return Response.json({ result: true });
+  });
+  await logoutAccount("ar");
+  for (const status of [204, 401]) {
+    t.mock.method(globalThis, "fetch", async () => new Response(null, { status }));
+    await logoutAccount("en");
+  }
+  for (const upstream of [
+    () => Response.json({ result: false, message: "Try again" }),
+    () => Response.json({ result: false }, { status: 403 }),
+    () => new Response("Unavailable", { status: 503 }),
+    () => { throw new TypeError("Network error"); },
+  ]) {
+    t.mock.method(globalThis, "fetch", upstream);
+    await assert.rejects(logoutAccount("en"));
+    assert.equal(values.get("token"), user.token);
+  }
+  values.delete("token");
+  const mocked = t.mock.method(globalThis, "fetch", () => { throw new Error("Must not send an unauthenticated request"); });
+  await logoutAccount("en");
+  assert.equal(mocked.mock.callCount(), 0);
+});
 
 test("loads agency fields containing a logo file successfully", async (t) => {
   t.mock.method(globalThis, "fetch", async () => Response.json({ result: true, data: { fields: [
