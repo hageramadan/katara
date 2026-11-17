@@ -2,6 +2,7 @@
 import { useApp } from "@/context/AppContext";
 import { travelerName } from "@/context/BookingFlowContext";
 import { servicePrice } from "@/lib/booking/services";
+import { selectedMeals } from "@/lib/booking/meals";
 import type { BookingTraveler, ServiceSelection } from "@/lib/booking/types";
 
 type ServiceReviewItemProps = {
@@ -23,6 +24,9 @@ export default function ServiceReviewItem({ traveler, selection }: ServiceReview
         {selection.baggage
           ? `+${selection.baggage} ${lang === "ar" ? "كجم" : "kg"}`
           : lang === "ar" ? "بدون أمتعة إضافية" : "No extra baggage"}
+        {selectedMeals(selection.meals).map((meal) => (
+          <span key={meal.id}>{" · "}{lang === "ar" ? meal.ar : meal.en}</span>
+        ))}
         {selection.wheelchair && (
           <>
             {" · "}

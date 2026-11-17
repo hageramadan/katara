@@ -82,6 +82,10 @@ export default function PaymentPriceDetails({ pricing }: PaymentPriceDetailsProp
                 <bdi>{pricing.seats.toFixed(2)} KWD</bdi>
               </dd>
             </div>
+            <div className="flex items-center justify-between gap-3">
+              <dt>{lang === "ar" ? "الوجبات" : "Meals"}</dt>
+              <dd className="text-primary"><bdi>{pricing.meals.toFixed(2)} KWD</bdi></dd>
+            </div>
             <div className="flex items-center justify-between gap-3 border-t border-slate-200 pt-3">
               <dt>
                 {lang === "ar" ? "إجمالي الخدمات" : "Services total"}

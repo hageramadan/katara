@@ -1,5 +1,6 @@
 import type { BookingPaymentMethod, BookingPricing, ServiceSelection } from "./types";
 import { baggageOptions, baseBookingFare, seatPrice } from "./services";
+import { mealsPrice } from "./meals";
 
 export const bookingPaymentMethods: {
   id: BookingPaymentMethod;
@@ -20,7 +21,8 @@ export function calculateBookingPricing(services: Record<string, ServiceSelectio
     return sum + (baggageOptions.find((option) => option.weight === item.baggage)?.price ?? 0);
   }, 0);
   const seats = selections.reduce((sum, item) => sum + seatPrice(item.seat), 0);
-  const extras = baggage + seats;
+  const meals = selections.reduce((sum, item) => sum + mealsPrice(item.meals), 0);
+  const extras = baggage + seats + meals;
   const subtotal = baseBookingFare + extras;
   const discount = promoCode.trim().toUpperCase() === "SAVE20" ? Math.min(20, subtotal) : 0;
 
@@ -29,6 +31,7 @@ export function calculateBookingPricing(services: Record<string, ServiceSelectio
     taxes: 100,
     baggage,
     seats,
+    meals,
     extras,
     subtotal,
     discount,

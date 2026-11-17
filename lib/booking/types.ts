@@ -29,10 +29,11 @@ export type ServiceSelection = {
   seat: string | null;
   baggage: number;
   wheelchair: boolean;
+  meals: string[];
 };
 
 export type FlightKey = "outbound" | "inbound";
-export type ServiceTab = "seats" | "baggage";
+export type ServiceTab = "seats" | "baggage" | "meals";
 
 export type BookingPaymentMethod = "knet" | "visa" | "mastercard" | "applepay" | "mada" | "wallet";
 
@@ -41,6 +42,7 @@ export type BookingPricing = {
   taxes: number;
   baggage: number;
   seats: number;
+  meals: number;
   extras: number;
   subtotal: number;
   discount: number;

@@ -7,12 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:booking": "node --test tests/booking-meals.test.mjs",
     "test:auth": "node --experimental-strip-types --test tests/registration-schema.test.mjs tests/registration.test.mjs tests/registration-api.test.mjs tests/registration-client.test.mjs tests/login-api.test.mjs tests/auth-storage.test.mjs"
   },
   "dependencies": {
     "country-flag-icons": "^1.6.20",
     "date-fns": "^4.4.0",
-    "next": "16.4.3",
+    "next": "16.4.6",
     "react": "19.3.0",
     "react-day-picker": "^10.0.2",
     "react-dom": "19.3.0",
@@ -25,7 +26,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.3",
+    "eslint-config-next": "16.4.6",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

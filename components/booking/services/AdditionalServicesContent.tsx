@@ -15,6 +15,7 @@ import BaggageOptions from "./BaggageOptions";
 import SeatMap from "./SeatMap";
 import WheelchairService from "./WheelchairService";
 import ServiceFooter from "./ServiceFooter";
+import MealOptions from "./MealOptions";
 
 export default function AdditionalServicesContent() {
   const { lang, dir } = useApp();
@@ -22,7 +23,7 @@ export default function AdditionalServicesContent() {
   const { travelers, services, updateService } = useBookingFlow();
   const [activeFlight, setActiveFlight] = useState<FlightKey>("outbound");
   const [activeTraveler, setActiveTraveler] = useState(travelers.find((person) => person.type !== "infant")!.id);
-  const [tab, setTab] = useState<ServiceTab>("baggage");
+  const [tab, setTab] = useState<ServiceTab>("meals");
   const key = serviceKey(activeFlight, activeTraveler);
   const selection = services[key] ?? emptyServiceSelection;
 
@@ -76,7 +77,7 @@ export default function AdditionalServicesContent() {
               activeTraveler={activeTraveler}
               onChange={setActiveTraveler}
             />
-            <div className="min-w-0 overflow-hidden rounded-lg bg-white">
+            <div className="min-w-0 overflow-hidden rounded-lg">
               <ServiceTabs
                 active={tab}
                 onChange={setTab}
@@ -86,7 +87,12 @@ export default function AdditionalServicesContent() {
                 id="service-panel"
                 aria-labelledby={`service-tab-${tab}`}
               >
-                {tab === "seats"
+                {tab === "meals" ? (
+                  <MealOptions
+                    value={selection.meals}
+                    onChange={(meals) => updateService(key, { meals })}
+                  />
+                ) : tab === "seats"
                   ? (
                     <SeatMap
                       flight={activeFlight}

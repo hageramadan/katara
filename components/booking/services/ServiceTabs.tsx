@@ -1,8 +1,6 @@
 "use client";
 import type { KeyboardEvent } from "react";
 import { useApp } from "@/context/AppContext";
-import { FaSuitcaseRolling } from "react-icons/fa6";
-import { MdAirlineSeatReclineNormal } from "react-icons/md";
 import type { ServiceTab } from "@/lib/booking/types";
 
 type ServiceTabsProps = {
@@ -11,16 +9,18 @@ type ServiceTabsProps = {
 };
 
 export default function ServiceTabs({ active, onChange }: ServiceTabsProps) {
-  const { lang } = useApp();
+  const { lang, dir } = useApp();
+  const tabs: ServiceTab[] = ["seats", "baggage", "meals"];
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>, current: ServiceTab) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
 
     event.preventDefault();
-    let next: ServiceTab = current === "seats" ? "baggage" : "seats";
+    const step = (event.key === "ArrowRight" ? 1 : -1) * (dir === "rtl" ? -1 : 1);
+    let next = tabs[(tabs.indexOf(current) + step + tabs.length) % tabs.length];
 
     if (event.key === "Home") next = "seats";
-    if (event.key === "End") next = "baggage";
+    if (event.key === "End") next = "meals";
 
     onChange(next);
     document.getElementById(`service-tab-${next}`)?.focus();
@@ -30,11 +30,11 @@ export default function ServiceTabs({ active, onChange }: ServiceTabsProps) {
     <>
       {/* ==================== Service Tabs ==================== */}
       <div
-        className="flex border border-[var(--color-primary-100)]"
+        className="flex overflow-hidden rounded-md border border-[#CBCDD7]"
         role="tablist"
         aria-label={lang === "ar" ? "خدمات إضافية" : "Extra services"}
       >
-        {(["seats", "baggage"] as const).map((item) => (
+        {tabs.map((item) => (
           <button
             key={item}
             id={`service-tab-${item}`}
@@ -45,24 +45,13 @@ export default function ServiceTabs({ active, onChange }: ServiceTabsProps) {
             tabIndex={active === item ? 0 : -1}
             onClick={() => onChange(item)}
             onKeyDown={(event) => handleKeyDown(event, item)}
-            className={`flex min-h-16 min-w-0 flex-1 flex-col items-center justify-center gap-2 px-2 py-3 text-sm leading-relaxed font-semibold sm:flex-row sm:px-3 sm:py-4 ${active === item ? "bg-primary text-white" : "bg-primary-50 text-primary"}`}
+            className={`flex min-h-12 min-w-0 flex-1 items-center justify-center border-e border-[#CBCDD7] px-2 py-3 text-[11px] leading-relaxed font-bold last:border-e-0 sm:px-3 sm:text-sm ${active === item ? "bg-primary text-white" : "bg-[#D8D9E2] text-primary hover:bg-primary-100"}`}
           >
             {item === "seats"
-              ? (
-                <MdAirlineSeatReclineNormal
-                  aria-hidden="true"
-                  className="shrink-0 text-lg"
-                />
-              )
-              : (
-                <FaSuitcaseRolling
-                  aria-hidden="true"
-                  className="shrink-0"
-                />
-              )}
-            {item === "seats"
               ? (lang === "ar" ? "تخصيص المقعد" : "Seat selection")
-              : (lang === "ar" ? "إضافة وترقية الأمتعة" : "Add and upgrade baggage")}
+              : item === "baggage"
+                ? (lang === "ar" ? "إضافة وترقية الأمتعة" : "Add and upgrade baggage")
+                : (lang === "ar" ? "إضافة وجبات" : "Add meals")}
           </button>
         ))}
       </div>

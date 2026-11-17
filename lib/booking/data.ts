@@ -82,7 +82,8 @@ export const seatTypes = {
 export const emptyServiceSelection: ServiceSelection = {
   seat: null,
   baggage: 0,
-  wheelchair: false
+  wheelchair: false,
+  meals: []
 };
 
 export const initialTravelers: BookingTraveler[] = [

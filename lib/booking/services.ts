@@ -1,5 +1,6 @@
 import { bookingFlights } from "./data";
 import type { ServiceSelection, FlightKey } from "./types";
+import { mealsPrice } from "./meals";
 
 export const flightKeys = ["outbound", "inbound"] as const;
 export const serviceFlights = flightKeys.map((id) => ({
@@ -35,5 +36,5 @@ export function seatPrice(seat: string | null) {
 }
 
 export function servicePrice(selection: ServiceSelection) {
-  return seatPrice(selection.seat) + (baggageOptions.find((option) => option.weight === selection.baggage)?.price ?? 0);
+  return seatPrice(selection.seat) + (baggageOptions.find((option) => option.weight === selection.baggage)?.price ?? 0) + mealsPrice(selection.meals);
 }

@@ -5,6 +5,7 @@ import { useApp } from "@/context/AppContext";
 import { useBookingFlow, travelerName } from "@/context/BookingFlowContext";
 import { emptyServiceSelection, travelerTypes } from "@/lib/booking/data";
 import { serviceFlights, serviceKey, servicePrice } from "@/lib/booking/services";
+import { selectedMeals } from "@/lib/booking/meals";
 import PaymentAccordion from "./PaymentAccordion";
 
 export default function PaymentTravelers() {
@@ -24,6 +25,7 @@ export default function PaymentTravelers() {
               key={traveler.id}
               className="flex min-w-0 flex-col items-start justify-between gap-2 rounded-lg sm:flex-row sm:items-center sm:gap-3 border-s-2 border-primary bg-slate-50 px-3 py-3"
             >
+              <div className="min-w-0">
               <Link
                 href="/passenger-details"
                 className="grid min-h-11 min-w-0 max-w-full grid-cols-[auto_minmax(0,1fr)] items-center gap-x-2 gap-y-1 text-sm hover:underline sm:flex sm:flex-wrap"
@@ -40,6 +42,14 @@ export default function PaymentTravelers() {
                   ({lang === "ar" ? travelerTypes[traveler.type].labelAr : travelerTypes[traveler.type].labelEn} {traveler.number})
                 </span>
               </Link>
+              {selections.map((selection, index) => {
+                const chosen = selectedMeals(selection.meals);
+                if (!chosen.length) return null;
+                return <p key={serviceFlights[index].id} className="mt-1 text-xs leading-relaxed text-slate-500">
+                  {lang === "ar" ? serviceFlights[index].titleAr : serviceFlights[index].titleEn}: {chosen.map((meal) => lang === "ar" ? meal.ar : meal.en).join(lang === "ar" ? "، " : ", ")}
+                </p>;
+              })}
+              </div>
               <span className={`flex shrink-0 items-center gap-2 text-xs ${extraPrice ? "text-primary" : "text-slate-400"}`}>
                 <FaSuitcase aria-hidden="true" />
                 {extraPrice > 0

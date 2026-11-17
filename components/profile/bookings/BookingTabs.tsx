@@ -21,14 +21,16 @@ const tabs: {
 ];
 
 export default function BookingTabs({ active, onChange }: BookingTabsProps) {
-  const { lang } = useApp();
+  const { lang, dir } = useApp();
 
   return (
     <div
+      dir={dir}
+      role="group"
+      aria-label={lang === "ar" ? "تصفية الحجوزات" : "Filter bookings"}
       className="
-        flex items-center gap-4 sm:gap-6 md:gap-8
-        border-b border-[#DCE3EC]
-        overflow-x-auto
+        flex min-h-12 min-w-0 items-center justify-start gap-6 sm:gap-8
+        overflow-x-auto bg-transparent
         [&::-webkit-scrollbar]:hidden
         [-ms-overflow-style:none]
         [scrollbar-width:none]
@@ -41,13 +43,16 @@ export default function BookingTabs({ active, onChange }: BookingTabsProps) {
         return (
           <button
             key={tab.key}
+            type="button"
+            aria-pressed={isActive}
             onClick={() => onChange(tab.key)}
             className={`
-              relative flex items-center gap-2
+              relative flex min-h-12 items-center gap-2
               whitespace-nowrap shrink-0
-              pb-2.5 pt-1 sm:pb-3
-              text-xs sm:text-sm md:text-base font-bold
+              pb-3 pt-2
+              text-sm sm:text-base font-bold leading-6
               transition-colors duration-200
+              focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#0D154B]
               cursor-pointer
               ${
                 isActive
@@ -56,14 +61,14 @@ export default function BookingTabs({ active, onChange }: BookingTabsProps) {
               }
             `}
           >
-            <Icon className="text-sm sm:text-base md:text-lg" />
+            <Icon aria-hidden="true" className="size-[18px] shrink-0" />
             <span>{lang === "ar" ? tab.ar : tab.en}</span>
 
-            {/* ✅ الخط السفلي للتاب النشط */}
             <span
+              aria-hidden="true"
               className={`
-                absolute bottom-0 start-0 end-0 h-[2.5px] rounded-full
-                transition-all duration-300
+                absolute bottom-1 start-0 end-0 h-0.5
+                transition-colors duration-200
                 ${isActive ? "bg-[#0D154B]" : "bg-transparent"}
               `}
             />
