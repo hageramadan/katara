@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useApp } from "@/context/AppContext";
-import { FiLinkedin, FiYoutube } from "react-icons/fi";
 
 import { FaFacebookF } from "react-icons/fa";
 import { PiInstagramLogoFill } from "react-icons/pi";
@@ -24,7 +23,6 @@ const servicesCol2 = [
 ];
 
 const servicesCol3 = [
-  { ar: "الشركة", en: "Company" },
   { ar: "عن كتارا جو", en: "About Katara go" },
   { ar: "الدعم", en: "Support" },
 ];
@@ -37,29 +35,28 @@ const socials = [
 ];
 
 export default function Footer() {
-  const { lang, setLang } = useApp();
+  const { lang, dir, setLang } = useApp();
 
   return (
-    <footer className="bg-[#0D154BEB] text-white">
-      <div className="container mx-auto px-4 py-10 md:py-14">
+    <footer dir={dir} className="bg-[#273C49] text-white">
+      <div className="container mx-auto px-4 py-8 md:py-9">
         {/* ==================== Row 1: Logo + Payment Partners ==================== */}
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 pb-8">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 pb-6">
   {/* ==================== 75% — Logo + Services ==================== */}
-  <div className="w-full md:w-3/4 flex flex-col gap-4">
+  <div className="w-full md:w-3/5 flex flex-col gap-4">
     {/* Logo */}
-    <div className="flex items-center gap-3">
+    <div className="flex items-center">
       <Image
-        src="/images/footer/logo-white.png"
-        alt="Katra Go"
-        width={120}
-        height={50}
-        className="w-10 md:w-10 h-auto object-contain"
+        src="/logo.png"
+        alt="Katara Go"
+        width={368}
+        height={256}
+        className="h-auto w-24 object-contain"
       />
-      <p className="text-[#7ABA4C] font-extrabold text-3xl">UCORNOS</p>
     </div>
 
     {/* Services */}
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 py-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6 py-3">
       {/* Column 1 */}
       <div>
         <h3 className="font-bold text-base md:text-lg mb-4">
@@ -78,7 +75,7 @@ export default function Footer() {
 
       {/* Column 2 */}
       <div>
-        <h3 className="font-bold text-base md:text-lg mb-4 invisible hidden lg:block">
+        <h3 aria-hidden="true" className="font-bold text-base md:text-lg mb-4 invisible">
           &nbsp;
         </h3>
         <ul className="flex flex-col gap-3 text-sm md:text-base text-white">
@@ -94,8 +91,8 @@ export default function Footer() {
 
       {/* Column 3 */}
       <div>
-        <h3 className="font-bold text-base md:text-lg mb-4 invisible hidden lg:block">
-          &nbsp;
+        <h3 className="font-bold text-base md:text-lg mb-4">
+          {lang === "ar" ? "الشركة" : "Company"}
         </h3>
         <ul className="flex flex-col gap-3 text-sm md:text-base text-white">
           {servicesCol3.map((s) => (
@@ -111,7 +108,7 @@ export default function Footer() {
   </div>
 
   {/* ==================== 25% — Payment Partners + QR ==================== */}
-  <div className="w-full md:w-1/4 flex flex-col gap-6">
+  <div className="w-full md:w-auto flex flex-col gap-6">
     {/* Payment Partners */}
     <div className="flex flex-col gap-3">
       <p className="text-sm md:text-xl font-medium text-[#E5E7EB]">
@@ -119,10 +116,10 @@ export default function Footer() {
       </p>
       <Image
         src="/images/footer/part.png"
-        alt="parteners"
+        alt={lang === "ar" ? "شركاء الدفع" : "Payment partners"}
         width={500}
         height={100}
-        className="w-full max-w-[250px] h-auto object-contain"
+        className="w-full max-w-[220px] h-auto object-contain"
       />
     </div>
 
@@ -130,11 +127,11 @@ export default function Footer() {
     <div className="flex flex-col gap-3">
       <h3 className="font-medium text-[#E5E7EB] text-base md:text-lg">
         {lang === "ar"
-          ? "امسح الرمز ونزّل تطبيق سعف"
-          : "Scan & download Saaf App"}
+          ? "امسح الرمز ونزّل تطبيق كتارا جو"
+          : "Scan & download the Katara Go app"}
       </h3>
 
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2">
         {/* QR Code */}
         <div>
           <Image
@@ -142,7 +139,7 @@ export default function Footer() {
             alt="QR Code"
             width={800}
             height={800}
-            className="w-24 h-24 md:w-28 md:h-28 object-contain"
+            className="size-24 object-contain"
           />
         </div>
 
@@ -150,20 +147,20 @@ export default function Footer() {
         <div className="flex flex-col gap-2">
           <button>
             <Image
-              src="/images/footer/google-play.png"
-              alt="Google Play"
-              width={400}
-              height={400}
-              className="w-[140px] md:w-[155px] h-auto object-contain"
-            />
-          </button>
-          <button>
-            <Image
               src="/images/footer/app-store.png"
               alt="App Store"
               width={400}
               height={400}
-              className="w-[140px] md:w-[155px] h-auto object-contain"
+              className="w-[150px] h-auto object-contain"
+            />
+          </button>
+          <button>
+            <Image
+              src="/images/footer/google-play.png"
+              alt="Google Play"
+              width={400}
+              height={400}
+              className="w-[150px] h-auto object-contain"
             />
           </button>
         </div>
@@ -173,7 +170,7 @@ export default function Footer() {
 </div>
 
         {/* ==================== Row 3: Language + Terms + Socials ==================== */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-5 pt-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-5 pt-6">
           {/* ==================== Language + Links ==================== */}
           <div className="flex items-center gap-4 md:gap-6 flex-wrap justify-center">
             {/* Language Switcher with Image */}

@@ -1,28 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useId } from "react";
 import { BiSolidPlaneLand, BiSolidPlaneTakeOff } from "react-icons/bi";
 import { FaSuitcase } from "react-icons/fa";
 import { GoBookmarkFill } from "react-icons/go";
 import { FiClock } from "react-icons/fi";
 import type { FlightResult } from "@/lib/flights/types";
+import { flightFares as fares } from "@/lib/flights/fares";
+import { useBookingFlow } from "@/context/BookingFlowContext";
 
 const baggageCategories = [
   { key: "three", label: "3 Bags ", color: "#852089" },
   { key: "two", label: "2 Bags", color: "#328316" },
   { key: "one", label: "1 Bag", color: "#263CCD" },
   { key: "none", label: "No bag", color: "#777777" },
-] as const;
-
-const fares = [
-  { name: "3B|Flex", price: 210, baggage: "three" },
-  { name: "3B|Saver", price: 195, baggage: "three" },
-  { name: "2B|Flex", price: 180, baggage: "two" },
-  { name: "2B|Saver", price: 165, baggage: "two" },
-  { name: "1B|Flex", price: 145, baggage: "one" },
-  { name: "1B|Saver", price: 130, baggage: "one" },
-  { name: "M|EC", price: 110, baggage: "none" },
-  { name: "L|EC", price: 125, baggage: "none" },
 ] as const;
 
 export default function FlightFareOptions({
@@ -34,7 +25,9 @@ export default function FlightFareOptions({
   direction: "outbound" | "return";
   ar: boolean;
 }) {
-  const [selectedFare, setSelectedFare] = useState("M|EC");
+  const { fareSelections, selectFare } = useBookingFlow();
+  const groupId = useId();
+  const selectedFare = fareSelections[flight.id]?.[direction] ?? "M|EC";
   const selectedFareOption = fares.find((fare) => fare.name === selectedFare) ?? fares[0];
   const durationMinutes = flight.durationMinutes;
   const duration = `${Math.floor(durationMinutes / 60)}h ${durationMinutes % 60}m`;
@@ -86,19 +79,18 @@ export default function FlightFareOptions({
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2 md:gap-4 justify-center">
+        <fieldset className="flex flex-wrap gap-2 md:gap-4 justify-center">
+          <legend className="sr-only">{ar ? `اختيار فئة ${directionLabel}` : `Choose ${directionLabel.toLowerCase()} fare`}</legend>
           {fares.map((fare) => {
             const fareCategory = baggageCategories.find((category) => category.key === fare.baggage)!;
 
             return (
-              <button
+              <label
                 key={fare.name}
-                type="button"
-                aria-pressed={selectedFare === fare.name}
-                onClick={() => setSelectedFare(fare.name)}
-                className={`relative h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl border-2 bg-white px-1 pb-1 pt-3 text-center transition hover:bg-[#F8F9FC] ${selectedFare === fare.name ? "ring-2 ring-[#0D154B]/20" : ""}`}
+                className={`relative h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl border-2 px-1 pb-1 pt-3 text-center transition hover:bg-[#F8F9FC] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-[#0D154B] ${selectedFare === fare.name ? "bg-[#EEF0F8] ring-2 ring-[#0D154B]/50" : "bg-white"}`}
                 style={{ borderColor: fareCategory.color }}
               >
+                <input type="radio" name={groupId} value={fare.name} checked={selectedFare === fare.name} onChange={() => selectFare(flight.id, direction, fare.name)} aria-label={`${fare.name} ${fare.price} KWD`} className="sr-only" />
                 <span
                   aria-hidden="true"
                   className="absolute left-0 top-0 h-3 w-3"
@@ -106,10 +98,11 @@ export default function FlightFareOptions({
                 />
                 <span className="block truncate text-[9px] font-extrabold text-[#263142]">{fare.name}</span>
                 <bdi dir="ltr" className="mt-1 block whitespace-nowrap text-[8px] font-bold text-[#4A4A4A]">{fare.price} KWD</bdi>
-              </button>
+              </label>
             );
           })}
-        </div>
+        </fieldset>
+        <p role="status" className="sr-only">{ar ? "الفئة المختارة" : "Selected fare"}: {selectedFareOption.name} {selectedFareOption.price} KWD</p>
       </div>
     </section>
   );

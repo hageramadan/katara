@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Kufi_Arabic, Inter } from "next/font/google";
 import { AppProvider } from "@/context/AppContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { NotificationsProvider } from "@/context/NotificationsContext";
 import { BookingFlowProvider } from "@/context/BookingFlowContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -38,10 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <AppProvider>
           <AuthProvider>
+            <NotificationsProvider>
             <AppToaster />
             <Navbar />
             <BookingFlowProvider>{children}</BookingFlowProvider>
             <Footer />
+            </NotificationsProvider>
           </AuthProvider>
         </AppProvider>
       </body>

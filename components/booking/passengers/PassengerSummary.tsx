@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { FiChevronDown, FiEdit2 } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
+import { useBookingFlow } from "@/context/BookingFlowContext";
+import { calculateBookingPricing } from "@/lib/booking/payment";
 import FlightSummary from "./FlightSummary";
 
 type PassengerSummaryProps = {
@@ -11,6 +13,8 @@ type PassengerSummaryProps = {
 
 export default function PassengerSummary({ onBookingDetails, onCancellationPolicy }: PassengerSummaryProps) {
   const { lang, dir } = useApp();
+  const { services, promoCode } = useBookingFlow();
+  const pricing = calculateBookingPricing(services, promoCode);
   return (
     <aside className="min-w-0 w-full">
       {/* ==================== Heading + Edit Trip ==================== */}
@@ -85,17 +89,20 @@ export default function PassengerSummary({ onBookingDetails, onCancellationPolic
           </button>
         </div>
         {/* ==================== Fare + Taxes + Total ==================== */}
-        <div className="border-t border-slate-100 pt-3.5 text-sm">
-          <details className="mb-2.75">
+        <section aria-label={lang === "ar" ? "تفاصيل سعر التذكرة" : "Ticket price details"} className="mt-2 rounded-xl bg-[#dcdde5] p-3 text-sm text-slate-500 shadow-[0_16px_24px_-14px_rgba(0,0,0,0.45)]">
+          <h3 className="mb-1 rounded-lg bg-primary px-3 py-3 text-center text-base font-semibold text-white">
+            {lang === "ar" ? "تفاصيل سعر التذكرة" : "Ticket price details"}
+          </h3>
+          <details className="group/fare">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
               <span className="flex items-center gap-1">
-                {lang === "ar" ? "سعر التذكرة" : "Ticket fare"}
-                <FiChevronDown />
+                {lang === "ar" ? "تكلفة التذاكر (الفير)" : "Ticket fare"}
+                <FiChevronDown aria-hidden="true" className="shrink-0 transition-transform group-open/fare:rotate-180" />
               </span>
               <b
                 dir="ltr"
                 className="shrink-0 whitespace-nowrap font-[family-name:var(--font-inter)] text-sm font-normal text-primary"
-              >400.00 KWD</b>
+              >{pricing.fare.toFixed(2)} KWD</b>
             </summary>
             <p className="pt-2.5 text-xs leading-loose text-slate-500">
               {lang === "ar" ? "بالغان: 300.00 KWD" : "2 adults: 300.00 KWD"}
@@ -105,16 +112,16 @@ export default function PassengerSummary({ onBookingDetails, onCancellationPolic
               {lang === "ar" ? "رضيع: 20.00 KWD" : "Infant: 20.00 KWD"}
             </p>
           </details>
-          <details className="mb-2.75">
+          <details className="group/taxes">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden text-slate-500">
               <span className="flex items-center gap-1">
                 {lang === "ar" ? "الضرائب والرسوم" : "Taxes and fees"}
-                <FiChevronDown />
+                <FiChevronDown aria-hidden="true" className="shrink-0 transition-transform group-open/taxes:rotate-180" />
               </span>
               <b
                 dir="ltr"
                 className="shrink-0 whitespace-nowrap font-[family-name:var(--font-inter)] text-sm font-normal text-primary"
-              >100.00 KWD</b>
+              >{pricing.taxes.toFixed(2)} KWD</b>
             </summary>
             <p className="pt-2.5 text-xs leading-loose text-slate-500">
               {lang === "ar"
@@ -122,16 +129,44 @@ export default function PassengerSummary({ onBookingDetails, onCancellationPolic
                 : "Total taxes and airport fees for all passengers."}
             </p>
           </details>
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t-2 border-primary pt-2.5 text-base text-primary">
+          <details className="group/services">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center gap-1">
+                {lang === "ar" ? "مصاريف خدمة" : "Service charges"}
+                <FiChevronDown aria-hidden="true" className="shrink-0 transition-transform group-open/services:rotate-180" />
+              </span>
+              <bdi className="shrink-0 whitespace-nowrap font-[family-name:var(--font-inter)] text-primary">{pricing.extras.toFixed(2)} KWD</bdi>
+            </summary>
+            <dl className="space-y-2 py-2 text-xs">
+              {[
+                { label: lang === "ar" ? "الأمتعة الإضافية" : "Extra baggage", amount: pricing.baggage },
+                { label: lang === "ar" ? "اختيار المقاعد" : "Seat selection", amount: pricing.seats },
+                { label: lang === "ar" ? "الوجبات" : "Meals", amount: pricing.meals },
+              ].map(({ label, amount }) => (
+                <div key={label} className="flex items-center justify-between gap-3">
+                  <dt>{label}</dt>
+                  <dd className="shrink-0 whitespace-nowrap"><bdi>{amount.toFixed(2)} KWD</bdi></dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+          <div className="flex min-h-11 flex-wrap items-center justify-between gap-2">
+            <span className="flex flex-wrap items-center gap-2">
+              {lang === "ar" ? "كود الخصم" : "Discount code"}
+              <bdi className="rounded-lg bg-slate-500 px-2.5 py-1 text-xs font-bold text-white">{promoCode || pricing.discount.toFixed(2)}</bdi>
+            </span>
+            <bdi className="shrink-0 whitespace-nowrap font-[family-name:var(--font-inter)] text-primary">{pricing.discount > 0 ? "−" : ""}{pricing.discount.toFixed(2)} KWD</bdi>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t-2 border-primary pt-2.5 text-base text-primary">
             <strong>
               {lang === "ar" ? "الإجمالي النهائي" : "Total price"}
             </strong>
             <strong
               dir="ltr"
               className="font-[family-name:var(--font-inter)]"
-            >500.00 KWD</strong>
+            >{pricing.total.toFixed(2)} KWD</strong>
           </div>
-        </div>
+        </section>
       </div>
     </aside>
   );

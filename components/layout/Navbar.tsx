@@ -5,13 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
+import NotificationBell from "@/components/notifications/NotificationBell";
 import CountryDropdown from "@/components/ui/CountryDropdown";
 import LanguageDropdown from "@/components/ui/LanguageDropdown";
 import { FaAngleDown } from "react-icons/fa6";
 import { RiPlaneLine } from "react-icons/ri";
 
 export default function Navbar() {
-  const { t, lang, country } = useApp();
+  const { t, lang, dir, country } = useApp();
   const { user: authenticatedUser } = useAuth();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -45,7 +46,7 @@ export default function Navbar() {
   const firstName = user.name.split(" ")[0];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md">
+    <nav dir={dir} className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="shrink-0">
@@ -100,9 +101,12 @@ export default function Navbar() {
             >
               <FiUser /> {t.navbar.login}
             </Link>}
+          <NotificationBell />
         </div>
 
         {/* Mobile Toggle */}
+        <div className="flex items-center gap-3 md:hidden">
+        <NotificationBell />
         <button
           ref={toggleRef}
           className="md:hidden text-2xl text-primary"
@@ -113,6 +117,7 @@ export default function Navbar() {
         >
           {open ? <FiX /> : <FiMenu />}
         </button>
+        </div>
       </div>
 
       {/* ==================== Mobile Menu ==================== */}

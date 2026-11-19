@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import type { BookingTraveler, ServiceSelection } from "@/lib/booking/types";
 import { initialTravelers, emptyServiceSelection } from "@/lib/booking/data";
+import type { FlightFareCode, FlightFareDirection, FlightFareSelections } from "@/lib/flights/fares";
 
 type BookingContact = {
   isTraveler: boolean;
@@ -18,6 +19,8 @@ type BookingFlow = {
   updateService: (key: string, patch: Partial<ServiceSelection>) => void;
   promoCode: string;
   updatePromoCode: (code: string) => void;
+  fareSelections: FlightFareSelections;
+  selectFare: (flightId: string, direction: FlightFareDirection, fare: FlightFareCode) => void;
   previewComplete: boolean;
   completePreview: () => void;
 };
@@ -37,6 +40,7 @@ export function BookingFlowProvider({ children }: BookingFlowProviderProps) {
   });
   const [services, setServices] = useState<Record<string, ServiceSelection>>({});
   const [promoCode, setPromoCode] = useState("");
+  const [fareSelections, setFareSelections] = useState<FlightFareSelections>({});
   const [previewComplete, setPreviewComplete] = useState(false);
 
   // ✅ تحديث بيانات مسافر واحد مع الاحتفاظ بباقي بيانات الحجز
@@ -72,6 +76,14 @@ export function BookingFlowProvider({ children }: BookingFlowProviderProps) {
     setPreviewComplete(false);
   }
 
+  function selectFare(flightId: string, direction: FlightFareDirection, fare: FlightFareCode) {
+    setFareSelections((current) => ({
+      ...current,
+      [flightId]: { ...current[flightId], [direction]: fare },
+    }));
+    setPreviewComplete(false);
+  }
+
   return (
     <BookingFlowContext.Provider
       value={{
@@ -83,6 +95,8 @@ export function BookingFlowProvider({ children }: BookingFlowProviderProps) {
         updateService,
         promoCode,
         updatePromoCode,
+        fareSelections,
+        selectFare,
         previewComplete,
         completePreview: () => setPreviewComplete(true),
       }}
