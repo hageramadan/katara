@@ -48,26 +48,26 @@ export default function NotificationsPanel() {
   return (
     <section dir={dir} aria-label={ar ? "الإشعارات" : "Notifications"} className="overflow-hidden bg-white text-[#26285C] [&_button]:cursor-pointer [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-2 [&_button:focus-visible]:outline-[#648DF1]">
       <header className="flex flex-wrap items-center justify-between gap-4 px-4 pb-8 pt-7 sm:px-8">
-        <h1 className="text-3xl font-extrabold">{ar ? "الاشعارات" : "Notifications"}</h1>
-        {allView ? <span className="text-lg font-bold text-[#777]">{ar ? "كل الاشعارات" : "All notifications"}</span> : <button type="button" disabled={!unreadCount} onClick={() => { markRead(notifications.map((item) => item.id)); setSelected([]); }} className={`min-h-10 rounded-full px-2 text-lg font-bold text-[#7398F8] disabled:cursor-default disabled:opacity-50 ${selecting ? "bg-[#A4A4A4]" : ""}`}>{ar ? "تحديد الكل كمقروء" : "Mark all as read"}</button>}
+        <h1 className="text-xl font-extrabold sm:text-3xl">{ar ? "الاشعارات" : "Notifications"}</h1>
+        {allView ? <span className="text-lg font-bold text-[#777]">{ar ? "كل الاشعارات" : "All notifications"}</span> : <button type="button" disabled={!unreadCount} onClick={() => { markRead(notifications.map((item) => item.id)); setSelected([]); }} className={`min-h-10 rounded-full px-2 text-xs font-bold text-[#7398F8] sm:text-lg disabled:cursor-default disabled:opacity-50 ${selecting ? "bg-[#A4A4A4]" : ""}`}>{ar ? "تحديد الكل كمقروء" : "Mark all as read"}</button>}
       </header>
-      <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-nowrap items-center justify-between gap-x-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D2D2D2] px-3.5 pb-2 pt-1 sm:px-7">
+      <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-nowrap items-center justify-between gap-x-3 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D2D2D2] px-3.5 pb-2 pt-1 sm:px-7">
         {tabs.map((tab) => {
           const count = filterNotifications(tab.id, readIds).filter((item) => tab.id !== "flights" || item.kind === "delay").length;
-          return <button key={tab.id} type="button" aria-pressed={!bookingOpen && filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); setBookingOpen(false); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-1 text-[calc(0.75rem+1px)] sm:px-2 sm:text-lg ${filter === tab.id && !selecting && !bookingOpen ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
+          return <button key={tab.id} type="button" aria-pressed={!bookingOpen && filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); setBookingOpen(false); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 text-[calc(0.75rem+1px)] sm:gap-1.5 sm:px-2 sm:text-lg ${filter === tab.id && !selecting && !bookingOpen ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
             {tab[lang]}<span className="grid min-h-5 min-w-5 shrink-0 place-items-center rounded-full bg-[#648DF1] px-1 text-[calc(0.75rem+1px)] font-bold text-white sm:min-h-6 sm:min-w-6 sm:text-base">{count}</span>
           </button>;
         })}
       </div>
       {bookingOpen ? <BookingChange /> : filter === "offers" ? <div className="py-5">
-        <div className="rounded-s-xl bg-gradient-to-l from-[#DFDFDF] to-white px-6 py-3 text-lg text-[#666]">
-          <h2 className="mb-2 font-bold">{ar ? "كود الخصم" : "Discount code"}</h2>
-          <div className="flex items-center gap-1.5">
+        <div className="rounded-s-xl bg-gradient-to-l from-[#DFDFDF] to-white px-3 py-4 text-xs leading-relaxed text-[#666] sm:px-6 sm:py-3 sm:text-lg">
+          <h2 className="mb-3 text-sm font-bold sm:mb-2 sm:text-lg">{ar ? "كود الخصم" : "Discount code"}</h2>
+          <div className="grid grid-cols-[auto_auto_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 text-[11px] leading-5 sm:flex sm:text-lg">
             <span className="rounded-full border border-[#BEBEBE] px-1.5 py-1" dir="ltr">1,000</span>
-            <button type="button" onClick={copyOffer} className="rounded-full border border-[#A8BDC3] bg-[#DDF7FA] px-2 py-1">{copied ? ar ? "تم النسخ" : "Copied" : ar ? "نسخ" : "Copy"}</button>
-            <span aria-hidden="true">←</span><span className="flex-1 rounded-full bg-[#26285C] px-2 py-1.5 text-center font-bold text-white">{ar ? "مجلد التذكرة" : "Ticket folder"}</span><span aria-hidden="true">←</span><span className="font-bold">{ar ? "لصق في المجلد" : "Paste in folder"}</span>
+            <button type="button" onClick={copyOffer} className="min-h-9 whitespace-nowrap rounded-full border border-[#A8BDC3] bg-[#DDF7FA] px-2 py-1">{copied ? ar ? "تم النسخ" : "Copied" : ar ? "نسخ" : "Copy"}</button>
+            <span aria-hidden="true">←</span><span className="min-w-0 rounded-xl bg-[#26285C] px-2 py-2 text-center font-bold text-white sm:flex-1 sm:rounded-full sm:py-1.5">{ar ? "مجلد التذكرة" : "Ticket folder"}</span><span aria-hidden="true">←</span><span className="min-w-0 text-center font-bold">{ar ? "لصق في المجلد" : "Paste in folder"}</span>
           </div>
-          <p className="mt-2 leading-5">{ar ? "أي رحلة متجهة إلى الكويت عليها خصم 5%" : "5% off any flight to Kuwait"} <Link href="/#terms" className="text-[#7398F8]">{ar ? "للاطلاع على الشروط والأحكام" : "View terms and conditions"}</Link></p>
+          <p className="mt-3 leading-6 sm:mt-2 sm:leading-7">{ar ? "أي رحلة متجهة إلى الكويت عليها خصم 5%" : "5% off any flight to Kuwait"} <Link href="/#terms" className="block text-[#7398F8] sm:inline">{ar ? "للاطلاع على الشروط والأحكام" : "View terms and conditions"}</Link></p>
           {copyError && <p role="alert" className="text-red-600">{ar ? "تعذر النسخ" : "Copy failed"}</p>}
         </div>
       </div> : filter === "occasions" ? <BirthdayCard /> : <div>
@@ -106,7 +106,7 @@ export default function NotificationsPanel() {
         })}
       </div>}
       <footer className="mt-2 border-t border-[#D2D2D2] px-6 py-2 text-center">
-        <button type="button" onClick={() => { setAllView(bookingOpen ? true : !allView); setFilter("all"); setBookingOpen(false); setSelected([]); }} className="min-h-8 text-xl font-bold text-[#7398F8]">{allView && !bookingOpen ? ar ? "رجوع" : "Back" : ar ? "عرض كل الاشعارات" : "View all notifications"}</button>
+        <button type="button" onClick={() => { setAllView(bookingOpen ? true : !allView); setFilter("all"); setBookingOpen(false); setSelected([]); }} className="min-h-8 text-sm font-bold text-[#7398F8] sm:text-xl">{allView && !bookingOpen ? ar ? "رجوع" : "Back" : ar ? "عرض كل الاشعارات" : "View all notifications"}</button>
       </footer>
     </section>
   );
