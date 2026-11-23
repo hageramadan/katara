@@ -89,9 +89,9 @@ export default function NotificationsPanel() {
                   <button type="button" onClick={() => openNotification(item)} className="flex min-w-0 flex-1 items-start gap-2 text-start sm:gap-3">
                     <span className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full ${iconColors[item.kind]}`}><Icon aria-hidden="true" className="text-xl" /></span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-xl font-bold leading-8">{item.title[lang]}</span>
-                      <span className={`block text-base leading-7 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.description[lang]}</span>
-                      <span className={`block text-base leading-7 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.time[lang]}</span>
+                      <span className="block text-sm font-bold leading-6 sm:text-xl sm:leading-8">{item.title[lang]}</span>
+                      <span className={`block text-xs leading-5 sm:text-base sm:leading-7 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.description[lang]}</span>
+                      <span className={`block text-xs leading-5 sm:text-base sm:leading-7 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.time[lang]}</span>
                     </span>
                   </button>
                   <button type="button" aria-label={`${ar ? "تحديد" : "Select"} ${item.title[lang]}`} onClick={() => toggleSelection(item.id)} className={`grid size-6 shrink-0 place-items-center rounded ${dark ? "" : "opacity-0 group-hover:opacity-100 focus:opacity-100"}`}><span className="size-2 rounded-full bg-[#548CE7]" /></button>
