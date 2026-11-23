@@ -50,9 +50,9 @@ export default function ExploreApp() {
             </div>
 
             {/* ==================== Content Side ==================== */}
-            <div className="p-6 md:p-10 order-1 md:order-2 flex flex-col gap-4 md:gap-5">
+            <div className="p-4 sm:p-6 md:p-10 order-1 md:order-2 flex flex-col gap-4 md:gap-5">
               {/* Title */}
-              <h2 className="font-bold text-[20px] sm:text-[21px] md:text-[28px] text-[#0D0D0D] lg:text-[32px] leading-tight">
+              <h2 className="font-bold text-lg sm:text-[21px] md:text-[28px] text-[#0D0D0D] lg:text-[32px] leading-tight">
                 {lang === "ar"
                   ? "اكتشف أفضل عروض السفر في الكون مع تطبيق كتارا جو"
                   : "Discover the Best Travel Deals in the Universe with Katara go App"}
@@ -99,7 +99,7 @@ export default function ExploreApp() {
                     alt="QR Code"
                     width={800}
                     height={800}
-                    className="w-33 h-30 md:w-38.75 md:h-35 object-cover rounded-lg shrink-0"
+                    className="w-24 h-24 sm:w-33 sm:h-30 md:w-38.75 md:h-35 object-cover rounded-lg shrink-0"
                   />
 
                   {/* Store Buttons */}

@@ -16,7 +16,7 @@ export default function PointsItem({ entry }: PointsItemProps) {
     entry.type === "add" ? "text-[#39D700]" : "text-[#FC0F15]";
 
   return (
-    <li className="flex items-center gap-3 md:gap-4 px-5 md:px-6 py-4 border-b border-[#DCE3EC] last:border-b-0 hover:bg-[#FAFCFE] transition">
+    <li className="flex items-center gap-2 sm:gap-3 md:gap-4 px-3 sm:px-5 md:px-6 py-4 border-b border-[#DCE3EC] last:border-b-0 hover:bg-[#FAFCFE] transition">
       <div
         className="w-9 h-9 md:w-9.5 md:h-9.5 rounded-lg flex items-center justify-center shrink-0 bg-[#F3F4F6]"
 

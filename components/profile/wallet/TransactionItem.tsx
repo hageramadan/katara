@@ -20,7 +20,7 @@ export default function TransactionItem({ tx }: TransactionItemProps) {
       : "text-[#FC0F15]";
 
   return (
-    <li className="flex items-center gap-3 md:gap-4 px-5 md:px-6 py-4 border-b border-[#DCE3EC] last:border-b-0 hover:bg-[#FAFCFE] transition">
+    <li className="flex items-center gap-2 sm:gap-3 md:gap-4 px-3 sm:px-5 md:px-6 py-4 border-b border-[#DCE3EC] last:border-b-0 hover:bg-[#FAFCFE] transition">
       <div
         className="w-9 h-9 md:w-9.5 md:h-9.5 rounded-lg flex items-center justify-center shrink-0 bg-[#F3F4F6]"
         
@@ -32,7 +32,7 @@ export default function TransactionItem({ tx }: TransactionItemProps) {
         <p className="text-sm md:text-base font-bold text-[#0D0D0D]">
           {lang === "ar" ? meta.ar : meta.en}
         </p>
-        <div className="flex items-center gap-2 text-[11px] md:text-xs text-[#6F7E89] mt-0.5">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] md:text-xs text-[#6F7E89] mt-0.5">
           
           <span className="text-[#9CA3AF] font-semibold text-xs md:text-sm" dir="ltr">{tx.card}</span>
         </div>

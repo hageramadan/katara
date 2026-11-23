@@ -24,10 +24,10 @@
   --color-secondary-soft: #C4EAEB66;
 }
 
-/* Make the site's rem-based typography more comfortable on phones. */
+/* Compact typography and spacing across phone layouts. */
 @media (max-width: 767px) {
   html {
-    font-size: 15px;
+    font-size: 14px;
   }
 }
 
@@ -169,4 +169,27 @@ body {
 }
 button{
   cursor: pointer;
+}
+
+/* Allow page containers to shrink inside flex and grid layouts. */
+main, section, article, aside, fieldset { min-inline-size: 0; }
+
+@media (max-width: 767px) {
+  body { overflow-wrap: break-word; }
+
+  /* Prevent automatic zoom when focusing fields on iOS. */
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    font-size: 16px;
+  }
+
+  .katra-daypicker {
+    --rdp-day-width: 34px;
+    --rdp-day-height: 36px;
+    --rdp-day_button-width: 34px;
+    --rdp-day_button-height: 36px;
+    margin-inline: auto;
+    width: fit-content;
+  }
 }

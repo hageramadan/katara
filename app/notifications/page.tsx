@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "الإشعارات | Katara Go", des
 export default function NotificationsPage() {
   return(
   <main className="min-h-[70vh] bg-white">
-    <div className="mx-auto w-full max-w-7xl shadow-2xl py-5 px-4 sm:px-6 lg:px-8 my-5 rounded-2xl">
+    <div className="mx-auto w-full max-w-7xl shadow-md py-2 m-4 px-4 sm:px-6 lg:px-8 rounded-2xl">
       <NotificationsPanel />
       </div>
     </main>

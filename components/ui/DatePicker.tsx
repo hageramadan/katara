@@ -82,8 +82,8 @@ export default function DatePicker({
       {open && (
         <div
           className={`
-            absolute top-full mt-2 z-50 w-[min(19rem,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl border border-primary/10 p-2 sm:p-3
-            ${align === "end" ? "inset-e-0" : "inset-s-0"}
+            fixed inset-x-3 bottom-3 z-[70] max-h-[calc(100dvh-1.5rem)] overflow-y-auto sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:mt-2 sm:w-[min(19rem,calc(100vw-2rem))] bg-white rounded-2xl shadow-2xl border border-primary/10 p-2 sm:p-3
+            ${align === "end" ? "sm:inset-e-0" : "sm:inset-s-0"}
           `}
         >
           <DayPicker

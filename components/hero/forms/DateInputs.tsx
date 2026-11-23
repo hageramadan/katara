@@ -23,7 +23,7 @@ export default function DateInputs({
   );
 
   return (
-    <div className={`flex gap-0 ${className}`}>
+    <div className={`flex min-w-0 gap-0 ${className}`}>
       {/* ==================== Departure ==================== */}
       <DatePicker
         value={departure}
@@ -33,7 +33,7 @@ export default function DateInputs({
         placeholderEn="Select departure date"
         align="start"
         className={`
-          flex-1 bg-[#F7F7F7] rounded-xl
+          min-w-0 flex-1 bg-[#F7F7F7] rounded-xl
           ${showReturn ? "rounded-l-none" : ""}
         `}
       />
@@ -54,7 +54,7 @@ export default function DateInputs({
           placeholderAr="اختر تاريخ العودة"
           placeholderEn="Select return date"
           align="end"
-          className="flex-1 bg-[#F7F7F7] rounded-xl rounded-r-none"
+          className="min-w-0 flex-1 bg-[#F7F7F7] rounded-xl rounded-r-none"
         />
       )}
     </div>

@@ -51,11 +51,11 @@ export default function NotificationsPanel() {
         <h1 className="text-3xl font-extrabold">{ar ? "الاشعارات" : "Notifications"}</h1>
         {allView ? <span className="text-lg font-bold text-[#777]">{ar ? "كل الاشعارات" : "All notifications"}</span> : <button type="button" disabled={!unreadCount} onClick={() => { markRead(notifications.map((item) => item.id)); setSelected([]); }} className={`min-h-10 rounded-full px-2 text-lg font-bold text-[#7398F8] disabled:cursor-default disabled:opacity-50 ${selecting ? "bg-[#A4A4A4]" : ""}`}>{ar ? "تحديد الكل كمقروء" : "Mark all as read"}</button>}
       </header>
-      <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-[#D2D2D2] px-3.5 pb-2 pt-1 sm:px-7">
+      <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-nowrap items-center justify-between gap-x-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D2D2D2] px-3.5 pb-2 pt-1 sm:px-7">
         {tabs.map((tab) => {
           const count = filterNotifications(tab.id, readIds).filter((item) => tab.id !== "flights" || item.kind === "delay").length;
-          return <button key={tab.id} type="button" aria-pressed={!bookingOpen && filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); setBookingOpen(false); }} className={`flex min-h-11 flex-row-reverse items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-1 text-lg sm:px-2 ${filter === tab.id && !selecting && !bookingOpen ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
-            {tab[lang]}<span className="grid min-h-6 min-w-6 shrink-0 place-items-center rounded-full bg-[#648DF1] px-1 text-base font-bold text-white">{count}</span>
+          return <button key={tab.id} type="button" aria-pressed={!bookingOpen && filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); setBookingOpen(false); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-1 text-[calc(0.75rem+1px)] sm:px-2 sm:text-lg ${filter === tab.id && !selecting && !bookingOpen ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
+            {tab[lang]}<span className="grid min-h-5 min-w-5 shrink-0 place-items-center rounded-full bg-[#648DF1] px-1 text-[calc(0.75rem+1px)] font-bold text-white sm:min-h-6 sm:min-w-6 sm:text-base">{count}</span>
           </button>;
         })}
       </div>

@@ -43,7 +43,7 @@ export default function BookAndOrganize() {
 
           {/* ==================== Right Side: Content ==================== */}
           <div className="flex flex-col gap-5 md:gap-6">
-            <h2 className="font-extrabold text-[22px] sm:text-[24px] md:text-[36px] lg:text-[54px] leading-tight">
+            <h2 className="font-extrabold text-xl sm:text-[24px] md:text-[36px] lg:text-[54px] leading-tight">
               {lang === "ar"
                 ? "احجز ونظم رحلتك مع خدمات كتارا جو"
                 : "Book and Organize Your Trip with Katara go Services"}

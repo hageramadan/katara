@@ -14,7 +14,7 @@ export default function PromoSection() {
       <div className="container mx-auto">
         {/* ============ Title & Description ============ */}
         <div className="mb-3 lg:mb-10">
-          <h1 className="font-bold text-[20px] sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#0D0D0D] mb-2 sm:mb-3 leading-tight">
+          <h1 className="font-bold text-lg sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#0D0D0D] mb-2 sm:mb-3 leading-tight">
             {lang === "ar"
               ? "هل زيارة لندن ما تزال ضمن خططك؟"
               : "Is Your London Trip Still on the Agenda?"}

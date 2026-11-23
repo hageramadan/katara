@@ -44,7 +44,7 @@ export default function WhyChooseUs() {
     <section className="py-5 lg:py-10 px-4">
       <div className="container mx-auto">
         {/* ============ Title ============ */}
-        <h2 className="text-center font-bold text-[20px] sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#333333] mb-3 lg:mb-12">
+        <h2 className="text-center font-bold text-lg sm:text-[22px] md:text-[32px] lg:text-[40px] text-[#333333] mb-3 lg:mb-12">
           {lang === "ar"
             ? "لماذا تستخدم منصة كتارا جو"
             : "Why Use Katara go Platform"}

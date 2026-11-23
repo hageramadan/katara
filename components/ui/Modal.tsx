@@ -42,7 +42,7 @@ export default function Modal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-3 sm:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -54,14 +54,14 @@ export default function Modal({
         className={`
           relative w-full ${maxWidth}
           bg-white rounded-2xl shadow-2xl
-          max-h-[90vh] overflow-y-auto
+          max-h-[calc(100dvh-1.5rem)] sm:max-h-[90dvh] overflow-y-auto
           animate-in fade-in zoom-in-95 duration-200
         `}
         onClick={(e) => e.stopPropagation()}
       >
         {/* ==================== Header (Centered) ==================== */}
         {(title || description) && (
-          <div className="relative px-5 md:px-6 pt-6 ">
+          <div className="relative px-4 sm:px-5 md:px-6 pt-5 sm:pt-6 ">
             {/* Close button */}
             <button
               type="button"
@@ -72,7 +72,7 @@ export default function Modal({
               <FiX className="text-xl" />
             </button>
 
-            <div className="text-start pe-8 ps-8">
+            <div className="text-start pe-10">
               {title && (
                 <h2 className="text-base md:text-lg lg:text-xl font-bold text-[#0D0D0D]">
                   {title}
@@ -88,7 +88,7 @@ export default function Modal({
         )}
 
         {/* Body */}
-        <div className="px-5 md:px-6 py-3">{children}</div>
+        <div className="px-4 sm:px-5 md:px-6 py-3">{children}</div>
       </div>
     </div>
   );

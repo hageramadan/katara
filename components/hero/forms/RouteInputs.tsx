@@ -8,7 +8,7 @@ export default function RouteInputs({ className = "" }: { className?: string }) 
   return (
     <div className={`relative flex items-center gap-2 ${className}`}>
       {/* From */}
-      <div className="flex-1 bg-[#F7F7F7] rounded-xl px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-100 transition">
+      <div className="min-w-0 flex-1 bg-[#F7F7F7] rounded-xl px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-100 transition">
         <label className="text-xs sm:text-base text-[#4A4A4A] block mb-1 sm:mb-2">
           {lang === "ar" ? "من" : "From"}
         </label>
@@ -24,7 +24,7 @@ export default function RouteInputs({ className = "" }: { className?: string }) 
       </button>
 
       {/* To */}
-      <div className="flex-1 bg-[#F7F7F7] rounded-xl px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-100 transition">
+      <div className="min-w-0 flex-1 bg-[#F7F7F7] rounded-xl px-3 py-2 sm:px-4 sm:py-3 hover:bg-gray-100 transition">
         <label className="text-xs sm:text-base text-[#4A4A4A] block mb-1 sm:mb-2">
           {lang === "ar" ? "إلى" : "To"}
         </label>

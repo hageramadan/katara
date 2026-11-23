@@ -56,7 +56,7 @@ export default function Footer() {
     </div>
 
     {/* Services */}
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6 py-3">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 sm:gap-x-8 gap-y-5 sm:gap-y-6 py-3">
       {/* Column 1 */}
       <div>
         <h3 className="font-bold text-base md:text-lg mb-4">

@@ -161,7 +161,7 @@ export default function WhereToTravel() {
     <section className="w-full overflow-x-clip bg-white px-3 py-7 sm:px-4 md:py-16">
       <div className="container mx-auto w-full min-w-0">
         {/* ============ Title ============ */}
-        <h2 className="font-bold text-[20px] sm:text-[21px] md:text-[28px] lg:text-[32px] text-[#0D0D0D] mb-3 md:mb-8">
+        <h2 className="font-bold text-lg sm:text-[21px] md:text-[28px] lg:text-[32px] text-[#0D0D0D] mb-3 md:mb-8">
           {lang === "ar" ? "إلى أين ستسافر؟" : "Where Will You Travel?"}
         </h2>
 

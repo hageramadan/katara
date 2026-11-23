@@ -54,7 +54,7 @@ export default function TopDestinations() {
     <section className="py-5 md:py-12 px-4 bg-white">
       <div className="container mx-auto">
         {/* ============ Title ============ */}
-        <h2 className="font-bold text-[20px] sm:text-[22px] lg:text-[32px] text-[#0D0D0D] mb-3 md:mb-8">
+        <h2 className="font-bold text-lg sm:text-[22px] lg:text-[32px] text-[#0D0D0D] mb-3 md:mb-8">
           {lang === "ar"
             ? "اكتشف أفضل الوجهات السياحية"
             : "Discover the Best Travel Destinations"}
