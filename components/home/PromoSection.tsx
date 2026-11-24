@@ -10,7 +10,7 @@ export default function PromoSection() {
   const router = useRouter();
 
   return (
-    <section className="py-10 px-4 bg-white">
+    <section id="offers" className="scroll-mt-20 py-10 px-4 bg-white">
       <div className="container mx-auto">
         {/* ============ Title & Description ============ */}
         <div className="mb-3 lg:mb-10">

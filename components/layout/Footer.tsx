@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 
 import { FaFacebookF } from "react-icons/fa";
@@ -197,12 +198,12 @@ export default function Footer() {
             </button>
 
             {/* Terms */}
-            <a
-              href="#"
+            <Link
+              href="/terms"
               className="text-sm md:text-base text-white hover:text-secondary transition"
             >
               {lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions"}
-            </a>
+            </Link>
 
             {/* Privacy */}
             <a

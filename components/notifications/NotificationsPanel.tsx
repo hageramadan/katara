@@ -67,7 +67,7 @@ export default function NotificationsPanel() {
             <button type="button" onClick={copyOffer} className="min-h-9 whitespace-nowrap rounded-full border border-[#A8BDC3] bg-[#DDF7FA] px-2 py-1">{copied ? ar ? "تم النسخ" : "Copied" : ar ? "نسخ" : "Copy"}</button>
             <span aria-hidden="true">←</span><span className="min-w-0 rounded-xl bg-[#26285C] px-2 py-2 text-center font-bold text-white sm:flex-1 sm:rounded-full sm:py-1.5">{ar ? "مجلد التذكرة" : "Ticket folder"}</span><span aria-hidden="true">←</span><span className="min-w-0 text-center font-bold">{ar ? "لصق في المجلد" : "Paste in folder"}</span>
           </div>
-          <p className="mt-3 leading-6 sm:mt-2 sm:leading-7">{ar ? "أي رحلة متجهة إلى الكويت عليها خصم 5%" : "5% off any flight to Kuwait"} <Link href="/#terms" className="block text-[#7398F8] sm:inline">{ar ? "للاطلاع على الشروط والأحكام" : "View terms and conditions"}</Link></p>
+          <p className="mt-3 leading-6 sm:mt-2 sm:leading-7">{ar ? "أي رحلة متجهة إلى الكويت عليها خصم 5%" : "5% off any flight to Kuwait"} <Link href="/terms" className="block text-[#7398F8] sm:inline">{ar ? "للاطلاع على الشروط والأحكام" : "View terms and conditions"}</Link></p>
           {copyError && <p role="alert" className="text-red-600">{ar ? "تعذر النسخ" : "Copy failed"}</p>}
         </div>
       </div> : filter === "occasions" ? <BirthdayCard /> : <div>
