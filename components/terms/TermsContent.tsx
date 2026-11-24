@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { FiAlertCircle, FiChevronLeft, FiMail, FiMapPin, FiPhone, FiUsers } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 
@@ -74,6 +75,7 @@ function TermsSection({ title, children }: { title: string; children: ReactNode 
 
 export default function TermsContent() {
   const { lang, dir } = useApp();
+  const fromOffers = useSearchParams().get("from") === "notification-offers";
   const t = copy[lang];
   const discounts = [
     { title: t.children, body: t.childrenBody },
@@ -100,7 +102,7 @@ export default function TermsContent() {
           <nav aria-label={lang === "ar" ? "مسار التنقل" : "Breadcrumb"} className="mb-5 flex flex-wrap items-center gap-2 text-sm text-[#aeb4cf]">
             <Link href="/" className="hover:text-white">{t.home}</Link>
             <FiChevronLeft aria-hidden className="size-3 rtl:rotate-0 ltr:rotate-180" />
-            <Link href="/#offers" className="hover:text-white">{t.offers}</Link>
+            <Link href={fromOffers ? "/notifications?tab=offers" : "/#offers"} className="hover:text-white">{t.offers}</Link>
             <FiChevronLeft aria-hidden className="size-3 rtl:rotate-0 ltr:rotate-180" />
             <span aria-current="page" className="text-[#d0d3e3]">{t.terms}</span>
           </nav>

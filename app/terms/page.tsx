@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import TermsContent from "@/components/terms/TermsContent";
 
 export const metadata: Metadata = {
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
-  return <TermsContent />;
+  return <Suspense fallback={<main className="min-h-[70vh] bg-[#fcfcfc]" />}><TermsContent /></Suspense>;
 }

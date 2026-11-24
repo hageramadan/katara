@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { FiCheck, FiCheckCircle, FiClock, FiMapPin, FiXCircle } from "react-icons/fi";
 import BookingChange from "./BookingChange";
 import { useApp } from "@/context/AppContext";
@@ -20,8 +21,9 @@ const iconColors = { delay: "bg-[#5C4700] text-[#D2B34B]", gate: "bg-[#273C49] t
 export default function NotificationsPanel() {
   const { lang, dir } = useApp();
   const { readIds, markRead, unreadCount } = useNotifications();
-  const [filter, setFilter] = useState<NotificationFilter>("all");
-  const [selected, setSelected] = useState<string[]>(["flight-delay", "booking-confirmed"]);
+  const searchParams = useSearchParams();
+  const filter = tabs.find((tab) => tab.id === searchParams.get("tab"))?.id ?? "all";
+  const [selected, setSelected] = useState<string[]>(() => filter === "all" ? ["flight-delay", "booking-confirmed"] : []);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [allView, setAllView] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -29,6 +31,13 @@ export default function NotificationsPanel() {
   const ar = lang === "ar";
   const selecting = selected.length > 0;
   const items = filterNotifications(filter, readIds).filter((item) => filter !== "flights" || item.kind === "delay");
+
+  function setFilter(value: NotificationFilter) {
+    const url = new URL(window.location.href);
+    if (value === "all") url.searchParams.delete("tab");
+    else url.searchParams.set("tab", value);
+    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  }
 
   function toggleSelection(id: string) {
     setSelected((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
@@ -67,7 +76,7 @@ export default function NotificationsPanel() {
             <button type="button" onClick={copyOffer} className="min-h-9 whitespace-nowrap rounded-full border border-[#A8BDC3] bg-[#DDF7FA] px-2 py-1">{copied ? ar ? "تم النسخ" : "Copied" : ar ? "نسخ" : "Copy"}</button>
             <span aria-hidden="true">←</span><span className="min-w-0 rounded-xl bg-[#26285C] px-2 py-2 text-center font-bold text-white sm:flex-1 sm:rounded-full sm:py-1.5">{ar ? "مجلد التذكرة" : "Ticket folder"}</span><span aria-hidden="true">←</span><span className="min-w-0 text-center font-bold">{ar ? "لصق في المجلد" : "Paste in folder"}</span>
           </div>
-          <p className="mt-3 leading-6 sm:mt-2 sm:leading-7">{ar ? "أي رحلة متجهة إلى الكويت عليها خصم 5%" : "5% off any flight to Kuwait"} <Link href="/terms" className="block text-[#7398F8] sm:inline">{ar ? "للاطلاع على الشروط والأحكام" : "View terms and conditions"}</Link></p>
+          <p className="mt-3 leading-6 sm:mt-2 sm:leading-7">{ar ? "أي رحلة متجهة إلى الكويت عليها خصم 5%" : "5% off any flight to Kuwait"} <Link href="/terms?from=notification-offers" className="block text-[#7398F8] sm:inline">{ar ? "للاطلاع على الشروط والأحكام" : "View terms and conditions"}</Link></p>
           {copyError && <p role="alert" className="text-red-600">{ar ? "تعذر النسخ" : "Copy failed"}</p>}
         </div>
       </div> : filter === "occasions" ? <BirthdayCard /> : <div>
