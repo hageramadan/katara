@@ -9,8 +9,11 @@ export function updateRegistrationField(
   key: string, value: RegistrationValues[string],
 ): RegistrationValues {
   const next = { ...previous, [key]: value };
-  if (key === "phone_country_code" && fields.some((field) => field.key === "whatsapp_country_code")) {
-    next.whatsapp_country_code = value;
+  const linkedCodeKeys = ["landline_country_code", "phone_country_code", "whatsapp_country_code"];
+  if (linkedCodeKeys.includes(key)) {
+    for (const field of fields) {
+      if (linkedCodeKeys.includes(field.key)) next[field.key] = value;
+    }
   }
   if (key !== "country_id") return next;
   const selected = fields.find((field) => field.key === key)?.options

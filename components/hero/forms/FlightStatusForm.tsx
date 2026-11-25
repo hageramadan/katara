@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiSearch, FiMapPin, FiHash } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 import DatePicker from "@/components/ui/DatePicker";
@@ -8,6 +9,7 @@ type Mode = "route" | "flightNumber";
 
 export default function FlightStatusForm() {
   const { lang } = useApp();
+  const router = useRouter();
   const [mode, setMode] = useState<Mode>("route");
   const [date, setDate] = useState<Date | undefined>(new Date(2025, 8, 2));
 
@@ -78,6 +80,8 @@ export default function FlightStatusForm() {
 
           {/* Search Button */}
           <button
+            type="button"
+            onClick={() => router.push("/flight-booking")}
             aria-label="search"
             className="w-full md:w-auto shrink-0 bg-primary text-white px-8 py-3 md:py-0 rounded-xl font-bold text-sm sm:text-base hover:opacity-90 transition flex items-center justify-center gap-2"
           >
@@ -111,6 +115,8 @@ export default function FlightStatusForm() {
 
           {/* Search Button */}
           <button
+            type="button"
+            onClick={() => router.push("/flight-booking")}
             aria-label="search"
             className="w-full md:w-auto shrink-0 bg-primary text-white px-8 py-3 md:py-0 rounded-xl font-bold text-sm sm:text-base hover:opacity-90 transition flex items-center justify-center gap-2"
           >
