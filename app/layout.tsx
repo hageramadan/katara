@@ -4,8 +4,7 @@ import { AppProvider } from "@/context/AppContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { NotificationsProvider } from "@/context/NotificationsContext";
 import { BookingFlowProvider } from "@/context/BookingFlowContext";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageChrome from "@/components/layout/PageChrome";
 import AppToaster from "@/components/ui/AppToaster";
 import "./globals.css";
 
@@ -44,9 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <NotificationsProvider>
             <AppToaster />
-            <Navbar />
-            <BookingFlowProvider>{children}</BookingFlowProvider>
-            <Footer />
+            <PageChrome><BookingFlowProvider>{children}</BookingFlowProvider></PageChrome>
             </NotificationsProvider>
           </AuthProvider>
         </AppProvider>

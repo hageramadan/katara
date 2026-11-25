@@ -9,6 +9,7 @@ import type { RegistrationType, RegistrationValues, RegistrationErrors, Registra
 import { useRegistrationFields } from "@/lib/auth/use-registration-fields";
 import { registerAccount, RegistrationApiError } from "@/lib/auth/api";
 import { buildRegistrationPayload, mapRegistrationErrors, validateRegistration } from "@/lib/auth/registration";
+import { updateRegistrationField } from "@/lib/auth/registration-country";
 import FormHeader from "../common/FormHeader";
 import InputField from "../common/InputField";
 import PasswordField from "../common/PasswordField";
@@ -84,11 +85,11 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
       <PhoneInput key={field.key} label={field.label} name={field.key}
         required={field.is_required} value={String(formValues[field.key] ?? "")}
         dialCode={String(formValues[codeField.key])} dialCodeName={codeField.key}
-        dialCodeLabel={codeField.label} dialCodeRequired={codeField.is_required}
+        dialCodeOptions={codeField.options} dialCodeLabel={codeField.label} dialCodeRequired={codeField.is_required}
         error={errors[field.key]?.join(" ")} dialCodeError={errors[codeField.key]?.join(" ")}
         validateLength={false}
-        onValueChange={(value) => setValues((previous) => ({ ...previous, [field.key]: value }))}
-        onDialCodeChange={(value) => setValues((previous) => ({ ...previous, [codeField.key]: value }))} />
+        onValueChange={(value) => setValues((previous) => updateRegistrationField(fields, previous, field.key, value))}
+        onDialCodeChange={(value) => setValues((previous) => updateRegistrationField(fields, previous, codeField.key, value))} />
     );
   }
 
@@ -186,7 +187,7 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
                   {brokerFields.map((brokerField) => (
                     <RegistrationField key={brokerField.key} field={brokerField} value={formValues[brokerField.key]}
                       error={errors[brokerField.key]?.join(" ")}
-                      onChange={(value) => setValues((previous) => ({ ...previous, [brokerField.key]: value }))} />
+                      onChange={(value) => setValues((previous) => updateRegistrationField(fields, previous, brokerField.key, value))} />
                   ))}
                 </div>
               );
@@ -210,7 +211,7 @@ export default function RegistrationForm({ type }: { type: RegistrationType }) {
               if (phoneCodeFields.has(field.key)) return renderPhoneField(field);
               return <RegistrationField key={field.key} field={field} value={formValues[field.key]}
                 error={errors[field.key]?.join(" ")}
-                onChange={(value) => setValues((previous) => ({ ...previous, [field.key]: value }))} />;
+                onChange={(value) => setValues((previous) => updateRegistrationField(fields, previous, field.key, value))} />;
             })}
             {type === "third_party_partner" && !fields.some((field) => field.key === "email") && (
               <InputField label={lang === "ar" ? "البريد الإلكتروني" : "Email"} type="email" required

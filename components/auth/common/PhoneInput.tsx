@@ -1,8 +1,10 @@
 "use client";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { FiChevronDown, FiCheck } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 import { countries } from "@/lib/countries";
+import type { RegistrationOption } from "@/lib/auth/types";
+import { phoneCountryName } from "@/lib/auth/registration-country";
 import * as Flags from "country-flag-icons/react/3x2";
 
 // ============ Flag Icon Component ============
@@ -55,6 +57,7 @@ type PhoneInputProps = {
   name?: string;
   dialCodeName?: string;
   dialCodeLabel?: string;
+  dialCodeOptions?: RegistrationOption[];
   dialCodeRequired?: boolean;
   error?: string;
   dialCodeError?: string;
@@ -73,6 +76,7 @@ export default function PhoneInput({
   name,
   dialCodeName,
   dialCodeLabel,
+  dialCodeOptions,
   dialCodeRequired,
   error,
   dialCodeError,
@@ -82,10 +86,25 @@ export default function PhoneInput({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
+  const phoneCountries = useMemo(() => {
+    if (!dialCodeOptions?.length) return countries;
+    const names = new Intl.DisplayNames([lang], { type: "region" });
+    const regions = Object.keys(Flags).filter((code) => /^[A-Z]{2}$/.test(code));
+    return dialCodeOptions.map((option) => {
+      const name = phoneCountryName(option.label);
+      const known = countries.find((country) => country.nameAr === name || country.nameEn === name);
+      return {
+        code: known?.code ?? regions.find((code) => names.of(code) === name) ?? "",
+        nameAr: name, nameEn: name, dialCode: String(option.value),
+      };
+    });
+  }, [dialCodeOptions, lang]);
 
   // ✅ الدولة الحالية
   const currentCountry =
-    countries.find((c) => c.dialCode === dialCode) || countries[0];
+    phoneCountries.find((c) => c.dialCode === dialCode) || {
+      code: "", nameAr: "", nameEn: "", dialCode,
+    };
 
   // ✅ الفلديشن حسب الدولة
   const maxDigits = phoneLengths[currentCountry.code] || 10;
@@ -214,10 +233,10 @@ export default function PhoneInput({
           `}
         >
           <ul id={`${id}-countries`} className="max-h-64 overflow-y-auto py-1">
-            {countries.map((c) => {
-              const active = c.code === currentCountry.code;
+            {phoneCountries.map((c, index) => {
+              const active = c.dialCode === currentCountry.dialCode;
               return (
-                <li key={c.code}>
+                <li key={`${c.dialCode}-${index}`}>
                   <button
                     type="button"
                     onClick={() => {

@@ -47,6 +47,7 @@ export default function Footer() {
   <div className="w-full md:w-3/5 flex flex-col gap-4">
     {/* Logo */}
     <div className="flex items-center">
+      <Link href="/" aria-label={lang === "ar" ? "الصفحة الرئيسية" : "Home"} className="inline-flex rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
       <Image
         src="/logo.png"
         alt="Katara Go"
@@ -54,6 +55,7 @@ export default function Footer() {
         height={256}
         className="h-auto w-24 object-contain"
       />
+      </Link>
     </div>
 
     {/* Services */}

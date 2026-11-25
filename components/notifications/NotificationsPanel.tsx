@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { FiCheck, FiCheckCircle, FiClock, FiMapPin, FiXCircle } from "react-icons/fi";
 import BookingChange from "./BookingChange";
 import { useApp } from "@/context/AppContext";
@@ -18,12 +17,11 @@ const tabs: { id: NotificationFilter; ar: string; en: string }[] = [
 const icons = { delay: FiClock, gate: FiMapPin, confirmed: FiCheckCircle, cancelled: FiXCircle };
 const iconColors = { delay: "bg-[#5C4700] text-[#D2B34B]", gate: "bg-[#273C49] text-[#B3CBD3]", confirmed: "bg-[#D1F2F3] text-[#69B942]", cancelled: "bg-[#541800] text-[#B64B1D]" };
 
-export default function NotificationsPanel() {
+export default function NotificationsPanel({ initialFilter = "all" }: { initialFilter?: NotificationFilter }) {
   const { lang, dir } = useApp();
   const { readIds, markRead, unreadCount } = useNotifications();
-  const searchParams = useSearchParams();
-  const filter = tabs.find((tab) => tab.id === searchParams.get("tab"))?.id ?? "all";
-  const [selected, setSelected] = useState<string[]>(() => filter === "all" ? ["flight-delay", "booking-confirmed"] : []);
+  const [filter, setFilter] = useState<NotificationFilter>(initialFilter);
+  const [selected, setSelected] = useState<string[]>([]);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [allView, setAllView] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -31,13 +29,6 @@ export default function NotificationsPanel() {
   const ar = lang === "ar";
   const selecting = selected.length > 0;
   const items = filterNotifications(filter, readIds).filter((item) => filter !== "flights" || item.kind === "delay");
-
-  function setFilter(value: NotificationFilter) {
-    const url = new URL(window.location.href);
-    if (value === "all") url.searchParams.delete("tab");
-    else url.searchParams.set("tab", value);
-    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
-  }
 
   function toggleSelection(id: string) {
     setSelected((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);

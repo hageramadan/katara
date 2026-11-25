@@ -37,12 +37,12 @@ export default function BookAndOrganize() {
   const { lang, dir } = useApp();
 
   return (
-    <section className="relative py-12 md:py-16 px-4 bg-[#0D154BEB] text-white overflow-hidden">
+    <section className="relative py-12 md:py-16 px-4 bg-[#0D154BEB] text-white overflow-clip">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 
           {/* ==================== Right Side: Content ==================== */}
-          <div className="flex flex-col gap-5 md:gap-6">
+          <div className="flex flex-col gap-5 md:sticky md:top-24 md:self-start md:gap-6">
             <h2 className="font-extrabold text-xl sm:text-[24px] md:text-[36px] lg:text-[54px] leading-tight">
               {lang === "ar"
                 ? "احجز ونظم رحلتك مع خدمات كتارا جو"

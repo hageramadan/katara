@@ -102,7 +102,7 @@ export default function TermsContent() {
           <nav aria-label={lang === "ar" ? "مسار التنقل" : "Breadcrumb"} className="mb-5 flex flex-wrap items-center gap-2 text-sm text-[#aeb4cf]">
             <Link href="/" className="hover:text-white">{t.home}</Link>
             <FiChevronLeft aria-hidden className="size-3 rtl:rotate-0 ltr:rotate-180" />
-            <Link href={fromOffers ? "/notifications?tab=offers" : "/#offers"} className="hover:text-white">{t.offers}</Link>
+            <Link href={fromOffers ? "/#notification-offers" : "/#offers"} className="hover:text-white">{t.offers}</Link>
             <FiChevronLeft aria-hidden className="size-3 rtl:rotate-0 ltr:rotate-180" />
             <span aria-current="page" className="text-[#d0d3e3]">{t.terms}</span>
           </nav>

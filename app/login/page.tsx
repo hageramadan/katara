@@ -26,14 +26,7 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="relative flex min-h-[calc(100svh-4rem)] items-center justify-center px-3 py-6 sm:px-4 sm:py-10 lg:min-h-screen">
-      {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/login/bg.jpg')" }}
-      />
-      <div className="absolute inset-0 bg-linear-to-b from-[#00000066] to-[#273C49]" />
-
+    <section className="relative flex flex-1 items-center justify-center px-3 py-8 sm:px-4 sm:py-14">
       {/* Main Card */}
       <div className="relative z-10 w-full max-w-5xl">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 md:items-stretch">

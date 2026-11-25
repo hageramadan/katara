@@ -52,9 +52,7 @@ export default function ForgotPasswordPage() {
       : ar ? "إرسال رابط إعادة التعيين" : "Send reset link";
 
   return (
-    <main dir={dir} className="relative isolate flex min-h-[calc(100svh-4rem)] items-center justify-center bg-[#273C49] px-4 py-10 sm:px-8 sm:py-16">
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-cover bg-center" style={{ backgroundImage: "url('/images/login/bg.jpg')" }} />
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-linear-to-b from-black/45 to-[#273C49]/85" />
+    <main dir={dir} className="relative flex flex-1 items-center justify-center px-4 py-10 sm:px-8 sm:py-16">
       <section aria-labelledby="forgot-password-title" className="w-full max-w-[820px] rounded-2xl bg-white px-6 py-9 text-[#163B45] shadow-2xl sm:px-12 sm:py-10">
         <div className="mx-auto w-full max-w-[592px]">
           <header className="text-center">

@@ -6,6 +6,8 @@ import Counter from "./Counter";
 import { localizeDigits } from "@/lib/flights/format";
 import { CabinClass, TravelerSelection } from "@/lib/flights/types";
 
+const MAX_TRAVELERS = 8;
+
 type TravelersDropdownProps = {
   className?: string;
   initialSelection?: TravelerSelection;
@@ -29,14 +31,17 @@ export default function TravelersDropdown({
   const ref = useRef<HTMLDivElement>(null);
 
   const updateAdults = (value: number) => {
+    if (value + children + infants > MAX_TRAVELERS) return;
     setAdults(value);
     onSelectionChange?.({ adults: value, children, infants, cabin });
   };
   const updateChildren = (value: number) => {
+    if (adults + value + infants > MAX_TRAVELERS) return;
     setChildren(value);
     onSelectionChange?.({ adults, children: value, infants, cabin });
   };
   const updateInfants = (value: number) => {
+    if (adults + children + value > MAX_TRAVELERS) return;
     setInfants(value);
     onSelectionChange?.({ adults, children, infants: value, cabin });
   };
@@ -95,7 +100,7 @@ export default function TravelersDropdown({
                 {lang === "ar" ? "12 سنة وأكثر" : "12+ years"}
               </p> */}
             </div>
-            <Counter value={adults} onChange={updateAdults} min={1} max={9} formatValue={formatCount} />
+            <Counter value={adults} onChange={updateAdults} min={1} max={MAX_TRAVELERS - children - infants} formatValue={formatCount} />
           </div>
 
           {/* Children */}
@@ -108,7 +113,7 @@ export default function TravelersDropdown({
                 ({lang === "ar" ? "2 - 12 العمر" : "2 - 12 years"})
               </p>
             </div>
-            <Counter value={children} onChange={updateChildren} min={0} max={8} formatValue={formatCount} />
+            <Counter value={children} onChange={updateChildren} min={0} max={MAX_TRAVELERS - adults - infants} formatValue={formatCount} />
           </div>
 
           {/* Infants */}
@@ -121,7 +126,7 @@ export default function TravelersDropdown({
                 ({lang === "ar" ? "0 - 2 العمر" : "0 - 2 years"})
               </p>
             </div>
-            <Counter value={infants} onChange={updateInfants} min={0} max={4} formatValue={formatCount} />
+            <Counter value={infants} onChange={updateInfants} min={0} max={Math.min(4, MAX_TRAVELERS - adults - children)} formatValue={formatCount} />
           </div>
 
           {/* Divider */}
