@@ -2,10 +2,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FiCheck, FiCheckCircle, FiClock, FiMapPin, FiXCircle } from "react-icons/fi";
-import BookingChange from "./BookingChange";
 import { useApp } from "@/context/AppContext";
 import { useNotifications } from "@/context/NotificationsContext";
-import { filterNotifications, isNotificationUnread, notifications, type NotificationFilter, type NotificationItem } from "@/lib/notifications";
+import { filterNotifications, isNotificationUnread, notifications, type NotificationFilter } from "@/lib/notifications";
 
 const tabs: { id: NotificationFilter; ar: string; en: string }[] = [
   { id: "all", ar: "الكل", en: "All" },
@@ -22,7 +21,6 @@ export default function NotificationsPanel({ initialFilter = "all" }: { initialF
   const { readIds, markRead, unreadCount } = useNotifications();
   const [filter, setFilter] = useState<NotificationFilter>(initialFilter);
   const [selected, setSelected] = useState<string[]>([]);
-  const [bookingOpen, setBookingOpen] = useState(false);
   const [allView, setAllView] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
@@ -32,12 +30,6 @@ export default function NotificationsPanel({ initialFilter = "all" }: { initialF
 
   function toggleSelection(id: string) {
     setSelected((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
-  }
-
-  function openNotification(item: NotificationItem) {
-    if (selecting) { toggleSelection(item.id); return; }
-    markRead([item.id]);
-    if (item.category === "flights" || item.category === "bookings") setBookingOpen(true);
   }
 
   async function copyOffer() {
@@ -54,12 +46,12 @@ export default function NotificationsPanel({ initialFilter = "all" }: { initialF
       <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-nowrap items-center justify-between gap-x-3 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D2D2D2] px-3.5 pb-2 pt-1 sm:px-7">
         {tabs.map((tab) => {
           const count = filterNotifications(tab.id, readIds).filter((item) => tab.id !== "flights" || item.kind === "delay").length;
-          return <button key={tab.id} type="button" aria-pressed={!bookingOpen && filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); setBookingOpen(false); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 text-xs sm:gap-1.5 sm:px-2 sm:text-xs ${filter === tab.id && !selecting && !bookingOpen ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
+          return <button key={tab.id} type="button" aria-pressed={filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 text-xs sm:gap-1.5 sm:px-2 sm:text-xs ${filter === tab.id && !selecting ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
             {tab[lang]}<span className="grid min-h-5 min-w-5 shrink-0 place-items-center rounded-full bg-[#648DF1] px-1 text-xs font-bold text-white sm:min-h-6 sm:min-w-6 sm:text-xs">{count}</span>
           </button>;
         })}
       </div>
-      {bookingOpen ? <BookingChange /> : filter === "offers" ? <div className="py-5">
+      {filter === "offers" ? <div className="py-5">
         <div className="rounded-s-xl bg-gradient-to-l from-[#DFDFDF] to-white px-3 py-4 text-xs leading-relaxed text-[#666] sm:px-6 sm:py-3 sm:text-xs">
           <h2 className="mb-3 text-sm font-bold sm:mb-2 sm:text-xs">{ar ? "كود الخصم" : "Discount code"}</h2>
           <div className="grid grid-cols-[auto_auto_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 text-[11px] leading-5 sm:flex sm:text-xs">
@@ -85,28 +77,30 @@ export default function NotificationsPanel({ initialFilter = "all" }: { initialF
                 const dark = (filter === "unread" && unread) || (selecting && day === "today");
                 const Icon = icons[item.kind];
                 return <li key={item.id} className={`group flex items-center gap-2 py-3 pe-2 ps-4 sm:gap-4 sm:pe-6 sm:ps-8 ${dark || chosen ? "bg-[#171D63] text-white" : "bg-white text-[#777]"}`}>
-                  {selecting && day === "today" && <span className="relative me-1 size-6 shrink-0 sm:me-5"><input type="checkbox" checked={chosen} onChange={() => toggleSelection(item.id)} aria-label={`${ar ? "تحديد" : "Select"} ${item.title[lang]}`} className="size-6 appearance-none rounded-[2px] border-2 border-[#A9B3D8] bg-transparent focus-visible:outline-2 focus-visible:outline-[#648DF1]" />{chosen && <FiCheck aria-hidden="true" className="pointer-events-none absolute inset-1 size-4 text-[#8AD348]" />}</span>}
-                  <button type="button" onClick={() => openNotification(item)} className="flex min-w-0 flex-1 items-start gap-2 text-start sm:gap-3">
+                  <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-start sm:gap-3">
                     <span className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full ${iconColors[item.kind]}`}><Icon aria-hidden="true" className="text-xl" /></span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-bold leading-6 sm:text-sm sm:leading-6">{item.title[lang]}</span>
                       <span className={`block text-xs leading-5 sm:text-xs sm:leading-6 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.description[lang]}</span>
                       <span className={`block text-xs leading-5 sm:text-xs sm:leading-6 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.time[lang]}</span>
                     </span>
-                  </button>
-                  <button type="button" aria-label={`${ar ? "تحديد" : "Select"} ${item.title[lang]}`} onClick={() => toggleSelection(item.id)} className={`grid size-6 shrink-0 place-items-center rounded ${dark ? "" : "opacity-0 group-hover:opacity-100 focus:opacity-100"}`}><span className="size-2 rounded-full bg-[#548CE7]" /></button>
+                    <span className="relative grid size-6 shrink-0 place-items-center">
+                      <input type="checkbox" checked={chosen} onChange={() => toggleSelection(item.id)} aria-label={`${ar ? "تحديد" : "Select"} ${item.title[lang]}`} className={`size-6 cursor-pointer appearance-none rounded border-2 bg-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#648DF1] ${selecting ? "border-[#A9B3D8]" : "border-transparent"}`} />
+                      {chosen ? <FiCheck aria-hidden="true" className="pointer-events-none absolute size-4 text-[#8AD348]" /> : !selecting && <span aria-hidden="true" className="pointer-events-none absolute size-2 rounded-full bg-[#548CE7]" />}
+                    </span>
+                  </label>
                 </li>;
               })}
             </ul>
-            {selecting && day === "today" && <div className="flex gap-6 bg-white px-3.5 pb-0 pt-5 sm:px-7">
-              <button type="button" onClick={() => { markRead(selected); setSelected([]); }} className="min-h-12 flex-1 rounded-xl bg-[#12154D] text-sm font-bold text-white">{ar ? "موافق" : "Confirm"}</button>
-              <button type="button" onClick={() => setSelected([])} className="min-h-12 flex-1 rounded-xl border border-[#A4ADBF] bg-[#DFFAFD] text-sm font-bold text-[#747B9A]">{ar ? "الغاء" : "Cancel"}</button>
-            </div>}
           </div>;
         })}
       </div>}
+      {selecting && <div className="flex gap-3 bg-white px-4 pb-3 pt-4 sm:px-6">
+        <button type="button" onClick={() => { markRead(selected); setSelected([]); }} className="min-h-10 flex-1 rounded-xl bg-[#12154D] text-sm font-bold text-white">{ar ? "موافق" : "Confirm"}</button>
+        <button type="button" onClick={() => setSelected([])} className="min-h-10 flex-1 rounded-xl border border-[#A4ADBF] bg-[#DFFAFD] text-sm font-bold text-[#747B9A]">{ar ? "الغاء" : "Cancel"}</button>
+      </div>}
       <footer className="mt-2 border-t border-[#D2D2D2] px-6 py-2 text-center">
-        <button type="button" onClick={() => { setAllView(bookingOpen ? true : !allView); setFilter("all"); setBookingOpen(false); setSelected([]); }} className="min-h-8 text-sm font-bold text-[#7398F8] sm:text-sm">{allView && !bookingOpen ? ar ? "رجوع" : "Back" : ar ? "عرض كل الاشعارات" : "View all notifications"}</button>
+        <button type="button" onClick={() => { setAllView(!allView); setFilter("all"); setSelected([]); }} className="min-h-8 text-sm font-bold text-[#7398F8] sm:text-sm">{allView ? ar ? "رجوع" : "Back" : ar ? "عرض كل الاشعارات" : "View all notifications"}</button>
       </footer>
     </section>
   );
