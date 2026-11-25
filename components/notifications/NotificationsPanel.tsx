@@ -43,10 +43,10 @@ export default function NotificationsPanel({ initialFilter = "all" }: { initialF
         <h1 className="text-lg font-extrabold">{ar ? "الاشعارات" : "Notifications"}</h1>
         {allView ? <span className="text-sm font-bold text-[#777]">{ar ? "كل الاشعارات" : "All notifications"}</span> : <button type="button" disabled={!unreadCount} onClick={() => { markRead(notifications.map((item) => item.id)); setSelected([]); }} className={`min-h-10 rounded-full px-2 text-xs font-bold text-[#7398F8] sm:text-xs disabled:cursor-default disabled:opacity-50 ${selecting ? "bg-[#A4A4A4]" : ""}`}>{ar ? "تحديد الكل كمقروء" : "Mark all as read"}</button>}
       </header>
-      <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-nowrap items-center justify-between gap-x-3 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#D2D2D2] px-3.5 pb-2 pt-1 sm:px-7">
+      <div aria-label={ar ? "تصفية الإشعارات" : "Filter notifications"} className="flex flex-wrap items-center gap-1 border-b border-[#D2D2D2] px-3 pb-3 pt-1 sm:px-4">
         {tabs.map((tab) => {
           const count = filterNotifications(tab.id, readIds).filter((item) => tab.id !== "flights" || item.kind === "delay").length;
-          return <button key={tab.id} type="button" aria-pressed={filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 text-xs sm:gap-1.5 sm:px-2 sm:text-xs ${filter === tab.id && !selecting ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
+          return <button key={tab.id} type="button" aria-pressed={filter === tab.id} onClick={() => { setFilter(tab.id); setSelected([]); }} className={`flex min-h-11 shrink-0 flex-row items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 text-xs sm:gap-1.5 sm:px-2 sm:text-xs ${filter === tab.id && !selecting ? "bg-[#A4A4A4] text-[#7398F8]" : "text-[#A4A4A4]"}`}>
             {tab[lang]}<span className="grid min-h-5 min-w-5 shrink-0 place-items-center rounded-full bg-[#648DF1] px-1 text-xs font-bold text-white sm:min-h-6 sm:min-w-6 sm:text-xs">{count}</span>
           </button>;
         })}
@@ -79,7 +79,7 @@ export default function NotificationsPanel({ initialFilter = "all" }: { initialF
                 return <li key={item.id} className={`group flex items-center gap-2 py-3 pe-2 ps-4 sm:gap-4 sm:pe-6 sm:ps-8 ${dark || chosen ? "bg-[#171D63] text-white" : "bg-white text-[#777]"}`}>
                   <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-start sm:gap-3">
                     <span className={`mt-1 grid size-9 shrink-0 place-items-center rounded-full ${iconColors[item.kind]}`}><Icon aria-hidden="true" className="text-xl" /></span>
-                    <span className="min-w-0 flex-1">
+                    <span className="min-w-0 flex-1 break-words">
                       <span className="block text-sm font-bold leading-6 sm:text-sm sm:leading-6">{item.title[lang]}</span>
                       <span className={`block text-xs leading-5 sm:text-xs sm:leading-6 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.description[lang]}</span>
                       <span className={`block text-xs leading-5 sm:text-xs sm:leading-6 ${dark || chosen ? "text-[#949BC1]" : "text-[#C6C6C6]"}`}>{item.time[lang]}</span>

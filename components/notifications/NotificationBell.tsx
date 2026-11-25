@@ -54,7 +54,7 @@ export default function NotificationBell() {
       <FiBell aria-hidden="true" />
       {unreadCount > 0 && <span aria-label={`${unreadCount} ${lang === "ar" ? "غير مقروءة" : "unread"}`} className="absolute end-1 top-1 size-2 rounded-full border border-white bg-red-500" />}
     </button>
-    {open && <div ref={panelRef} id={id} role="dialog" aria-label={lang === "ar" ? "الإشعارات" : "Notifications"} dir={dir} tabIndex={-1} className="absolute end-0 top-full z-50 mt-3 max-h-[calc(100svh-6rem)] w-[min(28rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none">
+    {open && <div ref={panelRef} id={id} role="dialog" aria-label={lang === "ar" ? "الإشعارات" : "Notifications"} dir={dir} tabIndex={-1} className="fixed inset-x-3 top-[calc(4rem+0.5rem)] z-50 max-h-[calc(100dvh-6rem)] w-auto md:absolute md:inset-x-auto md:end-0 md:top-full md:mt-3 md:w-112 overflow-y-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none">
       <NotificationsPanel initialFilter={initialFilter} />
     </div>}
     </div>
