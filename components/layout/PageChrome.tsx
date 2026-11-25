@@ -1,12 +1,20 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import LoginNavbar from "./LoginNavbar";
 
 export default function PageChrome({ children }: { children: ReactNode }) {
+  return (
+    <Suspense fallback={children}>
+      <RouteChrome>{children}</RouteChrome>
+    </Suspense>
+  );
+}
+
+function RouteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   if (pathname === "/login" || pathname === "/forgot-password") return (
