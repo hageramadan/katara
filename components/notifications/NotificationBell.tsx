@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { FiBell, FiX } from "react-icons/fi";
+import { FiBell } from "react-icons/fi";
 import { useApp } from "@/context/AppContext";
 import { useNotifications } from "@/context/NotificationsContext";
 import NotificationsPanel from "./NotificationsPanel";
@@ -54,10 +54,7 @@ export default function NotificationBell() {
       <FiBell aria-hidden="true" />
       {unreadCount > 0 && <span aria-label={`${unreadCount} ${lang === "ar" ? "غير مقروءة" : "unread"}`} className="absolute end-1 top-1 size-2 rounded-full border border-white bg-red-500" />}
     </button>
-    {open && <div ref={panelRef} id={id} role="dialog" aria-label={lang === "ar" ? "الإشعارات" : "Notifications"} dir={dir} tabIndex={-1} className="absolute end-0 top-full z-50 mt-3 max-h-[calc(100svh-6rem)] w-[min(36rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none">
-      <div className="sticky top-0 z-10 flex justify-end border-b border-slate-100 bg-white px-3 py-2">
-        <button type="button" onClick={() => { setOpen(false); buttonRef.current?.focus(); }} aria-label={lang === "ar" ? "إغلاق الإشعارات" : "Close notifications"} className="grid size-8 place-items-center rounded-full text-primary hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-blue-500"><FiX aria-hidden="true" /></button>
-      </div>
+    {open && <div ref={panelRef} id={id} role="dialog" aria-label={lang === "ar" ? "الإشعارات" : "Notifications"} dir={dir} tabIndex={-1} className="absolute end-0 top-full z-50 mt-3 max-h-[calc(100svh-6rem)] w-[min(28rem,calc(100vw-2rem))] overflow-y-auto overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl border border-slate-200 bg-white shadow-2xl outline-none">
       <NotificationsPanel initialFilter={initialFilter} />
     </div>}
     </div>

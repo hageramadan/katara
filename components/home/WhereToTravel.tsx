@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { FiCheck } from "react-icons/fi";
 import { countries } from "@/lib/countries";
@@ -281,6 +282,7 @@ export default function WhereToTravel() {
                       </p>
                     </div>
                   </div>
+                  <DealActions lang={lang} />
                 </div>
               </div>
 
@@ -315,6 +317,7 @@ export default function WhereToTravel() {
                           {lang === "ar" ? deal.metaAr : deal.metaEn}
                         </p>
                       </div>
+                      <DealActions lang={lang} compact />
                     </div>
                   </div>
                 ))}
@@ -327,5 +330,23 @@ export default function WhereToTravel() {
      
       </div>
     </section>
+  );
+}
+
+function DealActions({ lang, compact = false }: { lang: string; compact?: boolean }) {
+  const ar = lang === "ar";
+  return (
+    <div className="travel-deal-actions">
+      <div className="min-h-0 overflow-hidden">
+        <div className={`grid grid-cols-2 items-center gap-2 pt-4 md:gap-4 md:pt-6 ${compact ? "md:grid-cols-1" : ""}`}>
+          <Link href="/flight-booking" className="flex min-h-9 items-center justify-center rounded-full bg-[#0D154B] px-2 py-2 text-center text-[10px] font-bold text-white transition-colors hover:bg-[#1B2568] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-xs md:min-h-14 md:px-4 md:text-base">
+            {ar ? "إحجز الآن" : "Book now"}
+          </Link>
+          <Link href="/#offers" className="flex min-h-9 items-center justify-center rounded-full px-2 py-2 text-center text-xs font-bold text-white underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-sm md:min-h-12 md:text-lg">
+            {ar ? "اكتشف" : "Discover"}
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

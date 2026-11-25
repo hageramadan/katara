@@ -2,6 +2,34 @@
 
 @tailwind utilities;
 
+.travel-deal-actions {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 350ms ease;
+}
+
+@media (min-width: 768px) {
+  .travel-deal-actions {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .group:hover .travel-deal-actions,
+  .group:focus-within .travel-deal-actions {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .travel-deal-actions {
+    transition: none;
+  }
+}
+
 /* ============================
    🎨 Katra Go - Brand Colors
    ============================ */
